@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeioKahoot v1.0.0</title>
+    <link rel="stylesheet" href="/Scripts/Css/main.css">
+    <!-- 🆕 RANKING CSS -->
+    <link rel="stylesheet" href="/Scripts/Css/ranking.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        /* DEBUG - Remover depois */
+        #debug-box { position:fixed; bottom:0; left:0; width:100%; max-height:120px; overflow-y:auto; background:rgba(0,0,0,0.85); padding:8px; font-size:11px; font-family:monospace; color:#0f0; z-index:9999; display:block; }
+        #debug-box div { padding:2px 0; border-bottom:1px solid #333; }
+        .log-err { color:#f44; }
+        .log-ok { color:#0f0; }
+        .log-info { color:#0ff; }
+
+        /* Feedback de acerto/erro */
+        #fb-bar { position:fixed; top:76px; left:0; width:100%; padding:12px; text-align:center; font-weight:900; font-size:1.4rem; z-index:1500; display:none; }
+        #fb-bar.fb-correct { display:block; background:#26890c; color:white; }
+        #fb-bar.fb-wrong { display:block; background:#e21b3c; color:white; }
+
+        /* Score flutuante */
+        #live-score { position:fixed; top:78px; right:20px; background:rgba(0,0,0,0.6); padding:8px 18px; border-radius:8px; font-weight:900; z-index:999; display:none; }
+        #live-score.vis { display:block; }
+
+        .ans-btn { transition: all 0.15s; }
+        .ans-btn.picked { border:5px solid #fff; box-shadow:0 0 25px #fff; transform:scale(1.05); }
+        .ans-btn.show-correct { background:#26890c !important; border:4px solid #fff; }
+        .ans-btn.show-wrong { background:#e21b3c !important; opacity:0.5; }
+        .ans-btn.dimmed { opacity:0.15; }
+    </style>
+</head>
+<body class="f-montserrat">
+
+    <!-- DEBUG -->
+    <div id="debug-box"><div class="log-info">MeioKahoot v1.0.0 — Logs ativos</div></div>
+
+    <!-- BARRA DE ACERTO/ERRO -->
+    <div id="fb-bar">---</div>
+
+    <!-- SCORE AO VIVO -->
+    <div id="live-score">⭐ <span id="sc-val">0</span> pts</div>
+
+    <!-- HUD -->
+    <div id="hud" class="top-hud" style="display:none;">
+        <div class="user-profile">
+            <div id="u-img"><div class="p-photo" style="display:flex;align-items:center;justify-content:center;background:#eee;font-size:1.5rem;">👤</div></div>
+            <div><span id="u-name" class="p-name">---</span><br><span id="u-xp" style="font-size:0.7rem;color:var(--yellow);font-weight:900;">🏆 0 XP</span></div>
+        </div>
+        <div id="h-pin" style="font-weight:900;background:white;color:black;padding:5px 15px;border-radius:5px;">PIN: ---</div>
+    </div>
+
+    <div id="tm-ui" class="timer-container" style="display:none;"><div id="tm-bar" class="timer-bar"></div></div>
+
+    <!-- AUTH -->
+    <div id="p-auth" class="page" style="display:flex;">
+        <h1 style="font-size:3.5rem;font-weight:900;margin-bottom:2rem;">MEIO <span style="color:var(--green)">KAHOOT</span></h1>
+        <div class="arena-card" id="box-login">
+            <h2>Entrar</h2>
+            <input type="text" id="l-u" placeholder="Usuário">
+            <input type="password" id="l-p" placeholder="Senha">
+            <button class="btn-main" onclick="Auth.login()">LOGAR</button>
+            <button onclick="Auth.toggle()" style="margin-top:10px;background:none;border:none;color:var(--purple);font-weight:bold;cursor:pointer;">Criar conta</button>
+        </div>
+        <div class="arena-card" id="box-reg" style="display:none;">
+            <h2>Cadastro</h2>
+            <div id="prev" style="width:70px;height:70px;border-radius:50%;background:#f0f0f0;margin:0 auto 10px;overflow:hidden;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:2rem;">📸</div>
+            <label style="font-size:0.7rem;color:var(--purple);cursor:pointer;font-weight:bold;">ESCOLHER FOTO<input type="file" id="u-f" accept="image/*" onchange="Auth.read(this)" style="display:none;"></label>
+            <input type="text" id="r-u" placeholder="Usuário" style="margin-top:10px;">
+            <input type="password" id="r-p" placeholder="Senha">
+            <button class="btn-main btn-green" onclick="Auth.reg()">CADASTRAR</button>
+            <button onclick="Auth.toggle()" style="margin-top:10px;background:none;border:none;color:var(--purple);font-weight:bold;cursor:pointer;">Voltar</button>
+        </div>
+    </div>
+
+    <!-- HOME -->
+    <div id="p-home" class="page">
+        <div class="arena-card">
+            <h2>Menu Principal</h2>
+            <input type="text" id="j-pin" placeholder="PIN da Sala">
+            <button class="btn-main" onclick="Game.join()">ENTRAR NA SALA</button>
+            <hr style="margin:15px 0;opacity:0.1;">
+            <select id="t-sel"><option value="ciencias">Ciências</option><option value="reciclagem">Reciclagem</option><option value="agua">Água</option><option value="clima">Clima</option></select>
+            <button class="btn-main btn-green" onclick="Game.create()">CRIAR SALA</button>
+            <button class="btn-main btn-bot" onclick="Game.bot()">MODO TREINO (BOTS) 🤖</button>
+        </div>
+    </div>
+
+    <!-- LOBBY -->
+    <div id="p-lobby" class="page">
+        <h1 id="lb-pin" style="font-size:4.5rem;background:white;color:black;padding:10px 50px;border-radius:10px;">000000</h1>
+        <div id="lb-list" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:25px;"></div>
+        <button id="st-btn" class="btn-main btn-green" onclick="Game.start()" style="display:none;width:auto;padding:20px 60px;margin-top:30px;font-size:1.5rem;">COMEÇAR PARTIDA</button>
+    </div>
+
+    <!-- GAME -->
+    <div id="p-game" class="page">
+        <div style="background:white;color:black;padding:35px;border-radius:12px;width:90%;max-width:900px;text-align:center;position:relative;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+            <div id="q-diff" style="font-size:0.8rem;font-weight:900;margin-bottom:10px;text-transform:uppercase;">DIFICULDADE</div>
+            <h2 id="q-txt" style="font-size:2rem;font-weight:900;">---</h2>
+            <div id="q-count" style="position:absolute;top:-12px;left:20px;background:var(--blue);color:white;padding:4px 12px;border-radius:15px;font-weight:bold;font-size:0.8rem;">1/10</div>
+        </div>
+        <div id="ans-grid" class="quiz-grid"></div>
+    </div>
+
+    <!-- RANKING (antigo - mantido como fallback, mas não mais usado) -->
+    <div id="p-rank" class="page" style="display:none;">
+        <h1 style="font-size:3.5rem;margin-bottom:2rem;">Parabéns 🏆</h1>
+        <div id="rk-list" style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;"></div>
+        <button class="btn-main" onclick="location.reload()" style="margin-top:30px;background:white;color:var(--purple);width:auto;padding:15px 50px;">VOLTAR</button>
+    </div>
+
+    <div id="cb-pop" class="combo-pop">COMBO! 🔥</div>
+    <div style="position:fixed;bottom:130px;right:10px;font-size:0.65rem;opacity:0.4;font-weight:bold;">v1.0.0</div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- 🆕 RANKING JS (antes do script principal) -->
+    <script src="/Scripts/Js/ranking.js"></script>
+    <script src="/Scripts/Js/sounds.js"></script>
+    <script>
+        // ==================== DEBUG LOG ====================
+        function log(msg, type) {
+            const box = document.getElementById('debug-box');
+            const d = document.createElement('div');
+            d.className = type === 'err' ? 'log-err' : (type === 'ok' ? 'log-ok' : 'log-info');
+            d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+            box.appendChild(d);
+            box.scrollTop = box.scrollHeight;
+            console.log(msg);
+        }
+
+        // ==================== VARIÁVEIS ====================
+        const socket = io();
+        let curPin = '', curUser = null, curPhoto = '', combo = 0, curSec = 0, timer, canClick = false;
+
+        socket.on('connect', () => log('Socket conectado: ' + socket.id, 'ok'));
+        socket.on('disconnect', () => log('Socket DESCONECTADO!', 'err'));
+
+        // ==================== AUTH ====================
+        const Auth = {
+            read(i) { const f=i.files[0]; if(f){const r=new FileReader();r.onload=e=>{curPhoto=e.target.result;document.getElementById('prev').innerHTML=`<img src="${curPhoto}" style="width:100%;height:100%;object-fit:cover;">`;};r.readAsDataURL(f);} },
+            toggle() { const l=document.getElementById('box-login'),r=document.getElementById('box-reg');l.style.display=l.style.display==='none'?'block':'none';r.style.display=r.style.display==='none'?'block':'none'; },
+            reg() { const u=document.getElementById('r-u').value,p=document.getElementById('r-p').value;if(!u||!p)return alert('Preencha!');socket.emit('register',{user:u,pass:p,photo:curPhoto});log('Registrando: '+u); },
+            login() { const u=document.getElementById('l-u').value,p=document.getElementById('l-p').value;socket.emit('login',{user:u,pass:p});log('Logando: '+u); },
+            logout() { localStorage.removeItem('mk-user');location.reload(); }
+        };
+
+        // ==================== GAME ====================
+        const Game = {
+            create() { log('Criando sala...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo}); },
+            bot() { log('Criando sala com bots...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo}); setTimeout(()=>{socket.emit('addBots',curPin);document.getElementById('st-btn').style.display='block';},600); },
+            join() { const p=document.getElementById('j-pin').value;if(!p)return alert('PIN!');log('Entrando na sala: '+p);socket.emit('joinRoom',{pin:p,name:curUser.user,photo:curUser.photo}); },
+            start() { log('Iniciando jogo...'); socket.emit('startGame',curPin); },
+            answer(idx) {
+                log('>>> CLIQUE no botão ' + idx + ' | canClick=' + canClick + ' | pin=' + curPin);
+                
+                if (!canClick) { log('BLOQUEADO! canClick=false', 'err'); return; }
+                canClick = false;
+
+                // Visual: marca botão selecionado
+                const btns = document.querySelectorAll('.ans-btn');
+                btns[idx].classList.add('picked');
+
+                Sounds.play('click');
+                // 🔧 FIX: envia combo+1 para que a 1ª resposta já tenha bônus de 1.15x
+                const comboEnviado = combo + 1;
+                log('Enviando resposta: idx=' + idx + ' time=' + curSec + ' combo=' + comboEnviado);
+
+                socket.emit('answer', { pin: curPin, idx: idx, time: curSec, combo: comboEnviado });
+            }
+        };
+
+        // ==================== UI ====================
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+            document.getElementById(id).style.display='flex';
+            document.getElementById('hud').style.display=(id==='p-auth'||id==='p-home')?'none':'flex';
+            document.getElementById('tm-ui').style.display=(id==='p-game')?'block':'none';
+            document.getElementById('live-score').className=(id==='p-game')?'vis':'';
+        }
+
+        // ==================== SOCKET EVENTS ====================
+
+        socket.on('authOk', u => {
+            curUser = u;
+            localStorage.setItem('mk-user', JSON.stringify({user:u.user,pass:u.pass}));
+            document.getElementById('u-name').innerText = u.user;
+            document.getElementById('u-xp').innerText = '🏆 '+(u.xp||0)+' XP';
+            if(u.photo) document.getElementById('u-img').innerHTML = `<img src="${u.photo}" class="p-photo">`;
+            showPage('p-home');
+            log('Logado como: ' + u.user, 'ok');
+        });
+
+        socket.on('roomCreated', pin => {
+            curPin = pin;
+            document.getElementById('lb-pin').innerText = pin;
+            document.getElementById('h-pin').innerText = 'PIN: '+pin;
+            document.getElementById('st-btn').style.display = 'block';
+            showPage('p-lobby');
+            log('Sala criada: ' + pin + ' | Meu socket: ' + socket.id, 'ok');
+        });
+
+        socket.on('joined', d => {
+            curPin = d.pin;
+            document.getElementById('lb-pin').innerText = d.pin;
+            document.getElementById('h-pin').innerText = 'PIN: '+d.pin;
+            document.getElementById('st-btn').style.display = 'none';
+            showPage('p-lobby');
+            log('Entrou na sala: ' + d.pin, 'ok');
+        });
+
+        socket.on('pList', list => {
+            document.getElementById('lb-list').innerHTML = list.map(p => `
+                <div style="background:white;color:black;padding:10px 20px;border-radius:25px;display:flex;align-items:center;gap:8px;font-weight:900;">
+                    ${p.photo?`<img src="${p.photo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">`:'👤'} ${p.name}
+                </div>
+            `).join('');
+        });
+
+        // ==================== QUESTÃO ====================
+        socket.on('q', q => {
+            log('Questão ' + q.n + '/' + q.total + ': ' + q.question, 'info');
+            
+            canClick = true;
+            hideFb();
+            showPage('p-game');
+
+            document.getElementById('q-txt').innerText = q.question;
+            document.getElementById('q-count').innerText = q.n + '/' + q.total;
+            const diff = document.getElementById('q-diff');
+            diff.innerText = q.difficulty;
+            diff.style.color = q.difficulty==='facil'?'#4caf50':(q.difficulty==='medio'?'#ff9800':'#f44336');
+
+            const colors = ['red','blue','yellow','green'];
+            document.getElementById('ans-grid').innerHTML = q.options.map((opt, i) => 
+                '<button class="ans-btn c-'+colors[i]+'" onclick="Game.answer('+i+')">'+opt+'</button>'
+            ).join('');
+
+            // Timer
+            clearInterval(timer);
+            curSec = q.time;
+            const bar = document.getElementById('tm-bar');
+            bar.style.width = '100%'; bar.classList.remove('warning');
+            timer = setInterval(() => {
+                curSec--;
+                bar.style.width = (curSec/q.time)*100 + '%';
+                if(curSec<=5 && curSec>0) { bar.classList.add('warning'); Sounds.play('timer'); }
+                if(curSec<=0) clearInterval(timer);
+            }, 1000);
+        });
+
+        // ==================== RESULTADO ====================
+        socket.on('result', d => {
+            log('RESULTADO: ' + (d.correct ? '✅ ACERTOU! +' + d.earned + 'pts' : '❌ ERROU') + ' | Total: ' + d.totalScore, d.correct ? 'ok' : 'err');
+            clearInterval(timer);
+
+            const btns = document.querySelectorAll('.ans-btn');
+            btns.forEach((b, i) => {
+                b.classList.remove('picked');
+                if (i === d.correctIdx) b.classList.add('show-correct');
+                else b.classList.add('dimmed');
+            });
+
+            if (d.correct) {
+                combo++;
+                showFb(true, '+' + d.earned + ' pontos!');
+                Sounds.play('correct');
+                if(combo>1){document.getElementById('cb-pop').innerText='COMBO X'+combo+' 🔥';document.getElementById('cb-pop').classList.add('active');}
+            } else {
+                combo = 0;
+                showFb(false, 'A resposta certa era a ' + (d.correctIdx+1) + 'ª');
+                Sounds.play('wrong');
+                document.getElementById('cb-pop').classList.remove('active');
+            }
+
+            document.getElementById('sc-val').innerText = d.totalScore;
+        });
+
+        // ==================== TEMPO ESGOTOU ====================
+        socket.on('reveal', d => {
+            log('Revelação: correta=' + d.correct + (canClick ? ' (tempo esgotou sem responder)' : ''), 'info');
+            if (canClick) {
+                canClick = false;
+                combo = 0;
+                const btns = document.querySelectorAll('.ans-btn');
+                btns.forEach((b, i) => {
+                    if(i===d.correct) b.classList.add('show-correct');
+                    else b.classList.add('dimmed');
+                });
+                showFb(false, 'Tempo esgotado!');
+                Sounds.play('wrong');
+            }
+        });
+
+        // ==================== 🆕 FIM DE JOGO - RANKING ANIMADO ====================
+        socket.on('gameOver', r => {
+            log('🏁 FIM DE JOGO! ' + r.length + ' jogadores', 'ok');
+            hideFb();
+            Sounds.play('win');
+
+            // Configura callbacks dos botões
+            RankingScreen.setOnPlayAgain(() => {
+                log('Jogar de novo... voltando ao menu');
+                showPage('p-home');
+            });
+
+            RankingScreen.setOnLeave(() => {
+                log('Saindo...');
+                window.location.reload();
+            });
+
+            // 🎉 Mostra o ranking animado!
+            RankingScreen.show(r);
+        });
+
+        // ==================== FEEDBACK BAR ====================
+        function showFb(correct, msg) {
+            const bar = document.getElementById('fb-bar');
+            bar.className = correct ? 'fb-correct' : 'fb-wrong';
+            bar.textContent = (correct ? '✅ ' : '❌ ') + msg;
+        }
+        function hideFb() { document.getElementById('fb-bar').className = ''; }
+
+        // ==================== INIT ====================
+        window.onload = () => {
+            document.body.className = 'f-' + (localStorage.getItem('mk-font')||'montserrat');
+            const saved = localStorage.getItem('mk-user');
+            if(saved) { log('Auto-login...', 'info'); socket.emit('login', JSON.parse(saved)); }
+        };
+
+        socket.on('authErr', m => { log('AUTH ERROR: '+m, 'err'); alert(m); });
+        socket.on('err', m => { log('ERROR: '+m, 'err'); alert(m); });
+    </script>
+</body>
+</html>

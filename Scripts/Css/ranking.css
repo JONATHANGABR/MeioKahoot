@@ -1,0 +1,331 @@
+/* ============================================================
+   TELA DE RANKING FINAL – Estilo Kahoot (v2)
+   Coloque em: /Scripts/Css/ranking.css
+   ============================================================ */
+
+/* --- Overlay / Container Principal --- */
+#rankingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, #1a0533 0%, #2d1b69 40%, #461a8e 70%, #6c2bd9 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  overflow-y: auto;
+}
+
+#rankingOverlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* --- Partículas de fundo (confetti) --- */
+.ranking-confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: -20px;
+  border-radius: 3px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg) scale(0.3); opacity: 0; }
+}
+
+/* --- Conteúdo do Ranking --- */
+.ranking-content {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 700px;
+  text-align: center;
+}
+
+/* --- Título --- */
+.ranking-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 4px 8px rgba(0,0,0,0.4);
+  margin-bottom: 0.3em;
+  letter-spacing: 2px;
+  animation: titleBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ranking-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 2em;
+  letter-spacing: 1px;
+}
+
+@keyframes titleBounce {
+  0%   { transform: scale(0.3); opacity: 0; }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Lista de jogadores --- */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- Card de cada jogador --- */
+.player-rank-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border: 2px solid rgba(255,255,255,0.12);
+  transform: translateX(120%);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              opacity 0.4s ease,
+              background 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+.player-rank-card.revealed {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* --- Posição --- */
+.rank-pos {
+  font-size: 1.6rem;
+  font-weight: 900;
+  min-width: 44px;
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+}
+
+.rank-medal {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+/* --- Foto / Avatar --- */
+.rank-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  overflow: hidden;
+}
+
+.rank-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Nome --- */
+.rank-name {
+  flex: 1;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Pontuação --- */
+.rank-score {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #ffd700;
+  min-width: 70px;
+  text-align: right;
+  text-shadow: 0 0 12px rgba(255,215,0,0.5);
+}
+
+.rank-score-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Destaques por posição --- */
+/* 1º lugar */
+.player-rank-card:nth-child(1).revealed {
+  background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,180,0,0.1));
+  border-color: #ffd700;
+  box-shadow: 0 0 30px rgba(255,215,0,0.3), 0 8px 32px rgba(0,0,0,0.3);
+  padding: 20px 24px;
+  transform: translateX(0) scale(1.04);
+}
+
+.player-rank-card:nth-child(1) .rank-photo {
+  width: 60px;
+  height: 60px;
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255,215,0,0.5);
+}
+
+.player-rank-card:nth-child(1) .rank-score {
+  font-size: 1.6rem;
+  color: #ffd700;
+}
+
+.player-rank-card:nth-child(1) .rank-name {
+  font-size: 1.35rem;
+}
+
+/* 2º lugar */
+.player-rank-card:nth-child(2).revealed {
+  background: linear-gradient(135deg, rgba(192,192,192,0.18), rgba(150,150,150,0.08));
+  border-color: #c0c0c0;
+  box-shadow: 0 0 20px rgba(192,192,192,0.2), 0 6px 24px rgba(0,0,0,0.25);
+  padding: 18px 22px;
+  transform: translateX(0) scale(1.02);
+}
+
+.player-rank-card:nth-child(2) .rank-score {
+  color: #c0c0c0;
+  text-shadow: 0 0 12px rgba(192,192,192,0.5);
+}
+
+/* 3º lugar */
+.player-rank-card:nth-child(3).revealed {
+  background: linear-gradient(135deg, rgba(205,127,50,0.18), rgba(180,100,30,0.08));
+  border-color: #cd7f32;
+  box-shadow: 0 0 18px rgba(205,127,50,0.2), 0 4px 20px rgba(0,0,0,0.2);
+  padding: 16px 22px;
+  transform: translateX(0) scale(1.01);
+}
+
+.player-rank-card:nth-child(3) .rank-score {
+  color: #cd7f32;
+  text-shadow: 0 0 12px rgba(205,127,32,0.5);
+}
+
+/* --- Botões --- */
+.ranking-actions {
+  margin-top: 2.5em;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-ranking {
+  padding: 14px 36px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+}
+
+.btn-play-again {
+  background: linear-gradient(135deg, #ff6b6b, #ff3d3d);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(255,61,61,0.4);
+}
+
+.btn-play-again:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(255,61,61,0.55);
+}
+
+.btn-leave {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.25);
+}
+
+.btn-leave:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.5);
+  transform: translateY(-2px);
+}
+
+/* --- Coroa para o vencedor --- */
+.winner-crown {
+  position: absolute;
+  top: -38px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  animation: crownFloat 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(255,215,0,0.6));
+}
+
+@keyframes crownFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-8px); }
+}
+
+.player-rank-card:nth-child(1) {
+  position: relative;
+}
+
+/* --- Responsivo --- */
+@media (max-width: 500px) {
+  .player-rank-card {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .rank-photo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .rank-name {
+    font-size: 0.95rem;
+  }
+
+  .rank-score {
+    font-size: 1rem;
+    min-width: 50px;
+  }
+
+  .player-rank-card:nth-child(1) .rank-photo { width: 48px; height: 48px; }
+  .player-rank-card:nth-child(1) .rank-name  { font-size: 1.1rem; }
+  .player-rank-card:nth-child(1) .rank-score { font-size: 1.2rem; }
+
+  .btn-ranking {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+}

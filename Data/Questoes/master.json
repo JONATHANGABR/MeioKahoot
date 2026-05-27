@@ -1,0 +1,29 @@
+{
+  "ciencias": [
+    { "question": "Oque é fator biotico?", "options": ["É onde os Seres vivem","É a vida dos Animais","São as Rochas","É o Ser Humano"], "answer": 0, "time": 15, "difficulty": "facil" },
+    { "question": "O que é Ecossistema", "options": ["Um Conjunto formado pela Parte Viva e Não Viva","São as Bactérias","Os Virus","São os Fungos que estão espalhados"], "answer": 0, "time": 15, "difficulty": "facil" },
+    { "question": "Quais são os Biomas Brasileiros", "options": ["Amazonia, Mata-Atlantica, Cerrado, Pantanal e Taiga","Amazonia, Mata-Atlantica, Cerrado, Pantanal e Pampa","Tundra, Amazonia, Savana e Deserto","Amazonia, Mata-Atlantica, Cerrado, Pantanal"], "answer": 1, "time": 15, "difficulty": "facil" },
+    { "question": "O que é um Animal Produtor?", "options": ["Animais que ajudam em Plantas","São os Animais com os Genes das Formigas","Os Animais que fazem Fotossintese","Os Ultimos da Cadeia Alimentar"], "answer": 2, "time": 20, "difficulty": "medio" },
+    { "question": "O que é Fauna?", "options": ["Os Animais do Bioma","O Tipo do Bioma","As Arvores do Bioma","Os Mares do Bioma"], "answer": 0, "time": 20, "difficulty": "medio" },
+    { "question": "Oque é Ecologia??", "options": ["A Ciência que Estuda os Animais e o Ambiente","A Parte do Ecossistema","Seres Humanos","A Relações dos Animais"], "answer": 2, "time": 25, "difficulty": "dificil" }
+  ],
+  "reciclagem": [
+    { "question": "Qual lixeira é para Vidro?", "options": ["Azul","Vermelha","Verde","Amarela"], "answer": 2, "time": 15, "difficulty": "facil" },
+    { "question": "Qual lixeira é para Papel?", "options": ["Azul","Vermelha","Verde","Amarela"], "answer": 0, "time": 15, "difficulty": "facil" },
+    { "question": "O que significa Reciclar?", "options": ["Jogar fora","Reutilizar material","Queimar","Enterrar"], "answer": 1, "time": 15, "difficulty": "facil" },
+    { "question": "Quanto tempo o plástico demora para se decompor?", "options": ["50 anos","100 anos","450 anos","10 anos"], "answer": 2, "time": 20, "difficulty": "medio" },
+    { "question": "O que são 3R's?", "options": ["Reduzir, Reutilizar, Reciclar","Rir, Rezar, Repetir","Recolher, Reter, Repor","Nenhuma das anteriores"], "answer": 0, "time": 20, "difficulty": "medio" }
+  ],
+  "agua": [
+    { "question": "Qual a fórmula química da água?", "options": ["CO2","H2O","O2","NaCl"], "answer": 1, "time": 15, "difficulty": "facil" },
+    { "question": "Qual a porcentagem de água doce no planeta?", "options": ["97%","3%","50%","25%"], "answer": 1, "time": 15, "difficulty": "facil" }, 
+    { "question": "O que é dessalinização?", "options": ["Poluir água","Tirar o sal da água","Congelar água","Ferver água"], "answer": 1, "time": 20, "difficulty": "medio" },
+    { "question": "Qual setor mais consome água no Brasil?", "options": ["Indústria","Doméstico","Agropecuária","Lazer"], "answer": 2, "time": 20, "difficulty": "medio" }
+  ],
+  "clima": [
+    { "question": "O que causa o efeito estufa excessivo?", "options": ["Oxigênio","Gás Carbônico","Vento","Chuva"], "answer": 1, "time": 15, "difficulty": "facil" },
+    { "question": "O que são energias limpas?", "options": ["Carvão e Gás","Solar e Eólica","Petróleo","Diesel"], "answer": 1, "time": 15, "difficulty": "facil" },
+    { "question": "O que acontece com as calotas polares?", "options": ["Crescendo","Derretendo","Sem mudança","Ficaram roxas"], "answer": 1, "time": 20, "difficulty": "medio" },
+    { "question": "Qual conferência criou a Agenda 21?", "options": ["Eco-92","COP-21","Kyoto","Rio+20"], "answer": 0, "time": 25, "difficulty": "dificil" }
+  ]
+}

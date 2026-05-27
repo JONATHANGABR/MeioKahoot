@@ -1,0 +1,167 @@
+:root {
+    --purple: #46178f;
+    --red: #e21b3c;
+    --blue: #1368ce;
+    --yellow: #ffa602;
+    --green: #26890c;
+    --dark: #131018;
+    --glass: rgba(255, 255, 255, 0.1);
+}
+
+@font-face { font-family: 'Neo'; src: url('/Assets/Fontes/Neo.ttf') format('truetype'); }
+@font-face { font-family: 'Starborn'; src: url('/Assets/Fontes/Starborn.ttf') format('truetype'); }
+@font-face { font-family: 'SuperMario'; src: url('/Assets/Fontes/SuperMario256.ttf') format('truetype'); }
+
+* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+body { 
+    background-color: var(--purple); 
+    color: white; 
+    font-family: 'Montserrat', sans-serif; 
+    height: 100vh; 
+    overflow: hidden;
+}
+
+/* Utilitários de Fontes */
+.f-neo { font-family: 'Neo', sans-serif !important; }
+.f-star { font-family: 'Starborn', sans-serif !important; }
+.f-mario { font-family: 'SuperMario', sans-serif !important; }
+
+.page {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: radial-gradient(circle at center, var(--purple) 0%, #2e0e5f 100%);
+}
+
+/* HUD Superior */
+.top-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.user-profile { display: flex; align-items: center; gap: 12px; }
+.p-photo { width: 45px; height: 45px; border-radius: 50%; border: 2px solid white; object-fit: cover; background: #fff; }
+.p-name { font-weight: 900; font-size: 1.1rem; }
+
+/* Barra de Tempo */
+.timer-container {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+.timer-bar { height: 100%; background: var(--green); width: 100%; transition: width 1s linear; }
+.timer-bar.warning { background: var(--red); }
+
+/* Card Estilo Arena */
+.arena-card {
+    background: white;
+    color: var(--dark);
+    padding: 35px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    text-align: center;
+}
+
+.arena-card h2 { margin-bottom: 20px; font-weight: 900; color: var(--purple); }
+
+/* Inputs e Botões */
+input, select {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: 0.2s;
+}
+input:focus { border-color: var(--purple); }
+
+.btn-main {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: var(--purple);
+    color: white;
+    transition: 0.2s;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+.btn-main:active { transform: translateY(2px); box-shadow: none; }
+.btn-green { background: var(--green); }
+.btn-bot { background: #546e7a; margin-top: 10px; }
+
+/* Grid de Respostas */
+.quiz-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 25px;
+}
+
+.ans-btn {
+    height: 100px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+    transition: 0.1s;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+.ans-btn:active { transform: translateY(3px); box-shadow: none; }
+
+.ans-btn.correct { border: 6px solid white; box-shadow: 0 0 30px white; z-index: 10; }
+.ans-btn.wrong { opacity: 0.2; filter: grayscale(1); }
+
+.c-red { background: var(--red); }
+.c-blue { background: var(--blue); }
+.c-yellow { background: var(--yellow); }
+.c-green { background: var(--green); }
+
+/* Combo Pop */
+.combo-pop {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: var(--yellow);
+    color: var(--dark);
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: 900;
+    font-size: 1.8rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transform: scale(0);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.combo-pop.active { transform: scale(1.2); }
