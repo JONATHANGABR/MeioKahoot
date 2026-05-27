@@ -1,4 +1,5 @@
 Aqui está as mudanças de Todas as versões até o dia Esperado.
 
 - 1.0.0 -
-Foi criada uma Pagina no github para isso. para postar todo o Desenvolvimento do projeto e ETC.
+Criei umas Pastas para organizar todo o projeto.
+Também Foi criada uma Pagina no github para isso. para postar todo o Desenvolvimento do projeto e ETC.
