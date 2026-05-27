@@ -5,12 +5,12 @@
 const Sounds = {
     // Lista de sons (nome do arquivo)
     files: {
-        click: 'click.mp3',
-        correct: 'correct.mp3',
-        wrong: 'wrong.mp3',
-        timer: 'timer_tick.mp3',
-        lobby: 'lobby_music.mp3',
-        countdown: 'countdown.mp3',
+        click: 'Click.mp3',
+        correct: 'Correct.mp3',
+        wrong: 'Incorrrect.mp3',
+        timer: 'Coundown.mp3',
+        lobby: 'Lobby.mp3',
+        countdown: 'Alarm.mp3',
         win: 'victory.mp3'
     },
     

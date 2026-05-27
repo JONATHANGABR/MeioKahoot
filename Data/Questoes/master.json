@@ -1,29 +1,346 @@
 {
   "ciencias": [
-    { "question": "Oque é fator biotico?", "options": ["É onde os Seres vivem","É a vida dos Animais","São as Rochas","É o Ser Humano"], "answer": 0, "time": 15, "difficulty": "facil" },
-    { "question": "O que é Ecossistema", "options": ["Um Conjunto formado pela Parte Viva e Não Viva","São as Bactérias","Os Virus","São os Fungos que estão espalhados"], "answer": 0, "time": 15, "difficulty": "facil" },
-    { "question": "Quais são os Biomas Brasileiros", "options": ["Amazonia, Mata-Atlantica, Cerrado, Pantanal e Taiga","Amazonia, Mata-Atlantica, Cerrado, Pantanal e Pampa","Tundra, Amazonia, Savana e Deserto","Amazonia, Mata-Atlantica, Cerrado, Pantanal"], "answer": 1, "time": 15, "difficulty": "facil" },
-    { "question": "O que é um Animal Produtor?", "options": ["Animais que ajudam em Plantas","São os Animais com os Genes das Formigas","Os Animais que fazem Fotossintese","Os Ultimos da Cadeia Alimentar"], "answer": 2, "time": 20, "difficulty": "medio" },
-    { "question": "O que é Fauna?", "options": ["Os Animais do Bioma","O Tipo do Bioma","As Arvores do Bioma","Os Mares do Bioma"], "answer": 0, "time": 20, "difficulty": "medio" },
-    { "question": "Oque é Ecologia??", "options": ["A Ciência que Estuda os Animais e o Ambiente","A Parte do Ecossistema","Seres Humanos","A Relações dos Animais"], "answer": 2, "time": 25, "difficulty": "dificil" }
+    {
+      "question": "O que é fator biótico?",
+      "options": ["São os seres vivos de um ambiente", "São as rochas e a água", "É apenas o clima", "É somente o solo"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que é ecossistema?",
+      "options": ["Um conjunto formado pelos seres vivos e pelos fatores não vivos", "São apenas as bactérias", "São apenas os vírus", "São apenas os fungos"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Quais são biomas brasileiros?",
+      "options": ["Amazônia, Mata Atlântica, Cerrado, Pantanal e Taiga", "Amazônia, Mata Atlântica, Cerrado, Pantanal, Caatinga e Pampa", "Tundra, Amazônia, Savana e Deserto", "Amazônia, Mata Atlântica, Cerrado e Tundra"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que é um ser produtor na cadeia alimentar?",
+      "options": ["Um animal que caça outros animais", "Um ser que se alimenta de restos", "Um ser que produz seu próprio alimento, como plantas e algas", "O último ser da cadeia alimentar"],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que é fauna?",
+      "options": ["O conjunto de animais de uma região", "O tipo de solo de uma região", "O conjunto de plantas de uma região", "A quantidade de água de uma região"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que é ecologia?",
+      "options": ["A ciência que estuda as relações dos seres vivos entre si e com o ambiente", "A parte não viva do ecossistema", "O estudo apenas dos seres humanos", "O estudo apenas dos planetas"],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil"
+    },
+    {
+      "question": "O que é fator abiótico?",
+      "options": ["Os animais do ambiente", "Os elementos não vivos, como luz, água, temperatura e solo", "Apenas as plantas", "Apenas os fungos"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que é flora?",
+      "options": ["O conjunto de plantas de uma região", "O conjunto de animais de uma região", "A temperatura de uma região", "A quantidade de rios de uma região"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Em uma cadeia alimentar, quem se alimenta diretamente dos produtores?",
+      "options": ["Consumidores primários", "Consumidores terciários", "Decompositores", "Predadores finais"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual é a função dos decompositores no ecossistema?",
+      "options": ["Produzir luz", "Reciclar matéria orgânica, devolvendo nutrientes ao ambiente", "Aumentar a poluição", "Impedir o crescimento das plantas"],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual destes seres é um produtor?",
+      "options": ["Capim", "Onça", "Gavião", "Cobra"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que pode acontecer se um predador desaparecer de uma cadeia alimentar?",
+      "options": ["Nada muda no ecossistema", "A população de suas presas pode aumentar demais", "Todas as plantas desaparecem imediatamente", "A água vira salgada"],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil"
+    }
   ],
   "reciclagem": [
-    { "question": "Qual lixeira é para Vidro?", "options": ["Azul","Vermelha","Verde","Amarela"], "answer": 2, "time": 15, "difficulty": "facil" },
-    { "question": "Qual lixeira é para Papel?", "options": ["Azul","Vermelha","Verde","Amarela"], "answer": 0, "time": 15, "difficulty": "facil" },
-    { "question": "O que significa Reciclar?", "options": ["Jogar fora","Reutilizar material","Queimar","Enterrar"], "answer": 1, "time": 15, "difficulty": "facil" },
-    { "question": "Quanto tempo o plástico demora para se decompor?", "options": ["50 anos","100 anos","450 anos","10 anos"], "answer": 2, "time": 20, "difficulty": "medio" },
-    { "question": "O que são 3R's?", "options": ["Reduzir, Reutilizar, Reciclar","Rir, Rezar, Repetir","Recolher, Reter, Repor","Nenhuma das anteriores"], "answer": 0, "time": 20, "difficulty": "medio" }
+    {
+      "question": "Qual lixeira é para vidro?",
+      "options": ["Azul", "Vermelha", "Verde", "Amarela"],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual lixeira é para papel?",
+      "options": ["Azul", "Vermelha", "Verde", "Amarela"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que significa reciclar?",
+      "options": ["Jogar fora", "Transformar ou reaproveitar materiais", "Queimar lixo", "Enterrar resíduos"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Quanto tempo o plástico pode demorar para se decompor?",
+      "options": ["Cerca de 50 anos", "Cerca de 100 anos", "Cerca de 450 anos", "Cerca de 10 anos"],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que são os 3R's?",
+      "options": ["Reduzir, Reutilizar e Reciclar", "Rir, Rezar e Repetir", "Recolher, Reter e Repor", "Recortar, Remover e Rasgar"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual lixeira é usada para plástico?",
+      "options": ["Vermelha", "Verde", "Azul", "Marrom"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual lixeira é usada para metal?",
+      "options": ["Azul", "Amarela", "Verde", "Preta"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual lixeira é usada para resíduos orgânicos?",
+      "options": ["Marrom", "Azul", "Vermelha", "Amarela"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Por que é importante separar o lixo corretamente?",
+      "options": ["Para dificultar a coleta", "Para ajudar a reciclagem e reduzir a poluição", "Para aumentar o lixo nos rios", "Para gastar mais água"],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual destes materiais geralmente pode ser reciclado?",
+      "options": ["Garrafa PET limpa", "Restos de comida misturados", "Papel higiênico usado", "Fralda descartável usada"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que é coleta seletiva?",
+      "options": ["Misturar todo tipo de lixo", "Separar os resíduos por tipo de material", "Jogar lixo na rua", "Queimar resíduos em casa"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual atitude ajuda mais a reduzir a produção de lixo?",
+      "options": ["Usar descartáveis todos os dias", "Comprar sem necessidade", "Usar garrafa reutilizável", "Jogar embalagens no chão"],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio"
+    }
   ],
   "agua": [
-    { "question": "Qual a fórmula química da água?", "options": ["CO2","H2O","O2","NaCl"], "answer": 1, "time": 15, "difficulty": "facil" },
-    { "question": "Qual a porcentagem de água doce no planeta?", "options": ["97%","3%","50%","25%"], "answer": 1, "time": 15, "difficulty": "facil" }, 
-    { "question": "O que é dessalinização?", "options": ["Poluir água","Tirar o sal da água","Congelar água","Ferver água"], "answer": 1, "time": 20, "difficulty": "medio" },
-    { "question": "Qual setor mais consome água no Brasil?", "options": ["Indústria","Doméstico","Agropecuária","Lazer"], "answer": 2, "time": 20, "difficulty": "medio" }
+    {
+      "question": "Qual é a fórmula química da água?",
+      "options": ["CO2", "H2O", "O2", "NaCl"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Aproximadamente qual porcentagem da água do planeta é doce?",
+      "options": ["97%", "3%", "50%", "25%"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que é dessalinização?",
+      "options": ["Poluir a água", "Retirar o sal da água", "Congelar a água", "Misturar água com óleo"],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual setor mais consome água no Brasil?",
+      "options": ["Indústria", "Uso doméstico", "Agropecuária", "Lazer"],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual mudança de estado físico acontece quando a água vira vapor?",
+      "options": ["Condensação", "Solidificação", "Evaporação", "Fusão"],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual mudança de estado físico acontece quando o vapor vira gotículas de água?",
+      "options": ["Condensação", "Fusão", "Solidificação", "Sublimação"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que é ciclo da água?",
+      "options": ["O caminho que a água faz na natureza, passando por evaporação, condensação e precipitação", "A produção de plástico", "A separação do lixo", "A queima de combustíveis"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual atitude ajuda a economizar água em casa?",
+      "options": ["Deixar a torneira aberta ao escovar os dentes", "Tomar banhos muito longos", "Consertar vazamentos", "Lavar calçada todos os dias com mangueira"],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que é água potável?",
+      "options": ["Água própria para consumo humano", "Água do mar", "Água com lixo", "Água misturada com óleo"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual é uma consequência da poluição dos rios?",
+      "options": ["Melhora da vida aquática", "Morte de peixes e risco à saúde", "Aumento da água potável", "Diminuição do lixo automaticamente"],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Onde está a maior parte da água doce facilmente disponível para uso humano?",
+      "options": ["Nos oceanos", "Em rios, lagos e águas subterrâneas", "No petróleo", "No ar seco"],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil"
+    },
+    {
+      "question": "O que é precipitação no ciclo da água?",
+      "options": ["A queda de água da atmosfera, como chuva, neve ou granizo", "A água virando vapor", "O sal saindo da água", "O gelo derretendo"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    }
   ],
   "clima": [
-    { "question": "O que causa o efeito estufa excessivo?", "options": ["Oxigênio","Gás Carbônico","Vento","Chuva"], "answer": 1, "time": 15, "difficulty": "facil" },
-    { "question": "O que são energias limpas?", "options": ["Carvão e Gás","Solar e Eólica","Petróleo","Diesel"], "answer": 1, "time": 15, "difficulty": "facil" },
-    { "question": "O que acontece com as calotas polares?", "options": ["Crescendo","Derretendo","Sem mudança","Ficaram roxas"], "answer": 1, "time": 20, "difficulty": "medio" },
-    { "question": "Qual conferência criou a Agenda 21?", "options": ["Eco-92","COP-21","Kyoto","Rio+20"], "answer": 0, "time": 25, "difficulty": "dificil" }
+    {
+      "question": "O que causa o efeito estufa excessivo?",
+      "options": ["Oxigênio", "Aumento de gases como gás carbônico", "Vento", "Chuva"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que são energias limpas?",
+      "options": ["Carvão e gás", "Solar e eólica", "Petróleo", "Diesel"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que está acontecendo com muitas calotas polares por causa do aquecimento global?",
+      "options": ["Estão crescendo rapidamente", "Estão derretendo", "Não sofrem nenhuma mudança", "Ficaram roxas"],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual conferência criou a Agenda 21?",
+      "options": ["Eco-92", "COP-21", "Protocolo de Kyoto", "Rio+20"],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil"
+    },
+    {
+      "question": "Qual gás é muito associado à queima de combustíveis fósseis?",
+      "options": ["Gás carbônico", "Hélio", "Ozônio usado em balões", "Vapor de perfume"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual fonte de energia aproveita a força dos ventos?",
+      "options": ["Solar", "Eólica", "Hidrelétrica", "Nuclear"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual fonte de energia usa a luz do Sol?",
+      "options": ["Solar", "Eólica", "Carvão", "Diesel"],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual é uma consequência possível do aquecimento global?",
+      "options": ["Elevação do nível do mar", "Fim imediato de todas as chuvas", "Congelamento de todos os oceanos", "Desaparecimento da gravidade"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual atitude ajuda a reduzir a emissão de gases poluentes?",
+      "options": ["Usar mais transporte coletivo ou bicicleta", "Queimar lixo", "Desmatar áreas verdes", "Deixar luzes acesas sem necessidade"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual é a diferença entre tempo e clima?",
+      "options": ["Tempo é condição momentânea; clima é o padrão observado por longos períodos", "Tempo e clima são exatamente a mesma coisa", "Clima muda a cada minuto e tempo nunca muda", "Tempo é apenas temperatura do Sol"],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil"
+    },
+    {
+      "question": "O que é desmatamento?",
+      "options": ["Plantio de árvores", "Retirada da vegetação de uma área", "Limpeza de rios", "Reciclagem de papel"],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Por que as árvores ajudam no equilíbrio do clima?",
+      "options": ["Porque absorvem gás carbônico e liberam oxigênio na fotossíntese", "Porque produzem plástico", "Porque aumentam a fumaça", "Porque impedem toda chuva"],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    }
   ]
 }

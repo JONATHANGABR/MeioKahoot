@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
     socket.on('addBots', (pin) => {
         const r = rooms.get(pin);
         if (!r) return;
-        ['BOT_j9se 🤖', 'BOT_40ZO 🤖', 'BOT_Vida 🤖'].forEach((name, i) => {
+        ['BOT_j9se 🤖', 'BOT_ky/OO 🤖', 'BOT_Vida 🤖'].forEach((name, i) => {
             r.players.set('bot-' + i, { name, photo: '', score: 0, isBot: true });
         });
         io.to(pin).emit('pList', Array.from(r.players.values()));

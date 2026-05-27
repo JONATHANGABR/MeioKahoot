@@ -22,7 +22,7 @@ const App = {
             UI.showPage('lobby-waiting');
             document.getElementById('display-name').innerText = name;
         } else {
-            alert("Por favor, digite um apelido!");
+            alert("Por favor, digite um Nome!");
         }
     }
 };

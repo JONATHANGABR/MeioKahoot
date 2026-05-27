@@ -85,6 +85,10 @@
             <select id="t-sel"><option value="ciencias">Ciências</option><option value="reciclagem">Reciclagem</option><option value="agua">Água</option><option value="clima">Clima</option></select>
             <button class="btn-main btn-green" onclick="Game.create()">CRIAR SALA</button>
             <button class="btn-main btn-bot" onclick="Game.bot()">MODO TREINO (BOTS) 🤖</button>
+            <div class="menu-extra-buttons">
+                <button class="btn-mini btn-credits" onclick="Info.openCredits()">CRÉDITOS</button>
+                <button class="btn-mini btn-source" onclick="Info.openSource()">CÓDIGO FONTE</button>
+            </div>
         </div>
     </div>
 
@@ -103,6 +107,10 @@
             <div id="q-count" style="position:absolute;top:-12px;left:20px;background:var(--blue);color:white;padding:4px 12px;border-radius:15px;font-weight:bold;font-size:0.8rem;">1/10</div>
         </div>
         <div id="ans-grid" class="quiz-grid"></div>
+        <div id="answer-actions" class="answer-actions">
+            <div id="answer-status" class="answer-status">Escolha uma opção. Você pode trocar antes de confirmar.</div>
+            <button id="confirm-answer" class="btn-main btn-confirm" onclick="Game.confirmAnswer()" disabled>CONFIRMAR RESPOSTA</button>
+        </div>
     </div>
 
     <!-- RANKING (antigo - mantido como fallback, mas não mais usado) -->
@@ -112,13 +120,27 @@
         <button class="btn-main" onclick="location.reload()" style="margin-top:30px;background:white;color:var(--purple);width:auto;padding:15px 50px;">VOLTAR</button>
     </div>
 
-    <div id="cb-pop" class="combo-pop">COMBO! 🔥</div>
+    <!-- MODAL DE INFORMAÇÕES -->
+    <div id="info-modal" class="info-modal" onclick="Info.close(event)">
+        <div class="info-card">
+            <button class="info-close" onclick="Info.close()">×</button>
+            <h2 id="info-title">---</h2>
+            <div id="info-content">---</div>
+        </div>
+    </div>
+
+    <div id="cb-pop" class="combo-pop">COMBO! <img src="/Assets/animations/Fire.gif" alt="combo" class="combo-gif"></div>
     <div style="position:fixed;bottom:130px;right:10px;font-size:0.65rem;opacity:0.4;font-weight:bold;">v1.0.0</div>
 
     <script src="/socket.io/socket.io.js"></script>
     <!-- 🆕 RANKING JS (antes do script principal) -->
     <script src="/Scripts/Js/ranking.js"></script>
     <script src="/Scripts/Js/sounds.js"></script>
+    <!--
+        NOMES DOS SONS USADOS NESTE HTML:
+        click, timer, correct, wrong, win
+        Adicione/garanta esses nomes dentro do arquivo /Scripts/Js/sounds.js
+    -->
     <script>
         // ==================== DEBUG LOG ====================
         function log(msg, type) {
@@ -133,7 +155,11 @@
 
         // ==================== VARIÁVEIS ====================
         const socket = io();
-        let curPin = '', curUser = null, curPhoto = '', combo = 0, curSec = 0, timer, canClick = false;
+
+        // Coloque aqui o link do seu repositório, se tiver um:
+        const SOURCE_CODE_URL = 'https://github.com/JONATHANGABR/MeioKahoot/';
+
+        let curPin = '', curUser = null, curPhoto = '', combo = 0, curSec = 0, timer, canClick = false, selectedAnswer = null, answerSent = false;
 
         socket.on('connect', () => log('Socket conectado: ' + socket.id, 'ok'));
         socket.on('disconnect', () => log('Socket DESCONECTADO!', 'err'));
@@ -154,21 +180,61 @@
             join() { const p=document.getElementById('j-pin').value;if(!p)return alert('PIN!');log('Entrando na sala: '+p);socket.emit('joinRoom',{pin:p,name:curUser.user,photo:curUser.photo}); },
             start() { log('Iniciando jogo...'); socket.emit('startGame',curPin); },
             answer(idx) {
-                log('>>> CLIQUE no botão ' + idx + ' | canClick=' + canClick + ' | pin=' + curPin);
-                
-                if (!canClick) { log('BLOQUEADO! canClick=false', 'err'); return; }
-                canClick = false;
+                log('>>> ESCOLHEU botão ' + idx + ' | canClick=' + canClick + ' | pin=' + curPin);
 
-                // Visual: marca botão selecionado
+                if (!canClick || answerSent) { log('BLOQUEADO! resposta já enviada ou canClick=false', 'err'); return; }
+
+                // Agora o jogador pode re-escolher: só envia quando confirmar.
+                selectedAnswer = idx;
                 const btns = document.querySelectorAll('.ans-btn');
+                btns.forEach(b => b.classList.remove('picked'));
                 btns[idx].classList.add('picked');
 
+                document.getElementById('confirm-answer').disabled = false;
+                document.getElementById('answer-status').innerText = 'Opção ' + (idx + 1) + ' selecionada. Pode trocar ou confirmar.';
                 Sounds.play('click');
+            },
+            confirmAnswer(auto) {
+                if (!canClick || answerSent) return;
+                if (selectedAnswer === null) {
+                    if (!auto) alert('Escolha uma opção primeiro!');
+                    return;
+                }
+
+                answerSent = true;
+                canClick = false;
+                document.getElementById('confirm-answer').disabled = true;
+                document.getElementById('answer-status').innerText = auto ? 'Tempo acabou! Enviando sua última escolha...' : 'Resposta enviada!';
+
                 // 🔧 FIX: envia combo+1 para que a 1ª resposta já tenha bônus de 1.15x
                 const comboEnviado = combo + 1;
-                log('Enviando resposta: idx=' + idx + ' time=' + curSec + ' combo=' + comboEnviado);
+                log('Enviando resposta: idx=' + selectedAnswer + ' time=' + curSec + ' combo=' + comboEnviado);
+                socket.emit('answer', { pin: curPin, idx: selectedAnswer, time: curSec, combo: comboEnviado });
+            }
+        };
 
-                socket.emit('answer', { pin: curPin, idx: idx, time: curSec, combo: comboEnviado });
+        // ==================== BOTÕES DE INFORMAÇÃO ====================
+        const Info = {
+            openCredits() {
+                document.getElementById('info-title').innerText = 'Créditos';
+                document.getElementById('info-content').innerHTML = `
+                    <p><strong>MeioKahoot</strong></p>
+                    <p>Jogo criado por: <strong>Jonathan Gabriel</strong></p>
+                    <p>Design, programação e perguntas: <strong>Jonathan Gabriel</strong></p>
+                `;
+                document.getElementById('info-modal').classList.add('active');
+            },
+            openSource() {
+                document.getElementById('info-title').innerText = 'Código Fonte';
+                const link = SOURCE_CODE_URL.trim();
+                document.getElementById('info-content').innerHTML = link
+                    ? `<p>O código fonte está disponível aqui:</p><a class="source-link" href="${link}" target="_blank" rel="noopener">ABRIR REPOSITÓRIO</a>`
+                    : `<p>Adicione o link do seu repositório na variável <strong>https://github.com/JONATHANGABR/MeioKahoot/tree/main</strong> dentro do HTML.</p>`;
+                document.getElementById('info-modal').classList.add('active');
+            },
+            close(ev) {
+                if (ev && ev.target.id !== 'info-modal') return;
+                document.getElementById('info-modal').classList.remove('active');
             }
         };
 
@@ -224,6 +290,8 @@
             log('Questão ' + q.n + '/' + q.total + ': ' + q.question, 'info');
             
             canClick = true;
+            selectedAnswer = null;
+            answerSent = false;
             hideFb();
             showPage('p-game');
 
@@ -237,6 +305,8 @@
             document.getElementById('ans-grid').innerHTML = q.options.map((opt, i) => 
                 '<button class="ans-btn c-'+colors[i]+'" onclick="Game.answer('+i+')">'+opt+'</button>'
             ).join('');
+            document.getElementById('answer-status').innerText = 'Escolha uma opção. Você pode trocar antes de confirmar.';
+            document.getElementById('confirm-answer').disabled = true;
 
             // Timer
             clearInterval(timer);
@@ -247,7 +317,10 @@
                 curSec--;
                 bar.style.width = (curSec/q.time)*100 + '%';
                 if(curSec<=5 && curSec>0) { bar.classList.add('warning'); Sounds.play('timer'); }
-                if(curSec<=0) clearInterval(timer);
+                if(curSec<=0) {
+                    clearInterval(timer);
+                    if (selectedAnswer !== null && canClick && !answerSent) Game.confirmAnswer(true);
+                }
             }, 1000);
         });
 
