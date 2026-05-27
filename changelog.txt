@@ -1,6 +1,8 @@
 Aqui está as mudanças de Todas as versões até o dia Esperado.
 
 - 1.0.0 -
+Editei os scripts
+---- 26/05/2026 ----
 Criei os Arquivos do Servidor. tanto HTML, tanto .JS, ETC.
 Criei umas Pastas para organizar todo o projeto.
 Também Foi criada uma Pagina no github para isso. para postar todo o Desenvolvimento do projeto e ETC.
