@@ -42,17 +42,38 @@
 
     <!-- SCORE AO VIVO -->
     <div id="live-score">⭐ <span id="sc-val">0</span> pts</div>
+    <div id="net-status" class="net-status ok">● Online</div>
+
+    <!-- CHECAGEM DE DISPOSITIVO -->
+    <div id="device-check" class="device-check active">
+        <div class="device-card">
+            <div id="device-icon" class="device-icon">💻</div>
+            <h2 id="device-title">Detectando dispositivo...</h2>
+            <p id="device-desc">Vamos ajustar a interface antes de começar.</p>
+            <div class="device-actions">
+                <button id="device-switch-btn" class="btn-main btn-device-switch" onclick="DeviceCheck.toggle()">MUDAR PARA CELULAR</button>
+                <button class="btn-main btn-green" onclick="DeviceCheck.continue()">CONTINUAR</button>
+            </div>
+        </div>
+    </div>
 
     <!-- HUD -->
     <div id="hud" class="top-hud" style="display:none;">
-        <div class="user-profile">
-            <div id="u-img"><div class="p-photo" style="display:flex;align-items:center;justify-content:center;background:#eee;font-size:1.5rem;">👤</div></div>
-            <div><span id="u-name" class="p-name">---</span><br><span id="u-xp" style="font-size:0.7rem;color:var(--yellow);font-weight:900;">🏆 0 XP</span></div>
+        <div class="hud-left">
+            <div class="user-profile">
+                <div id="u-img"><div class="p-photo" style="display:flex;align-items:center;justify-content:center;background:#eee;font-size:1.5rem;">👤</div></div>
+                <div><span id="u-name" class="p-name">---</span><br><span id="u-xp" style="font-size:0.7rem;color:var(--yellow);font-weight:900;">🏆 0 XP</span></div>
+            </div>
         </div>
-        <div id="h-pin" style="font-weight:900;background:white;color:black;padding:5px 15px;border-radius:5px;">PIN: ---</div>
+        <div class="hud-right">
+            <div id="h-device" class="hud-chip">💻 PC</div>
+            <div id="h-phase" class="hud-chip">MENU</div>
+            <div id="h-players" class="hud-chip">👥 0</div>
+            <div id="h-pin" class="hud-pin">PIN: ---</div>
+        </div>
     </div>
 
-    <div id="tm-ui" class="timer-container" style="display:none;"><div id="tm-bar" class="timer-bar"></div></div>
+    <div id="tm-ui" class="timer-container" style="display:none;"><div id="tm-bar" class="timer-bar"></div><span id="tm-text">15</span></div>
 
     <!-- AUTH -->
     <div id="p-auth" class="page" style="display:flex;">
@@ -81,11 +102,13 @@
             <h2>Menu Principal</h2>
             <input type="text" id="j-pin" placeholder="PIN da Sala">
             <button class="btn-main" onclick="Game.join()">ENTRAR NA SALA</button>
+            <button id="reconnect-btn" class="btn-main btn-reconnect" onclick="Game.reconnectLast()" style="display:none;">VOLTAR PARA ÚLTIMA SALA</button>
             <hr style="margin:15px 0;opacity:0.1;">
-            <select id="t-sel"><option value="ciencias">Ciências</option><option value="reciclagem">Reciclagem</option><option value="agua">Água</option><option value="clima">Clima</option></select>
+            <select id="t-sel"><option value="ciencias">Ciências</option><option value="reciclagem">Reciclagem</option><option value="agua">Água</option><option value="clima">Clima</option><option value="energia">Energia</option><option value="sustentabilidade">Sustentabilidade</option></select>
             <button class="btn-main btn-green" onclick="Game.create()">CRIAR SALA</button>
             <button class="btn-main btn-bot" onclick="Game.bot()">MODO TREINO (BOTS) 🤖</button>
-            <div class="menu-extra-buttons">
+            <div class="menu-extra-buttons menu-extra-buttons-3">
+                <button class="btn-mini btn-ranking" onclick="Leaderboard.open()">RANKING</button>
                 <button class="btn-mini btn-credits" onclick="Info.openCredits()">CRÉDITOS</button>
                 <button class="btn-mini btn-source" onclick="Info.openSource()">CÓDIGO FONTE</button>
             </div>
@@ -110,6 +133,36 @@
         <div id="answer-actions" class="answer-actions">
             <div id="answer-status" class="answer-status">Escolha uma opção. Você pode trocar antes de confirmar.</div>
             <button id="confirm-answer" class="btn-main btn-confirm" onclick="Game.confirmAnswer()" disabled>CONFIRMAR RESPOSTA</button>
+        </div>
+    </div>
+
+    <!-- RANKING GERAL -->
+    <div id="p-ranking-board" class="page">
+        <div class="ranking-board-wrap">
+            <div class="ranking-board-head">
+                <div>
+                    <span class="eyebrow">PLACAR GERAL</span>
+                    <h1>Ranking dos Jogadores</h1>
+                    <p>Melhores pontuações salvas após cada partida.</p>
+                </div>
+                <div class="ranking-actions"><button class="btn-mini btn-refresh" onclick="Leaderboard.refresh()">ATUALIZAR</button><button class="btn-mini btn-back" onclick="Leaderboard.close()">VOLTAR</button></div>
+            </div>
+
+            <div class="ranking-stats">
+                <div class="stat-card"><span>🏆 Melhor</span><strong id="lb-best-score">0</strong></div>
+                <div class="stat-card"><span>👑 Jogador</span><strong id="lb-best-player">---</strong></div>
+                <div class="stat-card"><span>👥 Jogadores</span><strong id="lb-total-players">0</strong></div>
+                <div class="stat-card"><span>📌 Registros</span><strong id="lb-total-records">0</strong></div>
+            </div>
+
+            <div class="ranking-tabs">
+                <button id="tab-best" class="rank-tab active" onclick="Leaderboard.setTab('best')">TOP 20</button>
+                <button id="tab-recent" class="rank-tab" onclick="Leaderboard.setTab('recent')">RECENTES</button>
+            </div>
+
+            <div id="leaderboard-list" class="leaderboard-list">
+                <div class="empty-ranking">Carregando ranking...</div>
+            </div>
         </div>
     </div>
 
@@ -159,10 +212,58 @@
         // Coloque aqui o link do seu repositório, se tiver um:
         const SOURCE_CODE_URL = 'https://github.com/JONATHANGABR/MeioKahoot/';
 
-        let curPin = '', curUser = null, curPhoto = '', combo = 0, curSec = 0, timer, canClick = false, selectedAnswer = null, answerSent = false;
+        let curPin = '', curUser = null, curPhoto = '', combo = 0, curSec = 0, timer, canClick = false, selectedAnswer = null, answerSent = false, curQuestionId = null, deadlineAt = 0, serverOffset = 0, leaderboardRefresh = null;
+        let detectedDevice = { type: 'pc', label: 'PC', icon: '💻' };
 
-        socket.on('connect', () => log('Socket conectado: ' + socket.id, 'ok'));
-        socket.on('disconnect', () => log('Socket DESCONECTADO!', 'err'));
+        socket.on('connect', () => {
+            log('Socket conectado: ' + socket.id, 'ok');
+            document.getElementById('net-status').className = 'net-status ok';
+            document.getElementById('net-status').innerText = '● Online';
+        });
+        socket.on('disconnect', () => {
+            log('Socket DESCONECTADO!', 'err');
+            document.getElementById('net-status').className = 'net-status off';
+            document.getElementById('net-status').innerText = '● Reconectando...';
+        });
+
+        // ==================== DETECÇÃO DE DISPOSITIVO ====================
+        const DeviceCheck = {
+            forced: null,
+            detect() {
+                const ua = navigator.userAgent || '';
+                const isTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+                const isSmall = Math.min(window.innerWidth, window.innerHeight) <= 820;
+                const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+                const isMobile = isMobileUA || (isTouch && isSmall);
+                this.set(this.forced || (isMobile ? 'mobile' : 'pc'));
+            },
+            set(type) {
+                detectedDevice = type === 'mobile'
+                    ? { type: 'mobile', label: 'Celular', icon: '📱' }
+                    : { type: 'pc', label: 'PC', icon: '💻' };
+
+                document.body.classList.toggle('device-mobile', detectedDevice.type === 'mobile');
+                document.body.classList.toggle('device-pc', detectedDevice.type === 'pc');
+
+                document.getElementById('h-device').innerText = detectedDevice.icon + ' ' + detectedDevice.label;
+                document.getElementById('device-icon').innerText = detectedDevice.icon;
+                document.getElementById('device-title').innerText = 'Detectamos: ' + detectedDevice.label;
+                document.getElementById('device-desc').innerText = detectedDevice.type === 'mobile'
+                    ? 'A interface será ajustada para toque e tela pequena.'
+                    : 'A interface será ajustada para mouse/teclado e tela maior.';
+                document.getElementById('device-switch-btn').innerText = detectedDevice.type === 'mobile'
+                    ? 'MUDAR PARA PC'
+                    : 'MUDAR PARA CELULAR';
+            },
+            toggle() {
+                this.forced = detectedDevice.type === 'mobile' ? 'pc' : 'mobile';
+                this.set(this.forced);
+                localStorage.setItem('mk-device', this.forced);
+            },
+            continue() {
+                document.getElementById('device-check').classList.remove('active');
+            }
+        };
 
         // ==================== AUTH ====================
         const Auth = {
@@ -175,9 +276,10 @@
 
         // ==================== GAME ====================
         const Game = {
-            create() { log('Criando sala...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo}); },
-            bot() { log('Criando sala com bots...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo}); setTimeout(()=>{socket.emit('addBots',curPin);document.getElementById('st-btn').style.display='block';},600); },
-            join() { const p=document.getElementById('j-pin').value;if(!p)return alert('PIN!');log('Entrando na sala: '+p);socket.emit('joinRoom',{pin:p,name:curUser.user,photo:curUser.photo}); },
+            create() { log('Criando sala...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo,device:detectedDevice.type}); },
+            bot() { log('Criando sala com bots...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo,device:detectedDevice.type}); setTimeout(()=>{socket.emit('addBots',curPin);document.getElementById('st-btn').style.display='block';},600); },
+            join() { const p=document.getElementById('j-pin').value;if(!p)return alert('PIN!');log('Entrando na sala: '+p);socket.emit('joinRoom',{pin:p,name:curUser.user,photo:curUser.photo,device:detectedDevice.type}); },
+            reconnectLast() { const last=JSON.parse(localStorage.getItem('mk-last-room')||'null'); if(!last||!last.pin)return alert('Nenhuma sala recente.'); curPin=last.pin; document.getElementById('j-pin').value=last.pin; log('Reconectando na sala: '+last.pin); socket.emit('joinRoom',{pin:last.pin,name:curUser.user,photo:curUser.photo,device:detectedDevice.type}); },
             start() { log('Iniciando jogo...'); socket.emit('startGame',curPin); },
             answer(idx) {
                 log('>>> ESCOLHEU botão ' + idx + ' | canClick=' + canClick + ' | pin=' + curPin);
@@ -209,7 +311,63 @@
                 // 🔧 FIX: envia combo+1 para que a 1ª resposta já tenha bônus de 1.15x
                 const comboEnviado = combo + 1;
                 log('Enviando resposta: idx=' + selectedAnswer + ' time=' + curSec + ' combo=' + comboEnviado);
-                socket.emit('answer', { pin: curPin, idx: selectedAnswer, time: curSec, combo: comboEnviado });
+                socket.emit('answer', { pin: curPin, idx: selectedAnswer, qid: curQuestionId });
+            }
+        };
+
+        // ==================== RANKING GERAL ====================
+        const Leaderboard = {
+            data: { best: [], recent: [], stats: {} },
+            tab: 'best',
+            open() {
+                showPage('p-ranking-board');
+                document.getElementById('leaderboard-list').innerHTML = '<div class="empty-ranking">Carregando ranking...</div>';
+                socket.emit('getLeaderboard');
+                clearInterval(leaderboardRefresh);
+                leaderboardRefresh = setInterval(() => socket.emit('getLeaderboard'), 5000);
+            },
+            close() {
+                clearInterval(leaderboardRefresh);
+                showPage('p-home');
+            },
+            refresh() { socket.emit('getLeaderboard'); },
+            setTab(tab) {
+                this.tab = tab;
+                document.getElementById('tab-best').classList.toggle('active', tab === 'best');
+                document.getElementById('tab-recent').classList.toggle('active', tab === 'recent');
+                this.render();
+            },
+            update(payload) {
+                this.data = payload || { best: [], recent: [], stats: {} };
+                const st = this.data.stats || {};
+                document.getElementById('lb-best-score').innerText = st.bestScore || 0;
+                document.getElementById('lb-best-player').innerText = st.bestPlayer || '---';
+                document.getElementById('lb-total-players').innerText = st.players || 0;
+                document.getElementById('lb-total-records').innerText = st.records || 0;
+                this.render();
+            },
+            render() {
+                const list = this.data[this.tab] || [];
+                const el = document.getElementById('leaderboard-list');
+                if (!list.length) {
+                    el.innerHTML = '<div class="empty-ranking">Ainda não tem ranking salvo. Jogue uma partida para aparecer aqui.</div>';
+                    return;
+                }
+                el.innerHTML = list.map((p, i) => {
+                    const pos = this.tab === 'best' ? i + 1 : (p.position || i + 1);
+                    const medal = pos === 1 ? '🥇' : (pos === 2 ? '🥈' : (pos === 3 ? '🥉' : '#' + pos));
+                    const date = p.date ? new Date(p.date).toLocaleDateString('pt-BR') : '';
+                    return `
+                        <div class="leaderboard-row top-${Math.min(pos, 3)}">
+                            <div class="rank-pos">${medal}</div>
+                            <div class="rank-player">
+                                ${p.photo ? `<img src="${p.photo}" alt="${p.name}">` : '<div class="rank-avatar">👤</div>'}
+                                <div><strong>${p.name}</strong><span>${p.theme || 'tema'} ${date ? '• ' + date : ''}</span></div>
+                            </div>
+                            <div class="rank-score">${p.score || 0}<span>pts</span></div>
+                        </div>
+                    `;
+                }).join('');
             }
         };
 
@@ -245,6 +403,9 @@
             document.getElementById('hud').style.display=(id==='p-auth'||id==='p-home')?'none':'flex';
             document.getElementById('tm-ui').style.display=(id==='p-game')?'block':'none';
             document.getElementById('live-score').className=(id==='p-game')?'vis':'';
+
+            const phaseMap = { 'p-auth': 'LOGIN', 'p-home': 'MENU', 'p-lobby': 'LOBBY', 'p-game': 'JOGO', 'p-rank': 'RANKING', 'p-ranking-board': 'PLACAR' };
+            document.getElementById('h-phase').innerText = phaseMap[id] || '---';
         }
 
         // ==================== SOCKET EVENTS ====================
@@ -261,6 +422,7 @@
 
         socket.on('roomCreated', pin => {
             curPin = pin;
+            localStorage.setItem('mk-last-room', JSON.stringify({pin, at: Date.now()}));
             document.getElementById('lb-pin').innerText = pin;
             document.getElementById('h-pin').innerText = 'PIN: '+pin;
             document.getElementById('st-btn').style.display = 'block';
@@ -270,6 +432,7 @@
 
         socket.on('joined', d => {
             curPin = d.pin;
+            localStorage.setItem('mk-last-room', JSON.stringify({pin:d.pin, at: Date.now()}));
             document.getElementById('lb-pin').innerText = d.pin;
             document.getElementById('h-pin').innerText = 'PIN: '+d.pin;
             document.getElementById('st-btn').style.display = 'none';
@@ -278,18 +441,27 @@
         });
 
         socket.on('pList', list => {
-            document.getElementById('lb-list').innerHTML = list.map(p => `
-                <div style="background:white;color:black;padding:10px 20px;border-radius:25px;display:flex;align-items:center;gap:8px;font-weight:900;">
-                    ${p.photo?`<img src="${p.photo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">`:'👤'} ${p.name}
-                </div>
-            `).join('');
+            document.getElementById('h-players').innerText = '👥 ' + list.length;
+            document.getElementById('lb-list').innerHTML = list.map(p => {
+                const devIcon = p.device === 'mobile' ? '📱' : (p.device === 'pc' ? '💻' : '');
+                const off = p.connected === false ? ' opacity:0.45;filter:grayscale(1);' : '';
+                return `
+                <div style="background:white;color:black;padding:10px 20px;border-radius:25px;display:flex;align-items:center;gap:8px;font-weight:900;${off}">
+                    ${p.photo?`<img src="${p.photo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">`:'👤'} ${p.name} <span style="font-size:0.9rem;">${devIcon}</span>
+                </div>`;
+            }).join('');
         });
 
         // ==================== QUESTÃO ====================
         socket.on('q', q => {
             log('Questão ' + q.n + '/' + q.total + ': ' + q.question, 'info');
+            document.body.classList.remove('answer-correct','answer-wrong','question-reveal');
+            document.body.classList.add('question-live');
+            if (q.serverNow) serverOffset = q.serverNow - Date.now();
             
-            canClick = true;
+            curQuestionId = q.qid || null;
+            deadlineAt = q.deadlineAt || (Date.now() + (q.time * 1000));
+            canClick = !q.alreadyAnswered;
             selectedAnswer = null;
             answerSent = false;
             hideFb();
@@ -310,39 +482,48 @@
 
             // Timer
             clearInterval(timer);
-            curSec = q.time;
+            curSec = Math.max(0, Math.ceil((deadlineAt - (Date.now() + serverOffset)) / 1000));
             const bar = document.getElementById('tm-bar');
+            document.getElementById('tm-text').innerText = curSec;
             bar.style.width = '100%'; bar.classList.remove('warning');
             timer = setInterval(() => {
-                curSec--;
-                bar.style.width = (curSec/q.time)*100 + '%';
+                curSec = Math.max(0, Math.ceil((deadlineAt - (Date.now() + serverOffset)) / 1000));
+                const pct = Math.max(0, Math.min(100, ((deadlineAt - Date.now()) / (q.time * 1000)) * 100));
+                bar.style.width = pct + '%';
+                document.getElementById('tm-text').innerText = curSec;
                 if(curSec<=5 && curSec>0) { bar.classList.add('warning'); Sounds.play('timer'); }
                 if(curSec<=0) {
                     clearInterval(timer);
-                    if (selectedAnswer !== null && canClick && !answerSent) Game.confirmAnswer(true);
+                    // Não envia automaticamente depois do prazo. O servidor é quem encerra a pergunta.
+                    canClick = false;
+                    document.getElementById('confirm-answer').disabled = true;
                 }
-            }, 1000);
+            }, 250);
         });
 
         // ==================== RESULTADO ====================
         socket.on('result', d => {
+            if (d.qid && curQuestionId && d.qid !== curQuestionId) return;
             log('RESULTADO: ' + (d.correct ? '✅ ACERTOU! +' + d.earned + 'pts' : '❌ ERROU') + ' | Total: ' + d.totalScore, d.correct ? 'ok' : 'err');
             clearInterval(timer);
+            document.body.classList.remove('question-live');
+            document.body.classList.add(d.correct ? 'answer-correct' : 'answer-wrong');
 
             const btns = document.querySelectorAll('.ans-btn');
             btns.forEach((b, i) => {
                 b.classList.remove('picked');
                 if (i === d.correctIdx) b.classList.add('show-correct');
+                else if (!d.correct && i === selectedAnswer) b.classList.add('show-wrong');
                 else b.classList.add('dimmed');
             });
 
             if (d.correct) {
-                combo++;
+                combo = typeof d.combo === 'number' ? d.combo : combo + 1;
                 showFb(true, '+' + d.earned + ' pontos!');
                 Sounds.play('correct');
                 if(combo>1){document.getElementById('cb-pop').innerText='COMBO X'+combo+' 🔥';document.getElementById('cb-pop').classList.add('active');}
             } else {
-                combo = 0;
+                combo = typeof d.combo === 'number' ? d.combo : 0;
                 showFb(false, 'A resposta certa era a ' + (d.correctIdx+1) + 'ª');
                 Sounds.play('wrong');
                 document.getElementById('cb-pop').classList.remove('active');
@@ -353,6 +534,10 @@
 
         // ==================== TEMPO ESGOTOU ====================
         socket.on('reveal', d => {
+            if (d.qid && curQuestionId && d.qid !== curQuestionId) return;
+            document.getElementById('confirm-answer').disabled = true;
+            document.body.classList.remove('question-live');
+            document.body.classList.add('question-reveal');
             log('Revelação: correta=' + d.correct + (canClick ? ' (tempo esgotou sem responder)' : ''), 'info');
             if (canClick) {
                 canClick = false;
@@ -371,6 +556,13 @@
         socket.on('gameOver', r => {
             log('🏁 FIM DE JOGO! ' + r.length + ' jogadores', 'ok');
             hideFb();
+            combo = 0;
+            selectedAnswer = null;
+            answerSent = false;
+            canClick = false;
+            curQuestionId = null;
+            clearInterval(timer);
+            document.getElementById('sc-val').innerText = '0';
             Sounds.play('win');
 
             // Configura callbacks dos botões
@@ -398,10 +590,31 @@
 
         // ==================== INIT ====================
         window.onload = () => {
-            document.body.className = 'f-' + (localStorage.getItem('mk-font')||'montserrat');
+            document.body.classList.add('f-' + (localStorage.getItem('mk-font')||'montserrat'));
+            DeviceCheck.forced = localStorage.getItem('mk-device');
+            DeviceCheck.detect();
+            const lastRoom = localStorage.getItem('mk-last-room');
+            if (lastRoom) document.getElementById('reconnect-btn').style.display = 'block';
             const saved = localStorage.getItem('mk-user');
             if(saved) { log('Auto-login...', 'info'); socket.emit('login', JSON.parse(saved)); }
         };
+
+        socket.on('leaderboardData', data => Leaderboard.update(data));
+        socket.on('scoreSync', d => {
+            document.getElementById('sc-val').innerText = d.totalScore || 0;
+            combo = d.combo || 0;
+        });
+        socket.on('matchStarting', () => {
+            combo = 0;
+            selectedAnswer = null;
+            answerSent = false;
+            canClick = false;
+            document.getElementById('sc-val').innerText = '0';
+        });
+        socket.on('hostChanged', () => {
+            document.getElementById('st-btn').style.display = 'block';
+            log('Você virou o host da sala.', 'ok');
+        });
 
         socket.on('authErr', m => { log('AUTH ERROR: '+m, 'err'); alert(m); });
         socket.on('err', m => { log('ERROR: '+m, 'err'); alert(m); });
