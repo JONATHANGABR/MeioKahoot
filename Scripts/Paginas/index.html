@@ -1,623 +1,443 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MeioKahoot v1.0.0</title>
-    <link rel="stylesheet" href="/Scripts/Css/main.css">
-    <!-- 🆕 RANKING CSS -->
-    <link rel="stylesheet" href="/Scripts/Css/ranking.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
-    <style>
-        /* DEBUG - Remover depois */
-        #debug-box { position:fixed; bottom:0; left:0; width:100%; max-height:120px; overflow-y:auto; background:rgba(0,0,0,0.85); padding:8px; font-size:11px; font-family:monospace; color:#0f0; z-index:9999; display:block; }
-        #debug-box div { padding:2px 0; border-bottom:1px solid #333; }
-        .log-err { color:#f44; }
-        .log-ok { color:#0f0; }
-        .log-info { color:#0ff; }
-
-        /* Feedback de acerto/erro */
-        #fb-bar { position:fixed; top:76px; left:0; width:100%; padding:12px; text-align:center; font-weight:900; font-size:1.4rem; z-index:1500; display:none; }
-        #fb-bar.fb-correct { display:block; background:#26890c; color:white; }
-        #fb-bar.fb-wrong { display:block; background:#e21b3c; color:white; }
-
-        /* Score flutuante */
-        #live-score { position:fixed; top:78px; right:20px; background:rgba(0,0,0,0.6); padding:8px 18px; border-radius:8px; font-weight:900; z-index:999; display:none; }
-        #live-score.vis { display:block; }
-
-        .ans-btn { transition: all 0.15s; }
-        .ans-btn.picked { border:5px solid #fff; box-shadow:0 0 25px #fff; transform:scale(1.05); }
-        .ans-btn.show-correct { background:#26890c !important; border:4px solid #fff; }
-        .ans-btn.show-wrong { background:#e21b3c !important; opacity:0.5; }
-        .ans-btn.dimmed { opacity:0.15; }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>MeioKahoot</title>
+  <link rel="stylesheet" href="/Scripts/Css/main.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 </head>
-<body class="f-montserrat">
+<body>
 
-    <!-- DEBUG -->
-    <div id="debug-box"><div class="log-info">MeioKahoot v1.0.0 — Logs ativos</div></div>
+<!-- ════════════════════════════════════════
+     HUD — novo design
+════════════════════════════════════════ -->
+<header class="hud" id="hud">
+  <!-- Esquerda: avatar + nome + xp -->
+  <button class="hud-profile-btn" id="hud-profile-btn" onclick="Modal.open('modal-profile')">
+    <div class="hud-av">
+      <span id="av-letter">?</span>
+      <img  id="av-photo" src="" alt=""/>
+    </div>
+    <div class="hud-info">
+      <span class="hud-name" id="u-name">Visitante</span>
+      <span class="hud-sub"  id="u-xp">0 pts · Nível 1</span>
+    </div>
+  </button>
 
-    <!-- BARRA DE ACERTO/ERRO -->
-    <div id="fb-bar">---</div>
+  <!-- Centro: logo (só nas telas iniciais) -->
+  <div class="hud-logo" id="hud-logo">🌿 MeioKahoot</div>
 
-    <!-- SCORE AO VIVO -->
-    <div id="live-score">⭐ <span id="sc-val">0</span> pts</div>
-    <div id="net-status" class="net-status ok">● Online</div>
+  <!-- Direita: chips + ações -->
+  <div class="hud-right">
+    <span class="hud-chip chip-green"  id="h-status">● Online</span>
+    <span class="hud-chip chip-blue"   id="h-device"  style="display:none">💻</span>
+    <span class="hud-chip chip-amber"  id="h-phase"   style="display:none"></span>
+    <span class="hud-chip chip-green"  id="h-players" style="display:none">👥 0</span>
+    <span class="hud-pin"              id="h-pin"     style="display:none">000000</span>
+    <!-- Botão de amigos (aparece na home) -->
+    <button class="hud-icon-btn" id="friends-btn" onclick="Friends.open()" style="display:none" title="Amigos">👥</button>
+  </div>
+</header>
 
-    <!-- CHECAGEM DE DISPOSITIVO -->
-    <div id="device-check" class="device-check active">
-        <div class="device-card">
-            <div id="device-icon" class="device-icon">💻</div>
-            <h2 id="device-title">Detectando dispositivo...</h2>
-            <p id="device-desc">Vamos ajustar a interface antes de começar.</p>
-            <div class="device-actions">
-                <button id="device-switch-btn" class="btn-main btn-device-switch" onclick="DeviceCheck.toggle()">MUDAR PARA CELULAR</button>
-                <button class="btn-main btn-green" onclick="DeviceCheck.continue()">CONTINUAR</button>
-            </div>
+<!-- Timer barra -->
+<div class="timer-bar" id="timer-bar" style="display:none">
+  <div class="timer-fill" id="timer-fill"></div>
+</div>
+
+<!-- Timer círculo -->
+<div class="timer-circle-wrap" id="timer-circle-wrap" style="display:none">
+  <svg viewBox="0 0 36 36">
+    <circle class="tc-bg"   cx="18" cy="18" r="15.9"/>
+    <circle class="tc-ring" id="timer-ring" cx="18" cy="18" r="15.9"
+            stroke-dasharray="100 100" stroke-dashoffset="0"/>
+  </svg>
+  <span class="timer-num" id="timer-num">15</span>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" style="display:none"></div>
+
+<!-- Rede -->
+<div class="net-badge" id="net-badge">● Online</div>
+
+
+<!-- ════ DEVICE CHECK ════ -->
+<div class="overlay-center" id="ov-device">
+  <div class="modal-box">
+    <div class="modal-icon" id="device-icon">💻</div>
+    <h2>Dispositivo detectado</h2>
+    <p id="device-tips">Interface ajustada para você.</p>
+    <button class="btn btn-outline" id="btn-device-toggle" onclick="DeviceManager.toggle()">Mudar para celular</button>
+    <button class="btn btn-primary" onclick="DeviceManager.confirm()">Continuar →</button>
+  </div>
+</div>
+
+
+<!-- ════ P-AUTH ════ -->
+<div class="page" id="p-auth">
+  <!-- Login -->
+  <div class="auth-wrap" id="s-login">
+    <div class="brand">
+      <span class="brand-leaf">🌿</span>
+      <h1>MeioKahoot</h1>
+      <p>Quiz de Meio Ambiente</p>
+    </div>
+    <div class="white-card">
+      <h2>Entrar</h2>
+      <input type="text"     id="login-user" placeholder="Usuário" autocomplete="username"/>
+      <input type="password" id="login-pass" placeholder="Senha"   autocomplete="current-password"/>
+      <button class="btn btn-primary" onclick="Auth.login()">Entrar</button>
+      <button class="btn btn-ghost"   onclick="Auth.showRegister()">Criar conta</button>
+    </div>
+  </div>
+
+  <!-- Cadastro -->
+  <div class="auth-wrap" id="s-register" style="display:none">
+    <div class="white-card">
+      <h2>Criar conta</h2>
+      <div class="av-pick">
+        <div class="av-preview" id="reg-preview">
+          <span id="reg-initial">?</span>
+          <img  id="reg-photo-img" src="" alt="" style="display:none"/>
         </div>
+        <button class="btn-link" onclick="document.getElementById('reg-file').click()">📸 Escolher foto</button>
+        <input type="file" id="reg-file" accept="image/*" style="display:none" onchange="Auth.previewPhoto(this)"/>
+      </div>
+      <input type="text"     id="reg-user" placeholder="Nome de usuário"/>
+      <input type="password" id="reg-pass" placeholder="Senha"/>
+      <button class="btn btn-primary" onclick="Auth.register()">Cadastrar</button>
+      <button class="btn btn-ghost"   onclick="Auth.showLogin()">← Voltar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ P-HOME ════ -->
+<div class="page" id="p-home" style="display:none">
+  <div class="home-wrap">
+
+    <!-- Card perfil compacto -->
+    <div class="profile-strip">
+      <div class="profile-av">
+        <span class="pa-letter" id="home-initial">?</span>
+        <img  class="pa-photo"  id="home-avatar" src="" alt=""/>
+      </div>
+      <div class="profile-info">
+        <strong id="home-name">---</strong>
+        <div class="profile-stats-row">
+          <span>🏆 <b id="st-best">0</b></span>
+          <span>🎮 <b id="st-games">0</b></span>
+          <span>✅ <b id="st-acc">0%</b></span>
+          <span>🔥 <b id="st-combo">0</b></span>
+        </div>
+      </div>
+      <button class="icon-btn" onclick="Profile.openEdit()" title="Editar perfil">✏️</button>
     </div>
 
-    <!-- HUD -->
-    <div id="hud" class="top-hud" style="display:none;">
-        <div class="hud-left">
-            <div class="user-profile">
-                <div id="u-img"><div class="p-photo" style="display:flex;align-items:center;justify-content:center;background:#eee;font-size:1.5rem;">👤</div></div>
-                <div><span id="u-name" class="p-name">---</span><br><span id="u-xp" style="font-size:0.7rem;color:var(--yellow);font-weight:900;">🏆 0 XP</span></div>
-            </div>
-        </div>
-        <div class="hud-right">
-            <div id="h-device" class="hud-chip">💻 PC</div>
-            <div id="h-phase" class="hud-chip">MENU</div>
-            <div id="h-players" class="hud-chip">👥 0</div>
-            <div id="h-pin" class="hud-pin">PIN: ---</div>
-        </div>
+    <!-- Ações principais -->
+    <div class="main-actions">
+      <button class="btn btn-primary btn-hero" onclick="HomeUI.showJoin()">
+        <span class="btn-hero-icon">▶</span>
+        <span class="btn-hero-text">
+          <span class="btn-hero-title">Entrar em sala</span>
+          <span class="btn-hero-sub">Jogue com amigos</span>
+        </span>
+      </button>
+
+      <button class="btn btn-create" onclick="Modal.open('modal-create')">
+        <span class="btn-hero-icon">＋</span>
+        <span class="btn-hero-text">
+          <span class="btn-hero-title">Criar sala</span>
+          <span class="btn-hero-sub">Escolha o tema</span>
+        </span>
+      </button>
     </div>
 
-    <div id="tm-ui" class="timer-container" style="display:none;"><div id="tm-bar" class="timer-bar"></div><span id="tm-text">15</span></div>
+    <!-- Botão voltar à última sala -->
+    <button class="btn btn-ghost" id="btn-rejoin" onclick="HomeUI.rejoin()" style="display:none">↩ Última sala</button>
 
-    <!-- AUTH -->
-    <div id="p-auth" class="page" style="display:flex;">
-        <h1 style="font-size:3.5rem;font-weight:900;margin-bottom:2rem;">MEIO <span style="color:var(--green)">KAHOOT</span></h1>
-        <div class="arena-card" id="box-login">
-            <h2>Entrar</h2>
-            <input type="text" id="l-u" placeholder="Usuário">
-            <input type="password" id="l-p" placeholder="Senha">
-            <button class="btn-main" onclick="Auth.login()">LOGAR</button>
-            <button onclick="Auth.toggle()" style="margin-top:10px;background:none;border:none;color:var(--purple);font-weight:bold;cursor:pointer;">Criar conta</button>
-        </div>
-        <div class="arena-card" id="box-reg" style="display:none;">
-            <h2>Cadastro</h2>
-            <div id="prev" style="width:70px;height:70px;border-radius:50%;background:#f0f0f0;margin:0 auto 10px;overflow:hidden;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:2rem;">📸</div>
-            <label style="font-size:0.7rem;color:var(--purple);cursor:pointer;font-weight:bold;">ESCOLHER FOTO<input type="file" id="u-f" accept="image/*" onchange="Auth.read(this)" style="display:none;"></label>
-            <input type="text" id="r-u" placeholder="Usuário" style="margin-top:10px;">
-            <input type="password" id="r-p" placeholder="Senha">
-            <button class="btn-main btn-green" onclick="Auth.reg()">CADASTRAR</button>
-            <button onclick="Auth.toggle()" style="margin-top:10px;background:none;border:none;color:var(--purple);font-weight:bold;cursor:pointer;">Voltar</button>
-        </div>
+    <!-- Links secundários -->
+    <div class="secondary-links">
+      <button class="sec-link" onclick="HomeUI.goRanking()">🏆 Ranking</button>
+      <button class="sec-link" onclick="Friends.open()">👥 Amigos</button>
+      <button class="sec-link" onclick="Modal.open('modal-credits')">⭐ Créditos</button>
     </div>
 
-    <!-- HOME -->
-    <div id="p-home" class="page">
-        <div class="arena-card">
-            <h2>Menu Principal</h2>
-            <input type="text" id="j-pin" placeholder="PIN da Sala">
-            <button class="btn-main" onclick="Game.join()">ENTRAR NA SALA</button>
-            <button id="reconnect-btn" class="btn-main btn-reconnect" onclick="Game.reconnectLast()" style="display:none;">VOLTAR PARA ÚLTIMA SALA</button>
-            <hr style="margin:15px 0;opacity:0.1;">
-            <select id="t-sel"><option value="ciencias">Ciências</option><option value="reciclagem">Reciclagem</option><option value="agua">Água</option><option value="clima">Clima</option><option value="energia">Energia</option><option value="sustentabilidade">Sustentabilidade</option></select>
-            <button class="btn-main btn-green" onclick="Game.create()">CRIAR SALA</button>
-            <button class="btn-main btn-bot" onclick="Game.bot()">MODO TREINO (BOTS) 🤖</button>
-            <div class="menu-extra-buttons menu-extra-buttons-3">
-                <button class="btn-mini btn-ranking" onclick="Leaderboard.open()">RANKING</button>
-                <button class="btn-mini btn-credits" onclick="Info.openCredits()">CRÉDITOS</button>
-                <button class="btn-mini btn-source" onclick="Info.openSource()">CÓDIGO FONTE</button>
-            </div>
+  </div>
+</div>
+
+
+<!-- ════ P-JOIN ════ -->
+<div class="page" id="p-join" style="display:none">
+  <div class="modal-box" style="max-width:380px">
+    <h2>Entrar na sala</h2>
+    <p class="text-muted">Digite o PIN de 6 dígitos</p>
+    <input type="text" id="join-pin" class="pin-input" placeholder="000000"
+           maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')"/>
+    <button class="btn btn-primary" onclick="HomeUI.joinRoom()">Entrar →</button>
+    <button class="btn btn-ghost"   onclick="UI.showPage('p-home')">← Voltar</button>
+  </div>
+</div>
+
+
+<!-- ════ P-LOBBY ════ -->
+<div class="page" id="p-lobby" style="display:none">
+  <div class="lobby-wrap">
+
+    <!-- PIN grande e contido -->
+    <div class="pin-card">
+      <span class="pin-label">PIN DA SALA</span>
+      <div class="pin-row">
+        <span class="pin-digit" id="pin-d0">0</span>
+        <span class="pin-digit" id="pin-d1">0</span>
+        <span class="pin-digit" id="pin-d2">0</span>
+        <span class="pin-sep">·</span>
+        <span class="pin-digit" id="pin-d3">0</span>
+        <span class="pin-digit" id="pin-d4">0</span>
+        <span class="pin-digit" id="pin-d5">0</span>
+      </div>
+      <span class="pin-hint">Compartilhe este código</span>
+    </div>
+
+    <!-- Status -->
+    <div class="lobby-status-row">
+      <span class="pulse-dot"></span>
+      <span id="lobby-status-txt">Aguardando jogadores...</span>
+      <span class="count-badge" id="lb-count">0</span>
+    </div>
+
+    <!-- Grid de jogadores -->
+    <div class="players-grid" id="lb-list"></div>
+
+    <!-- Controles do host -->
+    <div id="host-controls" style="display:none">
+      <div class="diff-row">
+        <span class="label-sm">Dificuldade</span>
+        <div class="diff-pills">
+          <button class="diff-pill active" onclick="HomeUI.setDiff(this,'normal')">Normal</button>
+          <button class="diff-pill"        onclick="HomeUI.setDiff(this,'hard')">Difícil</button>
         </div>
+      </div>
+      <button class="btn btn-primary btn-hero" onclick="HomeUI.startGame()">▶ Começar partida</button>
     </div>
 
-    <!-- LOBBY -->
-    <div id="p-lobby" class="page">
-        <h1 id="lb-pin" style="font-size:4.5rem;background:white;color:black;padding:10px 50px;border-radius:10px;">000000</h1>
-        <div id="lb-list" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:25px;"></div>
-        <button id="st-btn" class="btn-main btn-green" onclick="Game.start()" style="display:none;width:auto;padding:20px 60px;margin-top:30px;font-size:1.5rem;">COMEÇAR PARTIDA</button>
+  </div>
+</div>
+
+
+<!-- ════ P-GAME ════ -->
+<div class="page page-game" id="p-game" style="display:none">
+
+  <!-- Meta da questão -->
+  <div class="q-header">
+    <div class="q-meta">
+      <span class="q-count" id="q-num">1/10</span>
+      <span class="q-cat"   id="q-cat">Ciências</span>
+      <div class="q-bar-wrap"><div class="q-bar" id="q-progress"></div></div>
+    </div>
+    <!-- Caixa da pergunta — BRANCA com texto escuro -->
+    <div class="q-box" id="q-box">
+      <p class="q-text" id="q-txt">Escolha uma resposta.</p>
+    </div>
+  </div>
+
+  <!-- Respostas -->
+  <div class="answers" id="answers">
+    <button class="ans ans-red"    id="ans-0" onclick="GameUI.pick(0)"><span class="ans-sym">▲</span><span id="al-0"></span></button>
+    <button class="ans ans-blue"   id="ans-1" onclick="GameUI.pick(1)"><span class="ans-sym">◆</span><span id="al-1"></span></button>
+    <button class="ans ans-yellow" id="ans-2" onclick="GameUI.pick(2)"><span class="ans-sym">●</span><span id="al-2"></span></button>
+    <button class="ans ans-green"  id="ans-3" onclick="GameUI.pick(3)"><span class="ans-sym">■</span><span id="al-3"></span></button>
+  </div>
+
+  <!-- Barra de ação -->
+  <div class="game-bottom">
+    <div class="status-pill" id="ans-status">Escolha uma resposta</div>
+    <button class="btn btn-confirm" id="btn-confirm" onclick="GameUI.confirm()" disabled>Confirmar</button>
+  </div>
+
+  <!-- Score ao vivo -->
+  <div class="score-pill" id="score-pill" style="display:none">
+    <span id="score-num">0</span><span class="score-unit">pts</span>
+  </div>
+
+  <!-- Combo -->
+  <div class="combo-pill" id="combo-pill" style="display:none">
+    🔥 <span id="combo-txt">x2</span>
+  </div>
+
+</div>
+
+
+<!-- ════ P-RANK ════ -->
+<div class="page" id="p-rank" style="display:none">
+  <div class="rank-wrap">
+    <div class="rank-header">
+      <div>
+        <p class="eyebrow">Placar Geral</p>
+        <h1>Ranking</h1>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" onclick="RankingBoard.load()">↻</button>
+        <button class="btn btn-ghost btn-sm" onclick="UI.showPage('p-home')">← Voltar</button>
+      </div>
+    </div>
+    <div class="rank-stats">
+      <div class="rstat"><label>Melhor</label><strong id="rb-best">—</strong></div>
+      <div class="rstat"><label>Líder</label><strong id="rb-player">—</strong></div>
+      <div class="rstat"><label>Jogadores</label><strong id="rb-players">—</strong></div>
+      <div class="rstat"><label>Partidas</label><strong id="rb-records">—</strong></div>
+    </div>
+    <div class="rank-tabs">
+      <button class="rtab active" onclick="RankingBoard.setTab('best',this)">Top 20</button>
+      <button class="rtab"        onclick="RankingBoard.setTab('recent',this)">Recentes</button>
+    </div>
+    <div class="rank-list" id="lb-board"><p class="text-muted" style="text-align:center;padding:20px">Carregando...</p></div>
+  </div>
+</div>
+
+
+<!-- ════ OVERLAY: Resultado (correto/errado) ════ -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-icon"  id="result-icon">✔</div>
+  <div class="result-label" id="result-label">Correto!</div>
+  <div class="result-pts"   id="result-pts"></div>
+  <div class="result-combo" id="result-combo"></div>
+</div>
+
+
+<!-- ════ OVERLAY: Pódio final ════ -->
+<div class="overlay-bottom" id="modal-podium" style="display:none">
+  <div class="podium-sheet">
+    <h2 class="podium-title" id="podium-title">Resultado Final</h2>
+    <div class="podium-top3"    id="podium-top3"></div>
+    <div class="podium-rest"    id="podium-rest"></div>
+    <div class="podium-actions" id="podium-actions"></div>
+  </div>
+</div>
+
+
+<!-- ════ MODAL: Perfil ════ -->
+<div class="overlay-center" id="modal-profile" style="display:none">
+  <div class="modal-box">
+    <button class="modal-close" onclick="Modal.close('modal-profile')">✕</button>
+    <h2>Meu Perfil</h2>
+    <div class="av-pick">
+      <div class="av-preview large" id="edit-av">
+        <span id="edit-av-letter">?</span>
+        <img  id="edit-av-photo" src="" alt="" style="display:none"/>
+      </div>
+      <button class="btn-link" onclick="document.getElementById('edit-file').click()">📸 Trocar foto</button>
+      <input type="file" id="edit-file" accept="image/*" style="display:none" onchange="Profile.previewEdit(this)"/>
+    </div>
+    <div class="edit-stats">
+      <div class="estat"><label>Melhor</label><strong id="es-best">0</strong></div>
+      <div class="estat"><label>Partidas</label><strong id="es-games">0</strong></div>
+      <div class="estat"><label>Acertos</label><strong id="es-acc">0%</strong></div>
+      <div class="estat"><label>Combo máx</label><strong id="es-combo">0</strong></div>
+    </div>
+    <button class="btn btn-primary" onclick="Profile.saveEdit()">Salvar</button>
+    <button class="btn btn-danger-ghost" onclick="Auth.logout()">Sair da conta</button>
+  </div>
+</div>
+
+
+<!-- ════ MODAL: Amigos ════ -->
+<div class="overlay-center" id="modal-friends" style="display:none">
+  <div class="modal-box">
+    <button class="modal-close" onclick="Modal.close('modal-friends')">✕</button>
+    <h2>👥 Amigos</h2>
+
+    <!-- Adicionar amigo -->
+    <div class="friends-add">
+      <input type="text" id="friend-input" placeholder="Nome de usuário do amigo"/>
+      <button class="btn btn-primary btn-sm" onclick="Friends.add()">Adicionar</button>
     </div>
 
-    <!-- GAME -->
-    <div id="p-game" class="page">
-        <div style="background:white;color:black;padding:35px;border-radius:12px;width:90%;max-width:900px;text-align:center;position:relative;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
-            <div id="q-diff" style="font-size:0.8rem;font-weight:900;margin-bottom:10px;text-transform:uppercase;">DIFICULDADE</div>
-            <h2 id="q-txt" style="font-size:2rem;font-weight:900;">---</h2>
-            <div id="q-count" style="position:absolute;top:-12px;left:20px;background:var(--blue);color:white;padding:4px 12px;border-radius:15px;font-weight:bold;font-size:0.8rem;">1/10</div>
-        </div>
-        <div id="ans-grid" class="quiz-grid"></div>
-        <div id="answer-actions" class="answer-actions">
-            <div id="answer-status" class="answer-status">Escolha uma opção. Você pode trocar antes de confirmar.</div>
-            <button id="confirm-answer" class="btn-main btn-confirm" onclick="Game.confirmAnswer()" disabled>CONFIRMAR RESPOSTA</button>
-        </div>
+    <!-- Lista de amigos -->
+    <div class="friends-list" id="friends-list">
+      <p class="text-muted" style="text-align:center;padding:16px">Nenhum amigo ainda.<br>Adicione pelo nome de usuário!</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ MODAL: Criar sala ════ -->
+<div class="overlay-center" id="modal-create" style="display:none">
+  <div class="modal-box modal-create-box">
+    <button class="modal-close" onclick="Modal.close('modal-create')">✕</button>
+    <div class="modal-create-header">
+      <span class="modal-create-icon">🌿</span>
+      <h2>Criar sala</h2>
+      <p>Escolha o tema das perguntas</p>
     </div>
 
-    <!-- RANKING GERAL -->
-    <div id="p-ranking-board" class="page">
-        <div class="ranking-board-wrap">
-            <div class="ranking-board-head">
-                <div>
-                    <span class="eyebrow">PLACAR GERAL</span>
-                    <h1>Ranking dos Jogadores</h1>
-                    <p>Melhores pontuações salvas após cada partida.</p>
-                </div>
-                <div class="ranking-actions"><button class="btn-mini btn-refresh" onclick="Leaderboard.refresh()">ATUALIZAR</button><button class="btn-mini btn-back" onclick="Leaderboard.close()">VOLTAR</button></div>
-            </div>
-
-            <div class="ranking-stats">
-                <div class="stat-card"><span>🏆 Melhor</span><strong id="lb-best-score">0</strong></div>
-                <div class="stat-card"><span>👑 Jogador</span><strong id="lb-best-player">---</strong></div>
-                <div class="stat-card"><span>👥 Jogadores</span><strong id="lb-total-players">0</strong></div>
-                <div class="stat-card"><span>📌 Registros</span><strong id="lb-total-records">0</strong></div>
-            </div>
-
-            <div class="ranking-tabs">
-                <button id="tab-best" class="rank-tab active" onclick="Leaderboard.setTab('best')">TOP 20</button>
-                <button id="tab-recent" class="rank-tab" onclick="Leaderboard.setTab('recent')">RECENTES</button>
-            </div>
-
-            <div id="leaderboard-list" class="leaderboard-list">
-                <div class="empty-ranking">Carregando ranking...</div>
-            </div>
-        </div>
+    <div class="theme-grid-popup">
+      <button class="theme-card" data-theme="ciencias"         onclick="HomeUI.createRoom('ciencias')">
+        <span class="theme-card-icon">🔬</span>
+        <span class="theme-card-name">Ciências</span>
+        <span class="theme-card-desc">Biologia e ecossistemas</span>
+      </button>
+      <button class="theme-card" data-theme="reciclagem"       onclick="HomeUI.createRoom('reciclagem')">
+        <span class="theme-card-icon">♻️</span>
+        <span class="theme-card-name">Reciclagem</span>
+        <span class="theme-card-desc">Resíduos e reutilização</span>
+      </button>
+      <button class="theme-card" data-theme="agua"             onclick="HomeUI.createRoom('agua')">
+        <span class="theme-card-icon">💧</span>
+        <span class="theme-card-name">Água</span>
+        <span class="theme-card-desc">Recursos hídricos</span>
+      </button>
+      <button class="theme-card" data-theme="clima"            onclick="HomeUI.createRoom('clima')">
+        <span class="theme-card-icon">🌡</span>
+        <span class="theme-card-name">Clima</span>
+        <span class="theme-card-desc">Mudanças climáticas</span>
+      </button>
+      <button class="theme-card" data-theme="energia"          onclick="HomeUI.createRoom('energia')">
+        <span class="theme-card-icon">⚡</span>
+        <span class="theme-card-name">Energia</span>
+        <span class="theme-card-desc">Fontes renováveis</span>
+      </button>
+      <button class="theme-card" data-theme="sustentabilidade" onclick="HomeUI.createRoom('sustentabilidade')">
+        <span class="theme-card-icon">🌿</span>
+        <span class="theme-card-name">Sustentabilidade</span>
+        <span class="theme-card-desc">Desenvolvimento sustentável</span>
+      </button>
     </div>
 
-    <!-- RANKING (antigo - mantido como fallback, mas não mais usado) -->
-    <div id="p-rank" class="page" style="display:none;">
-        <h1 style="font-size:3.5rem;margin-bottom:2rem;">Parabéns 🏆</h1>
-        <div id="rk-list" style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;"></div>
-        <button class="btn-main" onclick="location.reload()" style="margin-top:30px;background:white;color:var(--purple);width:auto;padding:15px 50px;">VOLTAR</button>
-    </div>
+    <div class="modal-create-divider">ou</div>
+    <button class="btn btn-ghost" onclick="HomeUI.createBot(); Modal.close('modal-create')">
+      🤖 Modo treino com bots
+    </button>
+  </div>
+</div>
 
-    <!-- MODAL DE INFORMAÇÕES -->
-    <div id="info-modal" class="info-modal" onclick="Info.close(event)">
-        <div class="info-card">
-            <button class="info-close" onclick="Info.close()">×</button>
-            <h2 id="info-title">---</h2>
-            <div id="info-content">---</div>
-        </div>
-    </div>
 
-    <div id="cb-pop" class="combo-pop">COMBO! <img src="/Assets/animations/Fire.gif" alt="combo" class="combo-gif"></div>
-    <div style="position:fixed;bottom:130px;right:10px;font-size:0.65rem;opacity:0.4;font-weight:bold;">v1.0.0</div>
+<!-- ════ MODAL: Créditos ════ -->
+<div class="overlay-center" id="modal-credits" style="display:none">
+  <div class="modal-box">
+    <button class="modal-close" onclick="Modal.close('modal-credits')">✕</button>
+    <h2>⭐ Créditos</h2>
+    <p>🌿 <strong>MeioKahoot</strong></p>
+    <p>Desenvolvido por <strong>Jonathan Gabriel</strong></p>
+    <p class="text-muted">Projeto escolar · 2026</p>
+    <p class="text-muted">Ciências · Reciclagem · Água · Clima · Energia · Sustentabilidade</p>
+    <a class="btn btn-outline" href="https://github.com/JONATHANGABR/MeioKahoot" target="_blank" rel="noopener">Ver no GitHub →</a>
+  </div>
+</div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <!-- 🆕 RANKING JS (antes do script principal) -->
-    <script src="/Scripts/Js/ranking.js"></script>
-    <script src="/Scripts/Js/sounds.js"></script>
-    <!--
-        NOMES DOS SONS USADOS NESTE HTML:
-        click, timer, correct, wrong, win
-        Adicione/garanta esses nomes dentro do arquivo /Scripts/Js/sounds.js
-    -->
-    <script>
-        // ==================== DEBUG LOG ====================
-        function log(msg, type) {
-            const box = document.getElementById('debug-box');
-            const d = document.createElement('div');
-            d.className = type === 'err' ? 'log-err' : (type === 'ok' ? 'log-ok' : 'log-info');
-            d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
-            box.appendChild(d);
-            box.scrollTop = box.scrollHeight;
-            console.log(msg);
-        }
 
-        // ==================== VARIÁVEIS ====================
-        const socket = io();
-
-        // Coloque aqui o link do seu repositório, se tiver um:
-        const SOURCE_CODE_URL = 'https://github.com/JONATHANGABR/MeioKahoot/';
-
-        let curPin = '', curUser = null, curPhoto = '', combo = 0, curSec = 0, timer, canClick = false, selectedAnswer = null, answerSent = false, curQuestionId = null, deadlineAt = 0, serverOffset = 0, leaderboardRefresh = null;
-        let detectedDevice = { type: 'pc', label: 'PC', icon: '💻' };
-
-        socket.on('connect', () => {
-            log('Socket conectado: ' + socket.id, 'ok');
-            document.getElementById('net-status').className = 'net-status ok';
-            document.getElementById('net-status').innerText = '● Online';
-        });
-        socket.on('disconnect', () => {
-            log('Socket DESCONECTADO!', 'err');
-            document.getElementById('net-status').className = 'net-status off';
-            document.getElementById('net-status').innerText = '● Reconectando...';
-        });
-
-        // ==================== DETECÇÃO DE DISPOSITIVO ====================
-        const DeviceCheck = {
-            forced: null,
-            detect() {
-                const ua = navigator.userAgent || '';
-                const isTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
-                const isSmall = Math.min(window.innerWidth, window.innerHeight) <= 820;
-                const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
-                const isMobile = isMobileUA || (isTouch && isSmall);
-                this.set(this.forced || (isMobile ? 'mobile' : 'pc'));
-            },
-            set(type) {
-                detectedDevice = type === 'mobile'
-                    ? { type: 'mobile', label: 'Celular', icon: '📱' }
-                    : { type: 'pc', label: 'PC', icon: '💻' };
-
-                document.body.classList.toggle('device-mobile', detectedDevice.type === 'mobile');
-                document.body.classList.toggle('device-pc', detectedDevice.type === 'pc');
-
-                document.getElementById('h-device').innerText = detectedDevice.icon + ' ' + detectedDevice.label;
-                document.getElementById('device-icon').innerText = detectedDevice.icon;
-                document.getElementById('device-title').innerText = 'Detectamos: ' + detectedDevice.label;
-                document.getElementById('device-desc').innerText = detectedDevice.type === 'mobile'
-                    ? 'A interface será ajustada para toque e tela pequena.'
-                    : 'A interface será ajustada para mouse/teclado e tela maior.';
-                document.getElementById('device-switch-btn').innerText = detectedDevice.type === 'mobile'
-                    ? 'MUDAR PARA PC'
-                    : 'MUDAR PARA CELULAR';
-            },
-            toggle() {
-                this.forced = detectedDevice.type === 'mobile' ? 'pc' : 'mobile';
-                this.set(this.forced);
-                localStorage.setItem('mk-device', this.forced);
-            },
-            continue() {
-                document.getElementById('device-check').classList.remove('active');
-            }
-        };
-
-        // ==================== AUTH ====================
-        const Auth = {
-            read(i) { const f=i.files[0]; if(f){const r=new FileReader();r.onload=e=>{curPhoto=e.target.result;document.getElementById('prev').innerHTML=`<img src="${curPhoto}" style="width:100%;height:100%;object-fit:cover;">`;};r.readAsDataURL(f);} },
-            toggle() { const l=document.getElementById('box-login'),r=document.getElementById('box-reg');l.style.display=l.style.display==='none'?'block':'none';r.style.display=r.style.display==='none'?'block':'none'; },
-            reg() { const u=document.getElementById('r-u').value,p=document.getElementById('r-p').value;if(!u||!p)return alert('Preencha!');socket.emit('register',{user:u,pass:p,photo:curPhoto});log('Registrando: '+u); },
-            login() { const u=document.getElementById('l-u').value,p=document.getElementById('l-p').value;socket.emit('login',{user:u,pass:p});log('Logando: '+u); },
-            logout() { localStorage.removeItem('mk-user');location.reload(); }
-        };
-
-        // ==================== GAME ====================
-        const Game = {
-            create() { log('Criando sala...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo,device:detectedDevice.type}); },
-            bot() { log('Criando sala com bots...'); socket.emit('createRoom',{theme:document.getElementById('t-sel').value,playerName:curUser.user,playerPhoto:curUser.photo,device:detectedDevice.type}); setTimeout(()=>{socket.emit('addBots',curPin);document.getElementById('st-btn').style.display='block';},600); },
-            join() { const p=document.getElementById('j-pin').value;if(!p)return alert('PIN!');log('Entrando na sala: '+p);socket.emit('joinRoom',{pin:p,name:curUser.user,photo:curUser.photo,device:detectedDevice.type}); },
-            reconnectLast() { const last=JSON.parse(localStorage.getItem('mk-last-room')||'null'); if(!last||!last.pin)return alert('Nenhuma sala recente.'); curPin=last.pin; document.getElementById('j-pin').value=last.pin; log('Reconectando na sala: '+last.pin); socket.emit('joinRoom',{pin:last.pin,name:curUser.user,photo:curUser.photo,device:detectedDevice.type}); },
-            start() { log('Iniciando jogo...'); socket.emit('startGame',curPin); },
-            answer(idx) {
-                log('>>> ESCOLHEU botão ' + idx + ' | canClick=' + canClick + ' | pin=' + curPin);
-
-                if (!canClick || answerSent) { log('BLOQUEADO! resposta já enviada ou canClick=false', 'err'); return; }
-
-                // Agora o jogador pode re-escolher: só envia quando confirmar.
-                selectedAnswer = idx;
-                const btns = document.querySelectorAll('.ans-btn');
-                btns.forEach(b => b.classList.remove('picked'));
-                btns[idx].classList.add('picked');
-
-                document.getElementById('confirm-answer').disabled = false;
-                document.getElementById('answer-status').innerText = 'Opção ' + (idx + 1) + ' selecionada. Pode trocar ou confirmar.';
-                Sounds.play('click');
-            },
-            confirmAnswer(auto) {
-                if (!canClick || answerSent) return;
-                if (selectedAnswer === null) {
-                    if (!auto) alert('Escolha uma opção primeiro!');
-                    return;
-                }
-
-                answerSent = true;
-                canClick = false;
-                document.getElementById('confirm-answer').disabled = true;
-                document.getElementById('answer-status').innerText = auto ? 'Tempo acabou! Enviando sua última escolha...' : 'Resposta enviada!';
-
-                // 🔧 FIX: envia combo+1 para que a 1ª resposta já tenha bônus de 1.15x
-                const comboEnviado = combo + 1;
-                log('Enviando resposta: idx=' + selectedAnswer + ' time=' + curSec + ' combo=' + comboEnviado);
-                socket.emit('answer', { pin: curPin, idx: selectedAnswer, qid: curQuestionId });
-            }
-        };
-
-        // ==================== RANKING GERAL ====================
-        const Leaderboard = {
-            data: { best: [], recent: [], stats: {} },
-            tab: 'best',
-            open() {
-                showPage('p-ranking-board');
-                document.getElementById('leaderboard-list').innerHTML = '<div class="empty-ranking">Carregando ranking...</div>';
-                socket.emit('getLeaderboard');
-                clearInterval(leaderboardRefresh);
-                leaderboardRefresh = setInterval(() => socket.emit('getLeaderboard'), 5000);
-            },
-            close() {
-                clearInterval(leaderboardRefresh);
-                showPage('p-home');
-            },
-            refresh() { socket.emit('getLeaderboard'); },
-            setTab(tab) {
-                this.tab = tab;
-                document.getElementById('tab-best').classList.toggle('active', tab === 'best');
-                document.getElementById('tab-recent').classList.toggle('active', tab === 'recent');
-                this.render();
-            },
-            update(payload) {
-                this.data = payload || { best: [], recent: [], stats: {} };
-                const st = this.data.stats || {};
-                document.getElementById('lb-best-score').innerText = st.bestScore || 0;
-                document.getElementById('lb-best-player').innerText = st.bestPlayer || '---';
-                document.getElementById('lb-total-players').innerText = st.players || 0;
-                document.getElementById('lb-total-records').innerText = st.records || 0;
-                this.render();
-            },
-            render() {
-                const list = this.data[this.tab] || [];
-                const el = document.getElementById('leaderboard-list');
-                if (!list.length) {
-                    el.innerHTML = '<div class="empty-ranking">Ainda não tem ranking salvo. Jogue uma partida para aparecer aqui.</div>';
-                    return;
-                }
-                el.innerHTML = list.map((p, i) => {
-                    const pos = this.tab === 'best' ? i + 1 : (p.position || i + 1);
-                    const medal = pos === 1 ? '🥇' : (pos === 2 ? '🥈' : (pos === 3 ? '🥉' : '#' + pos));
-                    const date = p.date ? new Date(p.date).toLocaleDateString('pt-BR') : '';
-                    return `
-                        <div class="leaderboard-row top-${Math.min(pos, 3)}">
-                            <div class="rank-pos">${medal}</div>
-                            <div class="rank-player">
-                                ${p.photo ? `<img src="${p.photo}" alt="${p.name}">` : '<div class="rank-avatar">👤</div>'}
-                                <div><strong>${p.name}</strong><span>${p.theme || 'tema'} ${date ? '• ' + date : ''}</span></div>
-                            </div>
-                            <div class="rank-score">${p.score || 0}<span>pts</span></div>
-                        </div>
-                    `;
-                }).join('');
-            }
-        };
-
-        // ==================== BOTÕES DE INFORMAÇÃO ====================
-        const Info = {
-            openCredits() {
-                document.getElementById('info-title').innerText = 'Créditos';
-                document.getElementById('info-content').innerHTML = `
-                    <p><strong>MeioKahoot</strong></p>
-                    <p>Jogo criado por: <strong>Jonathan Gabriel</strong></p>
-                    <p>Design, programação e perguntas: <strong>Jonathan Gabriel</strong></p>
-                `;
-                document.getElementById('info-modal').classList.add('active');
-            },
-            openSource() {
-                document.getElementById('info-title').innerText = 'Código Fonte';
-                const link = SOURCE_CODE_URL.trim();
-                document.getElementById('info-content').innerHTML = link
-                    ? `<p>O código fonte está disponível aqui:</p><a class="source-link" href="${link}" target="_blank" rel="noopener">ABRIR REPOSITÓRIO</a>`
-                    : `<p>Adicione o link do seu repositório na variável <strong>https://github.com/JONATHANGABR/MeioKahoot/tree/main</strong> dentro do HTML.</p>`;
-                document.getElementById('info-modal').classList.add('active');
-            },
-            close(ev) {
-                if (ev && ev.target.id !== 'info-modal') return;
-                document.getElementById('info-modal').classList.remove('active');
-            }
-        };
-
-        // ==================== UI ====================
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-            document.getElementById(id).style.display='flex';
-            document.getElementById('hud').style.display=(id==='p-auth'||id==='p-home')?'none':'flex';
-            document.getElementById('tm-ui').style.display=(id==='p-game')?'block':'none';
-            document.getElementById('live-score').className=(id==='p-game')?'vis':'';
-
-            const phaseMap = { 'p-auth': 'LOGIN', 'p-home': 'MENU', 'p-lobby': 'LOBBY', 'p-game': 'JOGO', 'p-rank': 'RANKING', 'p-ranking-board': 'PLACAR' };
-            document.getElementById('h-phase').innerText = phaseMap[id] || '---';
-        }
-
-        // ==================== SOCKET EVENTS ====================
-
-        socket.on('authOk', u => {
-            curUser = u;
-            localStorage.setItem('mk-user', JSON.stringify({user:u.user,pass:u.pass}));
-            document.getElementById('u-name').innerText = u.user;
-            document.getElementById('u-xp').innerText = '🏆 '+(u.xp||0)+' XP';
-            if(u.photo) document.getElementById('u-img').innerHTML = `<img src="${u.photo}" class="p-photo">`;
-            showPage('p-home');
-            log('Logado como: ' + u.user, 'ok');
-        });
-
-        socket.on('roomCreated', pin => {
-            curPin = pin;
-            localStorage.setItem('mk-last-room', JSON.stringify({pin, at: Date.now()}));
-            document.getElementById('lb-pin').innerText = pin;
-            document.getElementById('h-pin').innerText = 'PIN: '+pin;
-            document.getElementById('st-btn').style.display = 'block';
-            showPage('p-lobby');
-            log('Sala criada: ' + pin + ' | Meu socket: ' + socket.id, 'ok');
-        });
-
-        socket.on('joined', d => {
-            curPin = d.pin;
-            localStorage.setItem('mk-last-room', JSON.stringify({pin:d.pin, at: Date.now()}));
-            document.getElementById('lb-pin').innerText = d.pin;
-            document.getElementById('h-pin').innerText = 'PIN: '+d.pin;
-            document.getElementById('st-btn').style.display = 'none';
-            showPage('p-lobby');
-            log('Entrou na sala: ' + d.pin, 'ok');
-        });
-
-        socket.on('pList', list => {
-            document.getElementById('h-players').innerText = '👥 ' + list.length;
-            document.getElementById('lb-list').innerHTML = list.map(p => {
-                const devIcon = p.device === 'mobile' ? '📱' : (p.device === 'pc' ? '💻' : '');
-                const off = p.connected === false ? ' opacity:0.45;filter:grayscale(1);' : '';
-                return `
-                <div style="background:white;color:black;padding:10px 20px;border-radius:25px;display:flex;align-items:center;gap:8px;font-weight:900;${off}">
-                    ${p.photo?`<img src="${p.photo}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;">`:'👤'} ${p.name} <span style="font-size:0.9rem;">${devIcon}</span>
-                </div>`;
-            }).join('');
-        });
-
-        // ==================== QUESTÃO ====================
-        socket.on('q', q => {
-            log('Questão ' + q.n + '/' + q.total + ': ' + q.question, 'info');
-            document.body.classList.remove('answer-correct','answer-wrong','question-reveal');
-            document.body.classList.add('question-live');
-            if (q.serverNow) serverOffset = q.serverNow - Date.now();
-            
-            curQuestionId = q.qid || null;
-            deadlineAt = q.deadlineAt || (Date.now() + (q.time * 1000));
-            canClick = !q.alreadyAnswered;
-            selectedAnswer = null;
-            answerSent = false;
-            hideFb();
-            showPage('p-game');
-
-            document.getElementById('q-txt').innerText = q.question;
-            document.getElementById('q-count').innerText = q.n + '/' + q.total;
-            const diff = document.getElementById('q-diff');
-            diff.innerText = q.difficulty;
-            diff.style.color = q.difficulty==='facil'?'#4caf50':(q.difficulty==='medio'?'#ff9800':'#f44336');
-
-            const colors = ['red','blue','yellow','green'];
-            document.getElementById('ans-grid').innerHTML = q.options.map((opt, i) => 
-                '<button class="ans-btn c-'+colors[i]+'" onclick="Game.answer('+i+')">'+opt+'</button>'
-            ).join('');
-            document.getElementById('answer-status').innerText = 'Escolha uma opção. Você pode trocar antes de confirmar.';
-            document.getElementById('confirm-answer').disabled = true;
-
-            // Timer
-            clearInterval(timer);
-            curSec = Math.max(0, Math.ceil((deadlineAt - (Date.now() + serverOffset)) / 1000));
-            const bar = document.getElementById('tm-bar');
-            document.getElementById('tm-text').innerText = curSec;
-            bar.style.width = '100%'; bar.classList.remove('warning');
-            timer = setInterval(() => {
-                curSec = Math.max(0, Math.ceil((deadlineAt - (Date.now() + serverOffset)) / 1000));
-                const pct = Math.max(0, Math.min(100, ((deadlineAt - Date.now()) / (q.time * 1000)) * 100));
-                bar.style.width = pct + '%';
-                document.getElementById('tm-text').innerText = curSec;
-                if(curSec<=5 && curSec>0) { bar.classList.add('warning'); Sounds.play('timer'); }
-                if(curSec<=0) {
-                    clearInterval(timer);
-                    // Não envia automaticamente depois do prazo. O servidor é quem encerra a pergunta.
-                    canClick = false;
-                    document.getElementById('confirm-answer').disabled = true;
-                }
-            }, 250);
-        });
-
-        // ==================== RESULTADO ====================
-        socket.on('result', d => {
-            if (d.qid && curQuestionId && d.qid !== curQuestionId) return;
-            log('RESULTADO: ' + (d.correct ? '✅ ACERTOU! +' + d.earned + 'pts' : '❌ ERROU') + ' | Total: ' + d.totalScore, d.correct ? 'ok' : 'err');
-            clearInterval(timer);
-            document.body.classList.remove('question-live');
-            document.body.classList.add(d.correct ? 'answer-correct' : 'answer-wrong');
-
-            const btns = document.querySelectorAll('.ans-btn');
-            btns.forEach((b, i) => {
-                b.classList.remove('picked');
-                if (i === d.correctIdx) b.classList.add('show-correct');
-                else if (!d.correct && i === selectedAnswer) b.classList.add('show-wrong');
-                else b.classList.add('dimmed');
-            });
-
-            if (d.correct) {
-                combo = typeof d.combo === 'number' ? d.combo : combo + 1;
-                showFb(true, '+' + d.earned + ' pontos!');
-                Sounds.play('correct');
-                if(combo>1){document.getElementById('cb-pop').innerText='COMBO X'+combo+' 🔥';document.getElementById('cb-pop').classList.add('active');}
-            } else {
-                combo = typeof d.combo === 'number' ? d.combo : 0;
-                showFb(false, 'A resposta certa era a ' + (d.correctIdx+1) + 'ª');
-                Sounds.play('wrong');
-                document.getElementById('cb-pop').classList.remove('active');
-            }
-
-            document.getElementById('sc-val').innerText = d.totalScore;
-        });
-
-        // ==================== TEMPO ESGOTOU ====================
-        socket.on('reveal', d => {
-            if (d.qid && curQuestionId && d.qid !== curQuestionId) return;
-            document.getElementById('confirm-answer').disabled = true;
-            document.body.classList.remove('question-live');
-            document.body.classList.add('question-reveal');
-            log('Revelação: correta=' + d.correct + (canClick ? ' (tempo esgotou sem responder)' : ''), 'info');
-            if (canClick) {
-                canClick = false;
-                combo = 0;
-                const btns = document.querySelectorAll('.ans-btn');
-                btns.forEach((b, i) => {
-                    if(i===d.correct) b.classList.add('show-correct');
-                    else b.classList.add('dimmed');
-                });
-                showFb(false, 'Tempo esgotado!');
-                Sounds.play('wrong');
-            }
-        });
-
-        // ==================== 🆕 FIM DE JOGO - RANKING ANIMADO ====================
-        socket.on('gameOver', r => {
-            log('🏁 FIM DE JOGO! ' + r.length + ' jogadores', 'ok');
-            hideFb();
-            combo = 0;
-            selectedAnswer = null;
-            answerSent = false;
-            canClick = false;
-            curQuestionId = null;
-            clearInterval(timer);
-            document.getElementById('sc-val').innerText = '0';
-            Sounds.play('win');
-
-            // Configura callbacks dos botões
-            RankingScreen.setOnPlayAgain(() => {
-                log('Jogar de novo... voltando ao menu');
-                showPage('p-home');
-            });
-
-            RankingScreen.setOnLeave(() => {
-                log('Saindo...');
-                window.location.reload();
-            });
-
-            // 🎉 Mostra o ranking animado!
-            RankingScreen.show(r);
-        });
-
-        // ==================== FEEDBACK BAR ====================
-        function showFb(correct, msg) {
-            const bar = document.getElementById('fb-bar');
-            bar.className = correct ? 'fb-correct' : 'fb-wrong';
-            bar.textContent = (correct ? '✅ ' : '❌ ') + msg;
-        }
-        function hideFb() { document.getElementById('fb-bar').className = ''; }
-
-        // ==================== INIT ====================
-        window.onload = () => {
-            document.body.classList.add('f-' + (localStorage.getItem('mk-font')||'montserrat'));
-            DeviceCheck.forced = localStorage.getItem('mk-device');
-            DeviceCheck.detect();
-            const lastRoom = localStorage.getItem('mk-last-room');
-            if (lastRoom) document.getElementById('reconnect-btn').style.display = 'block';
-            const saved = localStorage.getItem('mk-user');
-            if(saved) { log('Auto-login...', 'info'); socket.emit('login', JSON.parse(saved)); }
-        };
-
-        socket.on('leaderboardData', data => Leaderboard.update(data));
-        socket.on('scoreSync', d => {
-            document.getElementById('sc-val').innerText = d.totalScore || 0;
-            combo = d.combo || 0;
-        });
-        socket.on('matchStarting', () => {
-            combo = 0;
-            selectedAnswer = null;
-            answerSent = false;
-            canClick = false;
-            document.getElementById('sc-val').innerText = '0';
-        });
-        socket.on('hostChanged', () => {
-            document.getElementById('st-btn').style.display = 'block';
-            log('Você virou o host da sala.', 'ok');
-        });
-
-        socket.on('authErr', m => { log('AUTH ERROR: '+m, 'err'); alert(m); });
-        socket.on('err', m => { log('ERROR: '+m, 'err'); alert(m); });
-    </script>
+<!-- ════ SCRIPTS ════ -->
+<script src="/socket.io/socket.io.js"></script>
+<script src="/Scripts/Js/sounds.js"></script>
+<script src="/Scripts/Js/profile.js"></script>
+<script src="/Scripts/Js/friends.js"></script>
+<script src="/Scripts/Js/ui.js"></script>
+<script src="/Scripts/Js/lobby.js"></script>
+<script src="/Scripts/Js/game.js"></script>
+<script src="/Scripts/Js/socket.js"></script>
+<script src="/Scripts/Js/app.js"></script>
 </body>
 </html>

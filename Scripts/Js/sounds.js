@@ -1,72 +1,56 @@
-/**
- * MeioKahoot Sound Manager (Robust Version)
- * Gerencia o áudio de forma segura: se o arquivo não existir, o jogo continua.
- */
-const Sounds = {
-    // Lista de sons (nome do arquivo)
-    files: {
-        click: 'Click.mp3',
-        correct: 'Correct.mp3',
-        wrong: 'Incorrrect.mp3',
-        timer: 'Coundown.mp3',
-        lobby: 'Lobby.mp3',
-        countdown: 'Alarm.mp3',
-        win: 'victory.mp3'
-    },
-    
-    instances: {},
-    available: {}, // Monitora quais sons foram carregados com sucesso
+/* MeioKahoot — Sounds.js */
+const Sounds = (() => {
+  const FILES = {
+    click:   'Click.mp3',
+    correct: 'Correct.mp3',
+    wrong:   'Incorrect.mp3',
+    timer:   'Coundown.mp3',
+    lobby:   'Lobby.mp3',
+    win:     'victory.mp3',
+  };
+  const VOL = { lobby: .45, timer: .65, default: .8 };
 
-    init() {
-        console.log("[Sounds] Inicializando sistema de áudio...");
-        for (let key in this.files) {
-            const audio = new Audio(`/Assets/Audio/${this.files[key]}`);
-            
-            // Tenta pré-carregar
-            audio.addEventListener('canplaythrough', () => {
-                this.available[key] = true;
-            }, { once: true });
+  const nodes = {}, ok = {};
+  let bgKey = null, muted = false, unlocked = false;
 
-            // Se der erro (arquivo não existe), desativa o som silenciosamente
-            audio.onerror = () => {
-                console.warn(`[Sounds] Aviso: O arquivo ${this.files[key]} não foi encontrado. O jogo continuará sem este som.`);
-                this.available[key] = false;
-            };
+  function _tryUnlock() {
+    if (unlocked) return; unlocked = true;
+    Object.keys(nodes).forEach(k => {
+      const a = nodes[k]; if (!a || ok[k] === false) return;
+      a.volume = 0; a.play().then(() => { a.pause(); a.currentTime = 0; a.volume = VOL[k] ?? VOL.default; }).catch(() => {});
+    });
+  }
 
-            this.instances[key] = audio;
-        }
-    },
+  function init() {
+    Object.entries(FILES).forEach(([k, f]) => {
+      const a = new Audio();
+      a.preload = 'auto'; a.volume = VOL[k] ?? VOL.default; ok[k] = null;
+      a.addEventListener('canplaythrough', () => { ok[k] = true; }, { once: true });
+      a.addEventListener('error',          () => { ok[k] = false; }, { once: true });
+      a.src = `/Assets/Audio/${f}`; nodes[k] = a;
+    });
+    const u = () => { _tryUnlock(); document.removeEventListener('click', u); document.removeEventListener('touchend', u); };
+    document.addEventListener('click', u, { once: true });
+    document.addEventListener('touchend', u, { once: true });
+  }
 
-    play(key, loop = false) {
-        // Só tenta tocar se o áudio foi carregado e está marcado como disponível
-        if (this.instances[key] && this.available[key] !== false) {
-            try {
-                this.instances[key].currentTime = 0;
-                this.instances[key].loop = loop;
-                
-                const promise = this.instances[key].play();
-                
-                if (promise !== undefined) {
-                    promise.catch(error => {
-                        // Isso evita erros no console se o usuário ainda não interagiu com a página
-                        // ou se o arquivo sumiu no meio do caminho
-                        this.available[key] = false;
-                    });
-                }
-            } catch (e) {
-                this.available[key] = false;
-                console.log(`[Sounds] Erro ao tentar tocar ${key}:`, e.message);
-            }
-        }
-    },
+  function play(key, loop = false) {
+    if (muted || ok[key] === false) return;
+    const base = nodes[key]; if (!base) return;
+    try {
+      let a = (!loop && ['click','correct','wrong'].includes(key)) ? base.cloneNode() : base;
+      a.volume = VOL[key] ?? VOL.default; a.loop = loop;
+      if (a !== base) a.currentTime = 0; else base.currentTime = 0;
+      const p = a.play(); if (p) p.catch(() => { ok[key] = false; });
+    } catch { ok[key] = false; }
+  }
 
-    stop(key) {
-        if (this.instances[key]) {
-            this.instances[key].pause();
-            this.instances[key].currentTime = 0;
-        }
-    }
-};
+  function stop(key)  { const a = nodes[key]; if (a) { try { a.pause(); a.currentTime = 0; } catch {} } }
+  function playBg(k)  { if (bgKey === k) return; stopBg(); bgKey = k; play(k, true); }
+  function stopBg()   { if (bgKey) { stop(bgKey); bgKey = null; } }
+  function stopAll()  { Object.keys(nodes).forEach(stop); bgKey = null; }
+  function toggleMute() { muted = !muted; if (muted) stopAll(); return muted; }
 
-// Inicializa o sistema de som
-Sounds.init();
+  init();
+  return { play, stop, playBg, stopBg, stopAll, toggleMute, _nodes: nodes };
+})();
