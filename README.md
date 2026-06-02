@@ -8,3 +8,10 @@ O Servidor é integrado junto com o jogo. para no dia da apresentação eu apena
 Tem varios temas. como "Ciencias, Reciclagem, Água e ETC." no total são quatro tipos de Temas e 100 Questões juntando tudo aquilo.
 
 ### Atenção. esse jogo é multiplataforma, pode ser jogado tanto no Computador ou no Celular.
+
+# O Jogo ainda esta em fase de Polimento ate o dia.
+Coisas podem ser Adicionadas ou tiradas
+
+# Agora:
+Procurando um negocio pra usar como servidor.
+polindo o Jogo

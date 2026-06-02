@@ -67,11 +67,17 @@ const Profile = (() => {
     const file = input.files[0]; if (!file) return;
     const r = new FileReader();
     r.onload = e => {
-      _pPhoto = e.target.result;
-      const img = document.getElementById('edit-av-photo');
-      const let_ = document.getElementById('edit-av-letter');
-      if (img) { img.src = _pPhoto; img.style.display = 'block'; }
-      if (let_) let_.style.display = 'none';
+      const raw = e.target.result;
+      const apply = (dataUrl) => {
+        _pPhoto = dataUrl;
+        const img  = document.getElementById('edit-av-photo');
+        const let_ = document.getElementById('edit-av-letter');
+        if (img)  { img.src = _pPhoto; img.style.display = 'block'; }
+        if (let_) let_.style.display = 'none';
+      };
+      if (typeof PhotoCrop !== 'undefined') PhotoCrop.open(raw, apply);
+      else apply(raw);
+      input.value = '';
     };
     r.readAsDataURL(file);
   }
@@ -95,11 +101,17 @@ const Profile = (() => {
     const file = input.files[0]; if (!file) return;
     const r = new FileReader();
     r.onload = e => {
-      input.dataset.base64 = e.target.result;
-      const prev = document.getElementById('reg-photo-img');
-      const init = document.getElementById('reg-initial');
-      if (prev) { prev.src = e.target.result; prev.style.display = 'block'; }
-      if (init) init.style.display = 'none';
+      const raw = e.target.result;
+      const apply = (dataUrl) => {
+        input.dataset.base64 = dataUrl;
+        const prev = document.getElementById('reg-photo-img');
+        const init = document.getElementById('reg-initial');
+        if (prev) { prev.src = dataUrl; prev.style.display = 'block'; }
+        if (init) init.style.display = 'none';
+      };
+      if (typeof PhotoCrop !== 'undefined') PhotoCrop.open(raw, apply);
+      else apply(raw);
+      input.value = '';
     };
     r.readAsDataURL(file);
   }

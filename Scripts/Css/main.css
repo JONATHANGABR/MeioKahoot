@@ -954,3 +954,176 @@ body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem;
   .theme-grid-popup { grid-template-columns: 1fr; }
   .modal-create-box { max-width: 100%; }
 }
+
+/* ================================================================
+   MODAL PERFIL — força letras pretas
+================================================================ */
+#modal-profile .modal-box,
+#modal-profile .modal-box h2,
+#modal-profile .modal-box p,
+#modal-profile .modal-box label,
+#modal-profile .modal-box strong,
+#modal-profile .modal-box span,
+#modal-profile .modal-box .btn-link,
+#modal-profile .modal-box .estat label,
+#modal-profile .modal-box .estat strong,
+#modal-profile .modal-box input {
+  color: #000 !important;
+}
+#modal-profile .modal-box .btn-link {
+  color: #000 !important;
+  opacity: .85;
+}
+#modal-profile .modal-box .btn-primary { color: #fff !important; }
+#modal-profile .modal-box .btn-danger-ghost { color: #b91c1c !important; }
+#modal-profile .modal-box input::placeholder { color: #555 !important; }
+
+/* ================================================================
+   FIRE GIF — substitui o emoji 🔥 do combo
+================================================================ */
+.fire-icon {
+  display: inline-block;
+  width: 1.15em; height: 1.15em;
+  vertical-align: -0.25em;
+  object-fit: contain;
+  filter: drop-shadow(0 0 4px rgba(255,140,0,.45));
+  pointer-events: none;
+}
+.combo-pill .fire-icon { width: 1.35em; height: 1.35em; }
+.result-combo .fire-icon { width: 1.25em; height: 1.25em; }
+
+/* ================================================================
+   CROP MODAL — ajuste de foto estilo WhatsApp
+================================================================ */
+.crop-overlay { z-index: 700; }
+
+.crop-box {
+  background: #111;
+  color: #fff;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 95dvh;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.6);
+}
+.crop-header { text-align: center; }
+.crop-header h2 {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+.crop-header p {
+  color: rgba(255,255,255,.6);
+  font-size: .8rem;
+}
+
+.crop-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 320px;
+  margin: 0 auto;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+.crop-stage:active { cursor: grabbing; }
+
+.crop-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#crop-img {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* Máscara escura ao redor do círculo */
+.crop-mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    transparent 0,
+    transparent calc(50% - 1px),
+    rgba(0,0,0,.6) 50%
+  );
+}
+.crop-circle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.85) inset;
+}
+
+.crop-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+.crop-zoom-ic {
+  color: rgba(255,255,255,.7);
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 18px;
+  text-align: center;
+}
+#crop-zoom {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255,255,255,.2);
+  border-radius: 99px;
+  outline: none;
+}
+#crop-zoom::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--green-l);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+#crop-zoom::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--green-l);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+
+.crop-actions {
+  display: flex;
+  gap: 8px;
+}
+.crop-actions .btn { width: 100%; padding: 12px 16px; }
+.crop-box .btn-ghost {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border-color: rgba(255,255,255,.15);
+}
+.crop-box .btn-primary {
+  background: var(--green);
+  color: #fff;
+}

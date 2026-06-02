@@ -131,7 +131,13 @@ const UI = {
     if (icon)  icon.textContent  = correct ? '✔' : '✗';
     if (label) label.textContent = correct ? 'Correto!' : 'Incorreto!';
     if (ptsEl) ptsEl.textContent = (correct && pts > 0) ? `+${pts.toLocaleString('pt-BR')} pts` : '';
-    if (cmbEl) cmbEl.textContent = (correct && combo >= 2) ? `🔥 Combo x${combo}` : '';
+    if (cmbEl) {
+      if (correct && combo >= 2) {
+        cmbEl.innerHTML = `<img class="fire-icon" src="/Assets/Animations/Fire.gif" alt="combo"/> Combo x${combo}`;
+      } else {
+        cmbEl.textContent = '';
+      }
+    }
 
     if (navigator.vibrate) navigator.vibrate(correct ? [40] : [80, 40, 80]);
 

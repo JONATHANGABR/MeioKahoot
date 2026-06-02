@@ -131,7 +131,7 @@
           <span>🏆 <b id="st-best">0</b></span>
           <span>🎮 <b id="st-games">0</b></span>
           <span>✅ <b id="st-acc">0%</b></span>
-          <span>🔥 <b id="st-combo">0</b></span>
+          <span><img class="fire-icon" src="/Assets/Animations/Fire.gif" alt="combo"/> <b id="st-combo">0</b></span>
         </div>
       </div>
       <button class="icon-btn" onclick="Profile.openEdit()" title="Editar perfil">✏️</button>
@@ -265,7 +265,7 @@
 
   <!-- Combo -->
   <div class="combo-pill" id="combo-pill" style="display:none">
-    🔥 <span id="combo-txt">x2</span>
+    <img class="fire-icon" src="/Assets/Animations/Fire.gif" alt="combo"/> <span id="combo-txt">x2</span>
   </div>
 
 </div>
@@ -429,9 +429,40 @@
 </div>
 
 
+<!-- ════ MODAL: Recortar foto (estilo WhatsApp) ════ -->
+<div class="overlay-center crop-overlay" id="modal-crop" style="display:none">
+  <div class="crop-box">
+    <div class="crop-header">
+      <h2>Ajustar foto</h2>
+      <p>Arraste e use o zoom para enquadrar</p>
+    </div>
+
+    <div class="crop-stage" id="crop-stage">
+      <div class="crop-canvas-wrap">
+        <img id="crop-img" alt="" draggable="false"/>
+        <div class="crop-mask"></div>
+        <div class="crop-circle"></div>
+      </div>
+    </div>
+
+    <div class="crop-controls">
+      <span class="crop-zoom-ic">−</span>
+      <input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1"/>
+      <span class="crop-zoom-ic">+</span>
+    </div>
+
+    <div class="crop-actions">
+      <button class="btn btn-ghost" onclick="PhotoCrop.cancel()">Cancelar</button>
+      <button class="btn btn-primary" onclick="PhotoCrop.confirm()">Concluir</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- ════ SCRIPTS ════ -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/Scripts/Js/sounds.js"></script>
+<script src="/Scripts/Js/crop.js"></script>
 <script src="/Scripts/Js/profile.js"></script>
 <script src="/Scripts/Js/friends.js"></script>
 <script src="/Scripts/Js/ui.js"></script>
