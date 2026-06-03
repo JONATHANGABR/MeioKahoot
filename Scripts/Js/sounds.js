@@ -12,6 +12,7 @@ const Sounds = (() => {
 
   const nodes = {}, ok = {};
   let bgKey = null, muted = false, unlocked = false;
+  let lobbyMuted = localStorage.getItem('mk_lobby_muted') === '1';
 
   function _tryUnlock() {
     if (unlocked) return; unlocked = true;
@@ -46,11 +47,28 @@ const Sounds = (() => {
   }
 
   function stop(key)  { const a = nodes[key]; if (a) { try { a.pause(); a.currentTime = 0; } catch {} } }
-  function playBg(k)  { if (bgKey === k) return; stopBg(); bgKey = k; play(k, true); }
-  function stopBg()   { if (bgKey) { stop(bgKey); bgKey = null; } }
+  function playBg(k)  { if (k === 'lobby' && lobbyMuted) { stopBg(); updateLobbyButton(); return; } if (bgKey === k) return; stopBg(); bgKey = k; play(k, true); updateLobbyButton(); }
+  function stopBg()   { if (bgKey) { stop(bgKey); bgKey = null; } updateLobbyButton(); }
   function stopAll()  { Object.keys(nodes).forEach(stop); bgKey = null; }
   function toggleMute() { muted = !muted; if (muted) stopAll(); return muted; }
+  function isLobbyMuted() { return lobbyMuted; }
+  function updateLobbyButton() {
+    const btn = document.getElementById('lobby-sound-btn');
+    if (!btn) return;
+    btn.textContent = lobbyMuted ? '🔇' : '🔊';
+    btn.title = lobbyMuted ? 'Ativar som do lobby' : 'Desativar som do lobby';
+    btn.classList.toggle('muted', lobbyMuted);
+  }
+  function toggleLobbyMute() {
+    lobbyMuted = !lobbyMuted;
+    localStorage.setItem('mk_lobby_muted', lobbyMuted ? '1' : '0');
+    if (lobbyMuted) stop('lobby'); else playBg('lobby');
+    updateLobbyButton();
+    if (typeof UI !== 'undefined') UI.toast(lobbyMuted ? 'Som do lobby desativado' : 'Som do lobby ativado');
+    return lobbyMuted;
+  }
 
   init();
-  return { play, stop, playBg, stopBg, stopAll, toggleMute, _nodes: nodes };
+  document.addEventListener('DOMContentLoaded', updateLobbyButton);
+  return { play, stop, playBg, stopBg, stopAll, toggleMute, toggleLobbyMute, isLobbyMuted, updateLobbyButton, _nodes: nodes };
 })();

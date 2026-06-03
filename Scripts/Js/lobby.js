@@ -1,6 +1,7 @@
 /* MeioKahoot — Lobby.js (minimalista) */
 const Lobby = {
   _last: 0,
+  _pin: '',
 
   updateList(players) {
     const grid  = document.getElementById('lb-list');
@@ -44,8 +45,23 @@ const Lobby = {
   },
 
   setPin(pin) {
+    this._pin = String(pin || '');
     // UI.setPin cuida do HUD chip + dígitos separados do lobby
     UI.setPin(pin);
+  },
+
+  async copyPin() {
+    const pin = this._pin || document.getElementById('h-pin')?.textContent?.trim();
+    if (!pin) return UI.toast('Nenhum código para copiar');
+    try {
+      await navigator.clipboard.writeText(pin);
+    } catch {
+      const tmp = document.createElement('input');
+      tmp.value = pin; document.body.appendChild(tmp); tmp.select();
+      document.execCommand('copy'); tmp.remove();
+    }
+    Sounds.play('click');
+    UI.toast(`Código ${pin} copiado!`);
   },
 
   showHostControls(show) {

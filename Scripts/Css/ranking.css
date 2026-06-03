@@ -56,3 +56,42 @@
 .rank-player span { font-size: .68rem; color: var(--text-muted); }
 .rank-score { font-weight: 800; font-size: .9rem; white-space: nowrap; }
 .rank-score span { display: block; font-size: .6rem; color: var(--text-muted); font-weight: 500; }
+
+/* Ranking melhorado */
+.rank-wrap { width: min(900px, 96vw); }
+.rank-stats { grid-template-columns: repeat(4, 1fr); }
+.rank-tools { display: grid; grid-template-columns: 1fr 210px; gap: 8px; }
+.rank-tools input, .rank-tools select {
+  width: 100%; padding: 10px 12px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: rgba(255,255,255,.1);
+  color: #fff; font-family: var(--font); font-weight: 700; font-size: .8rem;
+}
+.rank-tools select option { color: #111; }
+.rank-me {
+  grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 10px;
+  border-radius: var(--radius-lg); background: rgba(38,137,12,.18);
+  border: 1px solid rgba(74,222,128,.28);
+}
+.rank-me div { text-align: center; }
+.rank-me label { display:block; font-size:.58rem; color:rgba(255,255,255,.62); text-transform:uppercase; font-weight:900; letter-spacing:.05em; }
+.rank-me strong { font-size:.9rem; font-weight:900; color:#fff; }
+.rank-tabs { flex-wrap: wrap; }
+.rank-badge {
+  display: inline-flex; align-items: center; margin-left: 4px; padding: 2px 6px;
+  border-radius: 999px; background: rgba(19,104,206,.55); color: #fff;
+  font-size: .52rem; font-weight: 900; vertical-align: middle;
+}
+.rank-badge.green { background: rgba(38,137,12,.7); }
+.rank-badge.amber { background: rgba(216,158,0,.8); color: #2b1700; }
+.theme-rank-row .rank-avatar { font-size: 1rem; background: rgba(255,255,255,.15); }
+.rank-row.top-1 { background: linear-gradient(90deg, rgba(251,191,36,.18), rgba(255,255,255,.08)); }
+.rank-row.top-2 { background: linear-gradient(90deg, rgba(203,213,225,.14), rgba(255,255,255,.08)); }
+.rank-row.top-3 { background: linear-gradient(90deg, rgba(205,127,50,.14), rgba(255,255,255,.08)); }
+
+@media (max-width: 680px) {
+  .rank-stats { grid-template-columns: repeat(2, 1fr); }
+  .rank-tools { grid-template-columns: 1fr; }
+  .rank-me { grid-template-columns: repeat(2, 1fr); }
+  .rank-row { grid-template-columns: 38px 1fr; }
+  .rank-score { grid-column: 2; justify-self: start; }
+}

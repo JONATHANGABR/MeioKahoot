@@ -26,7 +26,7 @@ const UI = {
     if (ro) ro.classList.remove('show');
 
     // Reset chips
-    hide('h-device','h-phase','h-players','h-pin','timer-bar','timer-circle-wrap','score-pill');
+    hide('h-device','h-phase','h-players','h-pin','timer-bar','timer-circle-wrap','score-pill','lobby-sound-btn');
 
     // Logo: só em auth e home
     const logo = document.getElementById('hud-logo');
@@ -35,9 +35,10 @@ const UI = {
     // Botão amigos: só na home
     const fb = document.getElementById('friends-btn');
     if (fb) fb.style.display = (id === 'p-home') ? 'flex' : 'none';
+    if (typeof Sounds !== 'undefined') Sounds.updateLobbyButton?.();
 
     if (id === 'p-lobby') {
-      show('h-device'); show('h-players'); show('h-pin');
+      show('h-device'); show('h-players'); show('h-pin'); show('lobby-sound-btn', 'flex');
       set('h-phase', '🏠 Lobby'); show('h-phase');
     }
     if (id === 'p-game') {

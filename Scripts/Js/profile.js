@@ -44,7 +44,7 @@ const Profile = (() => {
     _txt('st-best',   (s.best || 0).toLocaleString('pt-BR'));
     _txt('st-games',  s.games || 0);
     _txt('st-acc',    acc(s));
-    _txt('st-combo',  s.combo || 0);
+    _txt('st-combo',  Math.floor((s.games || 0) / 5) + 1);
     _setAv('home-initial', 'home-avatar', name, p.photo);
   }
 

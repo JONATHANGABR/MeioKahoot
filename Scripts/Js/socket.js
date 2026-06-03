@@ -6,7 +6,7 @@ const socket = io(window.location.origin, {
 let _lu = '', _lp = '';
 
 const SocketClient = {
-  _pin: null, _isHost: false, _withBots: false, _qid: null,
+  _pin: null, _isHost: false, _withBots: false, _qid: null, _inLobby: false, _difficulty: 'normal',
   _loggedIn: false, // ← flag de sessão
 
   connect() {
@@ -25,25 +25,39 @@ const SocketClient = {
       Profile.setFromAuth({ name: data.name || data.user, photo: data.photo, user: data.user });
       Splash.hide();
       Sounds.play('click'); Sounds.playBg('lobby');
+      SocketClient.loadFriends();
       HomeUI.checkRejoin();
       UI.showPage('p-home');
     });
 
     socket.on('authErr', msg => {
-      AutoLogin.cancelTimer(); Splash.hide(); Auth.onError();
       const splash = document.getElementById('mk-splash');
-      if (splash?.classList.contains('visible')) {
-        AutoLogin.clear();
-        setTimeout(() => { UI.showPage('p-auth'); Auth.showLogin(); UI.toast('Sessão expirada. Faça login.'); }, 300);
-      } else {
-        UI.toast(msg || 'Usuário ou senha incorretos.');
-      }
+      const wasAutoLogin = !!splash?.classList.contains('visible');
+      AutoLogin.cancelTimer();
+      Auth.onError();
+      this._loggedIn = false;
+      this._pin = null;
+      this._isHost = false;
+      this._inLobby = false;
+      this._qid = null;
+
+      if (wasAutoLogin) AutoLogin.clear();
+      Splash.hide();
+
+      // Correção mobile/autologin: se o login falhar antes de uma página ser exibida,
+      // força a volta para a tela de login em vez de deixar a tela vazia.
+      const showLogin = () => {
+        UI.showPage('p-auth');
+        Auth.showLogin();
+        UI.toast(wasAutoLogin ? 'Sessão expirada. Faça login.' : (msg || 'Usuário ou senha incorretos.'));
+      };
+      setTimeout(showLogin, wasAutoLogin ? 300 : 0);
       Sounds.play('wrong');
     });
 
     socket.on('roomCreated', pin => {
       if (!this._loggedIn) return;
-      this._pin = pin; this._isHost = true;
+      this._pin = pin; this._isHost = true; this._inLobby = true;
       Lobby.setPin(pin); Lobby.showHostControls(true);
       localStorage.setItem('mk_lastPin', pin);
       UI.showPage('p-lobby'); Sounds.playBg('lobby');
@@ -52,7 +66,7 @@ const SocketClient = {
 
     socket.on('joined', data => {
       if (!this._loggedIn) return;
-      this._pin = data.pin; this._isHost = false;
+      this._pin = data.pin; this._isHost = false; this._inLobby = true;
       Lobby.setPin(data.pin); Lobby.showHostControls(false);
       localStorage.setItem('mk_lastPin', data.pin);
       UI.showPage('p-lobby'); Sounds.playBg('lobby');
@@ -70,6 +84,7 @@ const SocketClient = {
 
     socket.on('q', data => {
       if (!this._loggedIn || !this._pin) return; // ← IGNORA se deslogou
+      this._inLobby = false;
       this._qid = data.qid;
       Sounds.stopBg();
       GameUI.onQuestion(data);
@@ -90,12 +105,18 @@ const SocketClient = {
       GameUI.onScoreSync({ totalScore: data.totalScore, combo: data.combo, earned: 0 });
     });
 
-    socket.on('gameOver', rank => {
+    socket.on('gameOver', payload => {
       if (!this._loggedIn || !this._pin) return;
-      GameUI.onGameOver(rank);
+      this._inLobby = false;
+      GameUI.onGameOver(payload);
     });
 
     socket.on('leaderboardData', p => RankingBoard.render(p));
+    socket.on('roomsData', data => RoomsBrowser.render(data));
+    socket.on('roomInvite', data => RoomInvites.show(data));
+    socket.on('friendsData', data => Friends.render(data));
+    socket.on('friendInfo', msg => { UI.toast(msg || 'Amigos atualizado'); Sounds.play('click'); });
+    socket.on('friendErr', msg => { UI.toast(msg || 'Erro no sistema de amigos'); Sounds.play('wrong'); });
     socket.on('err', msg => { UI.toast(msg || 'Erro no servidor'); Sounds.play('wrong'); });
   },
 
@@ -111,9 +132,19 @@ const SocketClient = {
     socket.emit('createRoom', { playerName: Profile.getName(), playerPhoto: Profile.getPhoto(), device: DeviceManager.current(), theme });
   },
   joinRoom(pin)  { socket.emit('joinRoom', { pin, name: Profile.getName(), photo: Profile.getPhoto(), device: DeviceManager.current() }); },
-  startGame()    { if (this._pin) socket.emit('startGame', this._pin); },
+  setDifficulty(diff) { this._difficulty = diff === 'hard' ? 'hard' : 'normal'; },
+  startGame()    { if (this._pin) socket.emit('startGame', { pin: this._pin, difficulty: this._difficulty }); },
   sendAnswer(idx){ if (!this._pin) return; socket.emit('answer', { pin: this._pin, idx, qid: this._qid }); },
   loadRanking()  { socket.emit('getLeaderboard'); },
+  loadRooms()    { if (this._loggedIn) socket.emit('getRooms'); },
+  loadFriends()  { if (this._loggedIn) socket.emit('getFriends'); },
+  sendFriendRequest(user) { if (this._loggedIn) socket.emit('sendFriendRequest', { to: user }); },
+  acceptFriendRequest(user) { if (this._loggedIn) socket.emit('acceptFriendRequest', { from: user }); },
+  rejectFriendRequest(user) { if (this._loggedIn) socket.emit('rejectFriendRequest', { from: user }); },
+  removeFriend(user) { if (this._loggedIn) socket.emit('removeFriend', { user }); },
+  inviteFriend(user) { if (this._loggedIn && this._pin) socket.emit('inviteFriend', { to: user, pin: this._pin }); },
+  currentPin() { return this._pin; },
+  canInvite() { return this._loggedIn && this._inLobby && !!this._pin; },
 
   /* Chamado pelo logout — desconecta da sala e bloqueia eventos */
   leaveGame() {
@@ -123,6 +154,8 @@ const SocketClient = {
     this._pin = null;
     this._isHost = false;
     this._withBots = false;
+    this._inLobby = false;
+    this._difficulty = 'normal';
     this._qid = null;
     this._loggedIn = false;
   },

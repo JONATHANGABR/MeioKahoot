@@ -1063,3 +1063,294 @@ body.device-mobile .pin-digit { width: 32px; height: 42px; font-size: 1.35rem; }
 @media (max-width: 360px) {
   .crop-area { width: 240px; height: 240px; }
 }
+
+/* ================================================================
+   MELHORIAS — Amigos, copiar PIN, som do lobby e estatísticas finais
+================================================================ */
+.hud-icon-btn { position: relative; color: #fff; }
+.hud-mini-badge {
+  position: absolute; top: -3px; right: -3px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 99px; background: var(--kahoot-red); color: #fff;
+  font-size: .58rem; font-weight: 900; align-items: center; justify-content: center;
+  border: 2px solid rgba(46,14,95,.95);
+}
+#lobby-sound-btn.muted { background: rgba(226,27,60,.35); }
+
+.pin-copy-btn {
+  margin-top: 12px; padding: 9px 14px; border: 0; border-radius: 999px;
+  background: var(--kahoot-purple); color: #fff; font-family: var(--font);
+  font-weight: 800; font-size: .75rem; cursor: pointer;
+  box-shadow: 0 3px 0 var(--kahoot-purple-deep);
+}
+.pin-copy-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--kahoot-purple-deep); }
+
+.friend-help { font-size: .78rem !important; color: #777 !important; margin-top: -4px; }
+.friends-section-title {
+  font-size: .66rem; font-weight: 900; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--kahoot-purple); margin: 4px 2px 2px;
+}
+.friend-empty {
+  text-align: center; padding: 12px; color: #999; font-size: .78rem;
+  background: #fafafa; border-radius: var(--radius); border: 1px dashed #e5e5e5;
+}
+.friend-actions { display: flex; gap: 5px; }
+.friend-accept, .friend-reject {
+  width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
+  color: #fff; font-weight: 900; font-family: var(--font);
+}
+.friend-accept { background: var(--kahoot-green); }
+.friend-reject { background: var(--kahoot-red); }
+
+.podium-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-lg); padding: 10px;
+}
+.podium-stat { text-align: center; }
+.podium-stat label {
+  display: block; font-size: .58rem; text-transform: uppercase; letter-spacing: .05em;
+  color: rgba(255,255,255,.55); font-weight: 800; margin-bottom: 3px;
+}
+.podium-stat strong { font-size: .92rem; font-weight: 900; color: #fff; }
+.podium-tie-banner {
+  text-align: center; padding: 9px 12px; border-radius: var(--radius);
+  background: rgba(216,158,0,.18); border: 1px solid rgba(216,158,0,.35);
+  color: #fde68a; font-weight: 900; font-size: .82rem;
+}
+.pod-row.tie { background: rgba(216,158,0,.12); border: 1px solid rgba(216,158,0,.22); }
+.pod-position { font-size: .58rem; color: rgba(255,255,255,.62); font-weight: 800; }
+
+body.device-mobile .podium-stats { grid-template-columns: repeat(2, 1fr); }
+
+/* ================================================================
+   MELHORIAS 2 — Salas abertas, convites e ranking melhorado
+================================================================ */
+.rooms-browser {
+  width: 100%; margin-top: 8px; padding: 12px; border-radius: var(--radius-lg);
+  background: rgba(70,23,143,.06); border: 1px solid rgba(70,23,143,.12);
+}
+.rooms-browser-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.rooms-browser-head strong { color: var(--kahoot-purple); font-size: .86rem; }
+.rooms-list { display: flex; flex-direction: column; gap: 7px; max-height: 240px; overflow-y: auto; }
+.room-empty { text-align: center; padding: 14px; color: #999; font-size: .8rem; }
+.room-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px; border-radius: var(--radius); background: #fff; border: 1px solid #ece8ff;
+  box-shadow: 0 2px 8px rgba(70,23,143,.06);
+}
+.room-row.friend-room { background: #fff8df; border-color: rgba(216,158,0,.35); }
+.room-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.room-main strong { color: var(--kahoot-purple); font-size: .9rem; letter-spacing: .08em; }
+.room-main span { color: #777; font-size: .68rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
+.room-friends { color: var(--kahoot-yellow) !important; font-weight: 800; }
+.room-side { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+.room-side span { color: #999; font-size: .66rem; font-weight: 700; }
+.room-side button, .friend-invite {
+  border: 0; border-radius: 999px; padding: 6px 10px; cursor: pointer;
+  background: var(--kahoot-green); color: #fff; font-family: var(--font); font-size: .68rem; font-weight: 900;
+}
+.friend-invite { background: var(--kahoot-blue); }
+.friend-actions .friend-invite:first-child { background: var(--kahoot-green); }
+.rank-player span { line-height: 1.35; }
+
+body.device-mobile .room-row { align-items: stretch; }
+body.device-mobile .room-main span { max-width: 150px; }
+
+/* Créditos melhorados */
+.credits-hero {
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:3px;
+  padding:16px; border-radius:var(--radius-lg); background:#f8f6ff; border:1px solid #ede8ff;
+}
+.credits-logo { font-size:2.4rem; }
+.credits-hero strong { color:var(--kahoot-purple); font-size:1.2rem; font-weight:900; }
+.credits-hero small { color:#777; font-weight:600; }
+.credits-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.credits-grid div { background:#f7f7fb; border:1px solid #eee; border-radius:var(--radius); padding:10px; }
+.credits-grid label { display:block; color:#999; font-size:.6rem; font-weight:900; text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; }
+.credits-grid strong { color:var(--kahoot-dark); font-size:.8rem; }
+.credits-section { background:rgba(70,23,143,.06); border:1px solid rgba(70,23,143,.12); border-radius:var(--radius); padding:12px; }
+.credits-section h3 { color:var(--kahoot-purple); font-size:.9rem; margin-bottom:6px; }
+.credits-section ul { padding-left:18px; color:#666; font-size:.78rem; line-height:1.55; }
+.credits-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+@media (max-width:400px){ .credits-grid,.credits-actions{grid-template-columns:1fr;} }
+
+/* ================================================================
+   GAME UI — estilo mais parecido com Kahoot (sem combo)
+================================================================ */
+.page-game {
+  padding: calc(var(--hud-h) + var(--timer-h) + 18px) 22px 108px;
+  justify-content: flex-start;
+  gap: 16px;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.12), transparent 26%),
+    radial-gradient(circle at 85% 18%, rgba(255,255,255,.10), transparent 28%),
+    linear-gradient(180deg, #46178f 0%, #2e0e5f 100%);
+}
+
+/* timer mais Kahoot */
+.timer-bar { height: 8px; background: rgba(0,0,0,.34); }
+.timer-fill {
+  background: linear-gradient(90deg, var(--kahoot-green), #4ade80);
+  box-shadow: 0 0 20px rgba(74,222,128,.35);
+}
+.timer-fill.warn { background: linear-gradient(90deg, var(--kahoot-yellow), #facc15); }
+.timer-fill.urgent { background: linear-gradient(90deg, var(--kahoot-red), #fb7185); }
+.timer-circle-wrap {
+  width: 84px; height: 84px;
+  top: calc(var(--hud-h) + var(--timer-h) + 22px);
+  right: 22px;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.28));
+}
+.timer-circle-wrap svg { width: 84px; height: 84px; }
+.tc-bg { stroke: rgba(255,255,255,.24); stroke-width: 3.6; }
+.tc-ring { stroke-width: 3.6; }
+.timer-num {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: #fff; color: var(--kahoot-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.55rem; font-weight: 1000;
+  box-shadow: 0 6px 0 rgba(0,0,0,.22);
+}
+
+.q-header {
+  width: min(940px, calc(100vw - 44px));
+  max-width: 940px;
+  margin-top: 4px;
+  gap: 13px;
+}
+.q-meta { gap: 10px; padding-right: 102px; }
+.q-count, .q-cat {
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: .74rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.q-bar-wrap { height: 8px; background: rgba(255,255,255,.16); }
+.q-bar { background: rgba(255,255,255,.72); }
+
+.q-box {
+  min-height: 215px;
+  padding: 30px 38px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 0 rgba(0,0,0,.18), 0 22px 65px rgba(0,0,0,.32);
+}
+.q-box::before,
+.q-box::after {
+  content: "";
+  position: absolute;
+  width: 130px; height: 130px; border-radius: 50%;
+  background: rgba(70,23,143,.06);
+}
+.q-box::before { left: -38px; top: -38px; }
+.q-box::after { right: -42px; bottom: -48px; }
+.q-text {
+  position: relative; z-index: 1;
+  font-size: clamp(1.35rem, 3vw, 2.25rem);
+  line-height: 1.22;
+  font-weight: 1000;
+  letter-spacing: -.035em;
+}
+
+.answers {
+  width: min(940px, calc(100vw - 44px));
+  max-width: 940px;
+  gap: 12px;
+}
+.ans {
+  min-height: 112px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 0;
+  padding: 0;
+  align-items: stretch;
+  box-shadow: 0 7px 0 rgba(0,0,0,.28), 0 16px 36px rgba(0,0,0,.20);
+  transition: transform .09s, filter .14s, outline .12s;
+}
+.ans:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-2px); }
+.ans:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 2px 0 rgba(0,0,0,.28); }
+.ans-sym {
+  height: 100%; width: 74px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.18);
+  font-size: 2.15rem;
+  text-shadow: 0 3px 0 rgba(0,0,0,.22);
+}
+.ans span:not(.ans-sym) {
+  display: flex; align-items: center;
+  padding: 18px 22px;
+  font-size: clamp(1rem, 1.8vw, 1.18rem);
+  font-weight: 900;
+  line-height: 1.25;
+}
+.ans.picked {
+  outline: 5px solid #fff;
+  outline-offset: 3px;
+  transform: scale(1.015);
+}
+
+.game-bottom {
+  position: fixed;
+  left: 50%; bottom: 18px;
+  transform: translateX(-50%);
+  width: min(680px, calc(100vw - 26px));
+  z-index: 210;
+  align-items: center;
+  pointer-events: none;
+}
+.status-pill {
+  background: rgba(0,0,0,.64);
+  border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(14px);
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 900;
+  text-align: center;
+  padding: 12px 18px;
+}
+.btn-confirm {
+  pointer-events: auto;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--kahoot-purple);
+  box-shadow: 0 4px 0 rgba(0,0,0,.25);
+}
+.btn-confirm:disabled { color: rgba(255,255,255,.55); background: rgba(255,255,255,.14); }
+.score-pill {
+  bottom: 18px; right: 18px;
+  background: #fff; color: var(--kahoot-dark);
+  border: none;
+  box-shadow: 0 5px 0 rgba(0,0,0,.24);
+}
+.score-unit { color: rgba(0,0,0,.45); }
+
+@media (max-width: 900px) {
+  .page-game { padding: calc(var(--hud-h) + var(--timer-h) + 14px) 16px 105px; }
+  .q-header, .answers { width: 100%; }
+  .q-meta { padding-right: 84px; }
+  .timer-circle-wrap { width: 70px; height: 70px; right: 14px; }
+  .timer-circle-wrap svg { width: 70px; height: 70px; }
+  .timer-num { width: 48px; height: 48px; font-size: 1.25rem; }
+  .q-box { min-height: 170px; padding: 24px 20px; }
+  .answers { grid-template-columns: 1fr; gap: 9px; }
+  .ans { min-height: 82px; grid-template-columns: 58px 1fr; }
+  .ans-sym { width: 58px; font-size: 1.8rem; }
+  .game-bottom { gap: 8px; }
+}
+
+@media (max-width: 520px) {
+  .q-meta { padding-right: 0; flex-wrap: wrap; }
+  .timer-circle-wrap { display: none !important; }
+  .score-pill { display: none !important; }
+  .game-bottom { flex-direction: column; }
+  .btn-confirm { width: 100%; }
+}

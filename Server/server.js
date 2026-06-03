@@ -49,11 +49,135 @@ const getLeaderboard  = () => JSON.parse(fs.readFileSync(LEADERBOARD_FILE, 'utf8
 const saveLeaderboard = (d) => fs.writeFileSync(LEADERBOARD_FILE, JSON.stringify(d, null, 2));
 const shuffle         = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
+
+function normalizeUsers(users) {
+  let changed = false;
+  users.forEach(u => {
+    if (!Array.isArray(u.friends)) { u.friends = []; changed = true; }
+    if (!Array.isArray(u.friendRequests)) { u.friendRequests = []; changed = true; }
+  });
+  if (changed) fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  return users;
+}
+function saveUsers(users) { fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2)); }
+function findUser(users, username) {
+  const key = String(username || '').trim().toLowerCase();
+  return users.find(u => String(u.user || u.name || '').toLowerCase() === key);
+}
+function friendPayload(user) {
+  return {
+    friends: (user.friends || []).map(f => {
+      const item = typeof f === 'string' ? { user: f, since: null } : { ...f };
+      item.room = getUserLobbyRoom(item.user);
+      return item;
+    }),
+    requests: (user.friendRequests || []).map(r => typeof r === 'string' ? { from: r, at: null } : r),
+  };
+}
+function isFriend(user, other) {
+  const key = String(other || '').toLowerCase();
+  return (user.friends || []).some(f => String(f.user || f).toLowerCase() === key);
+}
+function addFriend(user, other, now = Date.now()) {
+  if (!isFriend(user, other)) user.friends.push({ user: other, since: now });
+}
+function removeRequest(user, from) {
+  const key = String(from || '').toLowerCase();
+  user.friendRequests = (user.friendRequests || []).filter(r => String(r.from || r).toLowerCase() !== key);
+}
+function hasRequest(user, from) {
+  const key = String(from || '').toLowerCase();
+  return (user.friendRequests || []).some(r => String(r.from || r).toLowerCase() === key);
+}
+function emitFriendsFor(username) {
+  const users = normalizeUsers(getUsers());
+  const u = findUser(users, username);
+  if (!u) return;
+  for (const [sid, user] of socketUsers.entries()) {
+    if (String(user).toLowerCase() === String(username).toLowerCase()) io.to(sid).emit('friendsData', friendPayload(u));
+  }
+}
+function publicAuthUser(u) {
+  return { user: u.user, name: u.name || u.user, photo: u.photo || '', xp: u.xp || 0, friends: u.friends || [], friendRequests: u.friendRequests || [] };
+}
+
+function getFriendKeys(user) {
+  return new Set((user?.friends || []).map(f => String(f.user || f).toLowerCase()));
+}
+function getRoomHostName(room) {
+  const p = room?.players?.get(room.host);
+  return p?.name || room?.hostName || 'Host';
+}
+function getUserLobbyRoom(username) {
+  const key = String(username || '').toLowerCase();
+  if (!key || typeof rooms === 'undefined') return null;
+  for (const [pin, room] of rooms) {
+    if (room.status !== ROOM_PHASE.LOBBY) continue;
+    let found = false;
+    for (const [sid, p] of room.players) {
+      const socketUser = socketUsers.get(sid);
+      if (!p.isBot && (String(p.name || '').toLowerCase() === key || String(socketUser || '').toLowerCase() === key)) {
+        found = true; break;
+      }
+    }
+    if (found) return {
+      pin, theme: room.theme, host: getRoomHostName(room),
+      playerCount: [...room.players.values()].filter(p => !p.isBot && p.connected !== false).length,
+      createdAt: room.createdAt || null,
+    };
+  }
+  return null;
+}
+function publicRoomsPayload(username) {
+  const users = normalizeUsers(getUsers());
+  const me = findUser(users, username);
+  const friendKeys = getFriendKeys(me);
+  const list = [];
+  for (const [pin, room] of rooms) {
+    if (room.status !== ROOM_PHASE.LOBBY) continue;
+    const humans = [...room.players.entries()].filter(([, p]) => !p.isBot && p.connected !== false);
+    const hostName = getRoomHostName(room);
+    const friendNames = humans
+      .map(([sid, p]) => socketUsers.get(sid) || p.name)
+      .filter(name => friendKeys.has(String(name || '').toLowerCase()));
+    list.push({
+      pin, theme: room.theme, host: hostName, hostUser: room.hostUser || '',
+      players: humans.length, bots: [...room.players.values()].filter(p => p.isBot).length,
+      friends: [...new Set(friendNames)], isFriendRoom: friendNames.length > 0 || friendKeys.has(String(room.hostUser || hostName).toLowerCase()),
+      createdAt: room.createdAt || Date.now(),
+    });
+  }
+  list.sort((a, b) => Number(b.isFriendRoom) - Number(a.isFriendRoom) || (b.createdAt || 0) - (a.createdAt || 0));
+  return { rooms: list, total: list.length };
+}
+function emitRoomsFor(socket) {
+  const username = socketUsers.get(socket.id);
+  if (username) socket.emit('roomsData', publicRoomsPayload(username));
+}
+function emitRoomsToAll() {
+  for (const sid of connectedSockets) {
+    const s = io.sockets.sockets.get(sid);
+    if (s) emitRoomsFor(s);
+  }
+}
+function getUserSockets(username) {
+  const key = String(username || '').toLowerCase();
+  const out = [];
+  for (const [sid, user] of socketUsers.entries()) {
+    if (String(user || '').toLowerCase() === key) {
+      const s = io.sockets.sockets.get(sid);
+      if (s) out.push(s);
+    }
+  }
+  return out;
+}
+
 // ═══════════════════════════════════════════════════════
 //  ESTADO GLOBAL
 // ═══════════════════════════════════════════════════════
 const rooms            = new Map();
 const connectedSockets = new Set();
+const socketUsers      = new Map();
 const serverStartedAt  = Date.now();
 
 let totalRoomsCreated    = 0;
@@ -76,6 +200,7 @@ const ROOM_PHASE = {
 const RECONNECT_GRACE_MS = 60 * 1000;
 const REVEAL_MS          = 4000;
 const RANKING_CLEANUP_MS = 30 * 1000;
+const QUESTION_LIMITS = { normal: 6, hard: 12 };
 
 // ═══════════════════════════════════════════════════════
 //  SISTEMA DE LOGS — ring buffer, categorias
@@ -461,15 +586,18 @@ function clearRoomTimers(room) {
   room.questionTimer = room.nextTimer = room.cleanupTimer = null;
 }
 
-function resetRoomForNewMatch(room) {
+function resetRoomForNewMatch(room, difficulty = 'normal') {
   clearRoomTimers(room);
   room.curIdx = room.questionStartedAt = room.deadlineAt = 0;
   room.status            = ROOM_PHASE.LOBBY;
   room.answered          = new Set();
   room.currentQuestionId = null;
-  room.players.forEach(p => { p.score = 0; p.combo = 0; p.lastQuestionId = null; });
+  room.players.forEach(p => { p.score = 0; p.combo = 0; p.maxCombo = 0; p.answers = 0; p.correct = 0; p.fastestMs = null; p.totalEarned = 0; p.lastQuestionId = null; });
   const allQ = getQuestions();
-  room.questions = shuffle(allQ[room.theme] || allQ.ciencias || []);
+  room.difficulty = difficulty === 'hard' ? 'hard' : 'normal';
+  const pool = shuffle(allQ[room.theme] || allQ.ciencias || []);
+  const limit = QUESTION_LIMITS[room.difficulty] || QUESTION_LIMITS.normal;
+  room.questions = pool.slice(0, Math.min(limit, pool.length));
 }
 
 function createPlayer(data, isBot = false) {
@@ -477,7 +605,7 @@ function createPlayer(data, isBot = false) {
     name:           data.name || data.playerName || 'Jogador',
     photo:          data.photo || data.playerPhoto || '',
     device:         data.device || null,
-    score: 0, combo: 0, isBot,
+    score: 0, combo: 0, maxCombo: 0, answers: 0, correct: 0, fastestMs: null, totalEarned: 0, isBot,
     connected: true, disconnectedAt: null,
     cleanupTimer: null, lastQuestionId: null,
   };
@@ -485,6 +613,7 @@ function createPlayer(data, isBot = false) {
 
 const publicPlayers = (room) => [...room.players.values()].map(p => ({
   name: p.name, photo: p.photo || '', score: p.score || 0,
+  answers: p.answers || 0, correct: p.correct || 0, maxCombo: p.maxCombo || 0, fastestMs: p.fastestMs || null,
   isBot: !!p.isBot, connected: p.connected !== false, device: p.device || null,
 }));
 
@@ -553,10 +682,11 @@ function removePlayerFromRoom(pin, socketId) {
   }
 
   io.to(pin).emit('pList', publicPlayers(room));
+  emitRoomsToAll();
   scheduleRender();
 
   if (![...room.players.values()].some(p => !p.isBot)) {
-    clearRoomTimers(room); rooms.delete(pin);
+    clearRoomTimers(room); rooms.delete(pin); emitRoomsToAll();
     log('ROOM', `Sala ${pin} encerrada (sem humanos)`);
     return;
   }
@@ -622,7 +752,7 @@ function doReveal(pin) {
   room.players.forEach((p, id) => {
     if (p.isBot && !room.answered.has(id)) {
       room.answered.add(id);
-      if (Math.random() > 0.4) { p.combo = (p.combo || 0) + 1; p.score += Math.floor(Math.random() * 400 + 200); }
+      if (Math.random() > 0.4) { p.combo = 0; p.score += Math.floor(Math.random() * 400 + 200); }
       else p.combo = 0;
     }
   });
@@ -633,6 +763,35 @@ function doReveal(pin) {
   room.nextTimer = setTimeout(() => nextQ(pin), REVEAL_MS);
 }
 
+
+function buildRankWithTies(room) {
+  const sorted = publicPlayers(room).sort((a, b) => (b.score || 0) - (a.score || 0));
+  let lastScore = null, lastPos = 0;
+  return sorted.map((p, i) => {
+    if (lastScore === null || (p.score || 0) !== lastScore) {
+      lastPos = i + 1;
+      lastScore = p.score || 0;
+    }
+    const tie = sorted.some((x, j) => j !== i && (x.score || 0) === (p.score || 0));
+    return { ...p, position: lastPos, tie };
+  });
+}
+function buildFinalStats(room, rank) {
+  const humans = rank.filter(p => !p.isBot);
+  const totalAnswers = humans.reduce((s, p) => s + (p.answers || 0), 0);
+  const totalCorrect = humans.reduce((s, p) => s + (p.correct || 0), 0);
+  const scoreCounts = new Map();
+  rank.forEach(p => scoreCounts.set(p.score || 0, (scoreCounts.get(p.score || 0) || 0) + 1));
+  return {
+    theme: room.theme || 'ciencias', questions: room.questions.length,
+    totalPlayers: rank.length, humanPlayers: humans.length,
+    totalAnswers, totalCorrect,
+    accuracy: totalAnswers ? Math.round(totalCorrect / totalAnswers * 100) : 0,
+    topTie: rank.length > 1 && (rank[0]?.score || 0) === (rank[1]?.score || -1),
+    tieGroups: [...scoreCounts.values()].filter(n => n > 1).length,
+  };
+}
+
 function finishGame(pin) {
   const room = rooms.get(pin);
   if (!room) return;
@@ -641,13 +800,14 @@ function finishGame(pin) {
   totalMatchesFinished++;
   room.status = ROOM_PHASE.RANKING;
 
-  const rank = publicPlayers(room).sort((a, b) => b.score - a.score);
+  const rank = buildRankWithTies(room);
+  const stats = buildFinalStats(room, rank);
   saveMatchToLeaderboard(room, rank);
-  io.to(pin).emit('gameOver', rank);
+  io.to(pin).emit('gameOver', { rank, stats });
   log('MATCH', `Partida finalizada na sala ${pin} · ${rank.length} jogadores`);
 
   room.cleanupTimer = setTimeout(() => {
-    clearRoomTimers(room); rooms.delete(pin);
+    clearRoomTimers(room); rooms.delete(pin); emitRoomsToAll();
     log('ROOM', `Sala ${pin} limpa após ranking`);
   }, RANKING_CLEANUP_MS);
 }
@@ -669,7 +829,7 @@ function saveMatchToLeaderboard(room, rank) {
   const now = new Date().toISOString();
   const cur = getLeaderboard();
   rank.filter(p => !p.isBot).forEach((p, i) =>
-    cur.push({ name: p.name, photo: p.photo || '', score: p.score || 0, position: i + 1, theme: room.theme || 'ciencias', date: now })
+    cur.push({ name: p.name, photo: p.photo || '', score: p.score || 0, position: p.position || (i + 1), tie: !!p.tie, theme: room.theme || 'ciencias', date: now })
   );
   cur.sort((a, b) => (b.score || 0) - (a.score || 0));
   saveLeaderboard(cur.slice(0, 100));
@@ -677,20 +837,74 @@ function saveMatchToLeaderboard(room, rank) {
 
 function buildLeaderboardPayload() {
   const data = getLeaderboard();
-  const best = new Map();
+  const aggregate = new Map();
+  const themeStats = new Map();
+
   data.forEach(item => {
     const k = String(item.name || '').toLowerCase();
     if (!k) return;
-    const o = best.get(k);
-    if (!o || (item.score || 0) > (o.score || 0)) best.set(k, item);
+    const theme = item.theme || 'geral';
+    const score = item.score || 0;
+    const pos = item.position || 999;
+
+    const cur = aggregate.get(k) || {
+      name: item.name, photo: item.photo || '', score: 0, bestScore: 0,
+      games: 0, wins: 0, podiums: 0, ties: 0, totalScore: 0, avgScore: 0,
+      bestPosition: 999, favoriteTheme: '', themes: {}, theme: item.theme || '',
+      date: item.date || '', lastDate: item.date || '', consistency: 0,
+    };
+
+    cur.games++;
+    cur.totalScore += score;
+    cur.avgScore = Math.round(cur.totalScore / cur.games);
+    cur.wins += Number(pos === 1);
+    cur.podiums += Number(pos <= 3);
+    cur.ties += Number(!!item.tie);
+    cur.bestPosition = Math.min(cur.bestPosition, pos);
+    cur.themes[theme] = (cur.themes[theme] || 0) + 1;
+    cur.favoriteTheme = Object.entries(cur.themes).sort((a, b) => b[1] - a[1])[0]?.[0] || theme;
+    cur.consistency = Math.round((cur.podiums / cur.games) * 100);
+
+    if (score > cur.bestScore) {
+      cur.bestScore = score;
+      cur.score = score;
+      cur.photo = item.photo || cur.photo;
+      cur.theme = item.theme || cur.theme;
+      cur.date = item.date || cur.date;
+    }
+    if (!cur.lastDate || new Date(item.date || 0) > new Date(cur.lastDate || 0)) cur.lastDate = item.date;
+    aggregate.set(k, cur);
+
+    const ts = themeStats.get(theme) || { theme, records: 0, bestScore: 0, bestPlayer: '---', totalScore: 0, avgScore: 0 };
+    ts.records++;
+    ts.totalScore += score;
+    ts.avgScore = Math.round(ts.totalScore / ts.records);
+    if (score > ts.bestScore) { ts.bestScore = score; ts.bestPlayer = item.name || '---'; }
+    themeStats.set(theme, ts);
   });
-  const sorted = [...best.values()].sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 20);
+
+  const players = [...aggregate.values()];
+  const best = [...players].sort((a, b) => (b.bestScore || b.score || 0) - (a.bestScore || a.score || 0)).slice(0, 50);
+  const wins = [...players].sort((a, b) => (b.wins || 0) - (a.wins || 0) || (b.bestScore || 0) - (a.bestScore || 0)).slice(0, 50);
+  const avg = [...players].filter(p => p.games >= 2).sort((a, b) => (b.avgScore || 0) - (a.avgScore || 0) || (b.games || 0) - (a.games || 0)).slice(0, 50);
+  const podiums = [...players].sort((a, b) => (b.podiums || 0) - (a.podiums || 0) || (b.consistency || 0) - (a.consistency || 0)).slice(0, 50);
+  const recent = data.slice(-50).reverse();
+  const themes = [...themeStats.values()].sort((a, b) => (b.records || 0) - (a.records || 0));
+
   return {
-    best: sorted,
-    recent: data.slice(-20).reverse(),
+    best,
+    wins,
+    avg,
+    podiums,
+    recent,
+    themes,
     stats: {
-      records: data.length, players: best.size,
-      bestScore: sorted[0]?.score || 0, bestPlayer: sorted[0]?.name || '---',
+      records: data.length, players: players.length,
+      bestScore: best[0]?.bestScore || best[0]?.score || 0, bestPlayer: best[0]?.name || '---',
+      totalWins: players.reduce((s, p) => s + (p.wins || 0), 0),
+      totalPodiums: players.reduce((s, p) => s + (p.podiums || 0), 0),
+      avgScore: data.length ? Math.round(data.reduce((s, p) => s + (p.score || 0), 0) / data.length) : 0,
+      activeThemes: themes.length,
     },
   };
 }
@@ -704,22 +918,29 @@ io.on('connection', (socket) => {
   log('CONNECT', `Socket conectado: ${socket.id.slice(0, 8)}`);
 
   socket.on('register', (d) => {
-    const users = getUsers();
-    if (users.find(u => u.user === d.user))
+    const users = normalizeUsers(getUsers());
+    if (users.find(u => String(u.user || '').toLowerCase() === String(d.user || '').toLowerCase()))
       return socket.emit('authErr', 'Nome já em uso. Tente outro.');
-    users.push({ ...d, xp: 0 });
+    users.push({ ...d, xp: 0, friends: [], friendRequests: [] });
     fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
     totalRegistrations++;
     log('AUTH', `Cadastro: ${d.user}`);
-    socket.emit('authOk', { ...d, xp: 0 });
+    socketUsers.set(socket.id, d.user);
+    socket.emit('authOk', publicAuthUser({ ...d, xp: 0, friends: [], friendRequests: [] }));
+    socket.emit('friendsData', { friends: [], requests: [] });
+    emitRoomsFor(socket);
   });
 
   socket.on('login', (d) => {
-    const u = getUsers().find(u => u.user === d.user && u.pass === d.pass);
+    const users = normalizeUsers(getUsers());
+    const u = users.find(u => String(u.user || '').toLowerCase() === String(d.user || '').toLowerCase() && u.pass === d.pass);
     if (u) {
       totalLogins++;
       log('AUTH', `Login: ${d.user}`);
-      socket.emit('authOk', u);
+      socketUsers.set(socket.id, u.user);
+      socket.emit('authOk', publicAuthUser(u));
+      socket.emit('friendsData', friendPayload(u));
+      emitRoomsFor(socket);
     } else {
       log('ERROR', `Login inválido: ${d.user}`);
       socket.emit('authErr', 'Usuário ou senha incorretos.');
@@ -733,7 +954,7 @@ io.on('connection', (socket) => {
     const allQ  = getQuestions();
     const theme = d.theme || 'ciencias';
     const room  = {
-      pin, theme, host: socket.id,
+      pin, theme, difficulty: 'normal', host: socket.id, hostUser: socketUsers.get(socket.id) || d.playerName, hostName: d.playerName, createdAt: Date.now(),
       players: new Map(),
       questions: shuffle(allQ[theme] || allQ.ciencias || []),
       curIdx: 0, status: ROOM_PHASE.LOBBY,
@@ -750,6 +971,7 @@ io.on('connection', (socket) => {
     socket.join(pin);
     socket.emit('roomCreated', pin);
     io.to(pin).emit('pList', publicPlayers(room));
+    emitRoomsToAll();
     scheduleRender();
   });
 
@@ -774,6 +996,7 @@ io.on('connection', (socket) => {
     socket.join(d.pin);
     socket.emit('joined', { pin: d.pin });
     io.to(d.pin).emit('pList', publicPlayers(room));
+    emitRoomsToAll();
     log('ROOM', `${d.name} entrou na sala ${d.pin}`);
     scheduleRender();
   });
@@ -790,11 +1013,14 @@ io.on('connection', (socket) => {
     });
 
     io.to(pin).emit('pList', publicPlayers(room));
+    emitRoomsToAll();
     log('ROOM', `Bots adicionados na sala ${pin}`);
     scheduleRender();
   });
 
-  socket.on('startGame', (pin) => {
+  socket.on('startGame', (payload) => {
+    const pin = typeof payload === 'object' ? payload.pin : payload;
+    const difficulty = (typeof payload === 'object' ? payload.difficulty : 'normal') === 'hard' ? 'hard' : 'normal';
     if (!pin) return;
     const room = rooms.get(pin);
     if (!room)                   return socket.emit('err', 'Sala não existe.');
@@ -802,12 +1028,13 @@ io.on('connection', (socket) => {
     if (![ROOM_PHASE.LOBBY, ROOM_PHASE.RANKING].includes(room.status)) return;
     if (!room.questions.length)  return socket.emit('err', 'Nenhuma questão para esse tema.');
 
-    resetRoomForNewMatch(room);
+    resetRoomForNewMatch(room, difficulty);
     totalMatchesStarted++;
-    log('MATCH', `Partida iniciada · sala ${pin} · tema ${room.theme}`);
+    log('MATCH', `Partida iniciada · sala ${pin} · tema ${room.theme} · ${difficulty} · ${room.questions.length} questões`);
 
     room.status = ROOM_PHASE.STARTING;
-    io.to(pin).emit('matchStarting', { pin });
+    io.to(pin).emit('matchStarting', { pin, difficulty, questions: room.questions.length });
+    emitRoomsToAll();
     scheduleRender();
     setTimeout(() => nextQ(pin), 800);
   });
@@ -827,12 +1054,14 @@ io.on('connection', (socket) => {
     if (room.answered.has(socket.id))                     return;
 
     const idx = Number(data.idx);
-    if (!Number.isInteger(idx) || idx < 0 || idx >= q.options.length) return;
+    const isTimeout = idx === -1;
+    if (!isTimeout && (!Number.isInteger(idx) || idx < 0 || idx >= q.options.length)) return;
 
     room.answered.add(socket.id);
     player.lastQuestionId = room.currentQuestionId;
+    player.answers = (player.answers || 0) + 1;
 
-    const isCorrect = q.answer === idx;
+    const isCorrect = !isTimeout && q.answer === idx;
     let earned = 0;
     totalAnswers++;
 
@@ -841,10 +1070,13 @@ io.on('connection', (socket) => {
       const base       = q.difficulty === 'facil' ? 400 : q.difficulty === 'medio' ? 700 : 1000;
       const remMs      = Math.max(0, room.deadlineAt - now);
       const timeBonus  = Math.floor((remMs / ((Number(q.time) || 15) * 1000)) * 300);
-      const combo      = (player.combo || 0) + 1;
-      earned           = Math.floor((base + timeBonus) * (1 + combo * 0.15));
+      earned           = base + timeBonus;
       player.score    += earned;
-      player.combo     = combo;
+      player.combo     = 0;
+      player.correct   = (player.correct || 0) + 1;
+      player.maxCombo  = 0;
+      player.fastestMs = player.fastestMs == null ? (now - room.questionStartedAt) : Math.min(player.fastestMs, now - room.questionStartedAt);
+      player.totalEarned = (player.totalEarned || 0) + earned;
     } else {
       player.combo = 0;
     }
@@ -852,18 +1084,136 @@ io.on('connection', (socket) => {
     socket.emit('result', {
       qid: room.currentQuestionId, correct: isCorrect,
       earned, totalScore: player.score,
-      correctIdx: q.answer, combo: player.combo,
+      correctIdx: q.answer, combo: 0,
     });
 
     room.players.forEach((p, id) => {
       if (p.isBot && !room.answered.has(id)) {
         room.answered.add(id);
-        if (Math.random() > 0.3) { p.combo = (p.combo || 0) + 1; p.score += Math.floor(Math.random() * 500 + 200); }
+        if (Math.random() > 0.3) { p.combo = 0; p.score += Math.floor(Math.random() * 500 + 200); }
         else p.combo = 0;
       }
     });
 
     checkAllAnswered(data.pin);
+  });
+
+
+
+  socket.on('getRooms', () => {
+    emitRoomsFor(socket);
+  });
+
+  socket.on('inviteFriend', ({ to, pin } = {}) => {
+    const from = socketUsers.get(socket.id);
+    to = String(to || '').trim();
+    pin = String(pin || '').trim();
+    if (!from) return socket.emit('friendErr', 'Faça login para convidar amigos.');
+    if (!to || !pin) return socket.emit('friendErr', 'Convite inválido.');
+
+    const room = rooms.get(pin);
+    if (!room || room.status !== ROOM_PHASE.LOBBY) return socket.emit('friendErr', 'Essa sala não está disponível para convite.');
+    if (!room.players.has(socket.id)) return socket.emit('friendErr', 'Você precisa estar na sala para convidar.');
+
+    const users = normalizeUsers(getUsers());
+    const me = findUser(users, from);
+    const target = findUser(users, to);
+    if (!me || !target) return socket.emit('friendErr', 'Usuário não encontrado.');
+    if (!isFriend(me, target.user)) return socket.emit('friendErr', 'Você só pode convidar amigos.');
+
+    const targetSockets = getUserSockets(target.user);
+    if (!targetSockets.length) return socket.emit('friendInfo', `${target.user} está offline agora.`);
+
+    const payload = { from: me.user, pin, theme: room.theme, host: getRoomHostName(room), players: publicPlayers(room).length };
+    targetSockets.forEach(s => s.emit('roomInvite', payload));
+    socket.emit('friendInfo', `Convite enviado para ${target.user}.`);
+  });
+
+  socket.on('getFriends', () => {
+    const username = socketUsers.get(socket.id);
+    if (!username) return socket.emit('friendErr', 'Faça login para ver amigos.');
+    const users = normalizeUsers(getUsers());
+    const me = findUser(users, username);
+    if (me) socket.emit('friendsData', friendPayload(me));
+  });
+
+  socket.on('sendFriendRequest', ({ to } = {}) => {
+    const from = socketUsers.get(socket.id);
+    to = String(to || '').trim();
+    if (!from) return socket.emit('friendErr', 'Faça login para enviar pedido.');
+    if (!to) return socket.emit('friendErr', 'Digite um usuário.');
+    if (to.toLowerCase() === from.toLowerCase()) return socket.emit('friendErr', 'Você não pode adicionar você mesmo.');
+
+    const users = normalizeUsers(getUsers());
+    const me = findUser(users, from);
+    const target = findUser(users, to);
+    if (!target) return socket.emit('friendErr', 'Usuário não encontrado.');
+    if (isFriend(me, target.user)) return socket.emit('friendErr', 'Vocês já são amigos.');
+
+    const now = Date.now();
+    if (hasRequest(me, target.user)) {
+      addFriend(me, target.user, now); addFriend(target, me.user, now);
+      removeRequest(me, target.user); removeRequest(target, me.user);
+      saveUsers(users);
+      emitFriendsFor(me.user); emitFriendsFor(target.user);
+      return socket.emit('friendInfo', `${target.user} também tinha pedido você. Amizade aceita! 🤝`);
+    }
+    if (hasRequest(target, me.user)) return socket.emit('friendErr', 'Pedido já enviado. Aguarde o aceite.');
+
+    target.friendRequests.push({ from: me.user, at: now });
+    saveUsers(users);
+    emitFriendsFor(me.user); emitFriendsFor(target.user);
+    socket.emit('friendInfo', `Pedido enviado para ${target.user}.`);
+  });
+
+  socket.on('acceptFriendRequest', ({ from } = {}) => {
+    const username = socketUsers.get(socket.id);
+    from = String(from || '').trim();
+    if (!username || !from) return;
+    const users = normalizeUsers(getUsers());
+    const me = findUser(users, username);
+    const other = findUser(users, from);
+    if (!me || !other || !hasRequest(me, other.user)) return socket.emit('friendErr', 'Pedido não encontrado.');
+    const now = Date.now();
+    addFriend(me, other.user, now); addFriend(other, me.user, now);
+    removeRequest(me, other.user); removeRequest(other, me.user);
+    saveUsers(users);
+    emitFriendsFor(me.user); emitFriendsFor(other.user);
+    socket.emit('friendInfo', `${other.user} agora é seu amigo!`);
+  });
+
+  socket.on('rejectFriendRequest', ({ from } = {}) => {
+    const username = socketUsers.get(socket.id);
+    from = String(from || '').trim();
+    if (!username || !from) return;
+    const users = normalizeUsers(getUsers());
+    const me = findUser(users, username);
+    if (!me) return;
+    removeRequest(me, from);
+    saveUsers(users);
+    emitFriendsFor(me.user);
+    socket.emit('friendInfo', 'Pedido recusado.');
+  });
+
+  socket.on('removeFriend', ({ user } = {}) => {
+    const username = socketUsers.get(socket.id);
+    user = String(user || '').trim();
+    if (!username || !user) return;
+    const users = normalizeUsers(getUsers());
+    const me = findUser(users, username);
+    const other = findUser(users, user);
+    if (!me || !other) return;
+    const keyMe = me.user.toLowerCase(), keyOther = other.user.toLowerCase();
+    me.friends = (me.friends || []).filter(f => String(f.user || f).toLowerCase() !== keyOther);
+    other.friends = (other.friends || []).filter(f => String(f.user || f).toLowerCase() !== keyMe);
+    saveUsers(users);
+    emitFriendsFor(me.user); emitFriendsFor(other.user);
+    socket.emit('friendInfo', `${other.user} removido dos amigos.`);
+  });
+
+  socket.on('leaveRoom', (pin) => {
+    const found = findRoomBySocket(socket.id);
+    if (found && (!pin || found.pin === pin)) removePlayerFromRoom(found.pin, socket.id);
   });
 
   socket.on('getLeaderboard', () => {
@@ -872,6 +1222,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     connectedSockets.delete(socket.id);
+    socketUsers.delete(socket.id);
     log('DISCONNECT', `Socket desconectado: ${socket.id.slice(0, 8)}`);
     markDisconnected(socket);
     scheduleRender();
