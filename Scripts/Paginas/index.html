@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
   <title>MeioKahoot</title>
   <link rel="stylesheet" href="/Scripts/Css/main.css"/>
+  <link rel="stylesheet" href="/Scripts/Css/ranking.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
 <!-- ════════════════════════════════════════
-     HUD — novo design
+     HUD — Kahoot-style clean bar
 ════════════════════════════════════════ -->
 <header class="hud" id="hud">
   <!-- Esquerda: avatar + nome + xp -->
@@ -28,7 +29,7 @@
   </button>
 
   <!-- Centro: logo (só nas telas iniciais) -->
-  <div class="hud-logo" id="hud-logo">🌿 MeioKahoot</div>
+  <div class="hud-logo" id="hud-logo">🌿 MEIOKAHOOT</div>
 
   <!-- Direita: chips + ações -->
   <div class="hud-right">
@@ -131,7 +132,7 @@
           <span>🏆 <b id="st-best">0</b></span>
           <span>🎮 <b id="st-games">0</b></span>
           <span>✅ <b id="st-acc">0%</b></span>
-          <span><img class="fire-icon" src="/Assets/Animations/Fire.gif" alt="combo"/> <b id="st-combo">0</b></span>
+          <span>🔥 <b id="st-combo">0</b></span>
         </div>
       </div>
       <button class="icon-btn" onclick="Profile.openEdit()" title="Editar perfil">✏️</button>
@@ -147,7 +148,7 @@
         </span>
       </button>
 
-      <button class="btn btn-create" onclick="Modal.open('modal-create')">
+      <button class="btn btn-create btn-hero" onclick="Modal.open('modal-create')">
         <span class="btn-hero-icon">＋</span>
         <span class="btn-hero-text">
           <span class="btn-hero-title">Criar sala</span>
@@ -221,7 +222,7 @@
           <button class="diff-pill"        onclick="HomeUI.setDiff(this,'hard')">Difícil</button>
         </div>
       </div>
-      <button class="btn btn-primary btn-hero" onclick="HomeUI.startGame()">▶ Começar partida</button>
+      <button class="btn btn-primary btn-hero" onclick="HomeUI.startGame()" style="margin-top:8px">▶ Começar partida</button>
     </div>
 
   </div>
@@ -244,7 +245,7 @@
     </div>
   </div>
 
-  <!-- Respostas -->
+  <!-- Respostas — Cores e formas Kahoot -->
   <div class="answers" id="answers">
     <button class="ans ans-red"    id="ans-0" onclick="GameUI.pick(0)"><span class="ans-sym">▲</span><span id="al-0"></span></button>
     <button class="ans ans-blue"   id="ans-1" onclick="GameUI.pick(1)"><span class="ans-sym">◆</span><span id="al-1"></span></button>
@@ -263,10 +264,7 @@
     <span id="score-num">0</span><span class="score-unit">pts</span>
   </div>
 
-  <!-- Combo -->
-  <div class="combo-pill" id="combo-pill" style="display:none">
-    <img class="fire-icon" src="/Assets/Animations/Fire.gif" alt="combo"/> <span id="combo-txt">x2</span>
-  </div>
+
 
 </div>
 
@@ -304,7 +302,6 @@
   <div class="result-icon"  id="result-icon">✔</div>
   <div class="result-label" id="result-label">Correto!</div>
   <div class="result-pts"   id="result-pts"></div>
-  <div class="result-combo" id="result-combo"></div>
 </div>
 
 
@@ -429,40 +426,9 @@
 </div>
 
 
-<!-- ════ MODAL: Recortar foto (estilo WhatsApp) ════ -->
-<div class="overlay-center crop-overlay" id="modal-crop" style="display:none">
-  <div class="crop-box">
-    <div class="crop-header">
-      <h2>Ajustar foto</h2>
-      <p>Arraste e use o zoom para enquadrar</p>
-    </div>
-
-    <div class="crop-stage" id="crop-stage">
-      <div class="crop-canvas-wrap">
-        <img id="crop-img" alt="" draggable="false"/>
-        <div class="crop-mask"></div>
-        <div class="crop-circle"></div>
-      </div>
-    </div>
-
-    <div class="crop-controls">
-      <span class="crop-zoom-ic">−</span>
-      <input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1"/>
-      <span class="crop-zoom-ic">+</span>
-    </div>
-
-    <div class="crop-actions">
-      <button class="btn btn-ghost" onclick="PhotoCrop.cancel()">Cancelar</button>
-      <button class="btn btn-primary" onclick="PhotoCrop.confirm()">Concluir</button>
-    </div>
-  </div>
-</div>
-
-
 <!-- ════ SCRIPTS ════ -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/Scripts/Js/sounds.js"></script>
-<script src="/Scripts/Js/crop.js"></script>
 <script src="/Scripts/Js/profile.js"></script>
 <script src="/Scripts/Js/friends.js"></script>
 <script src="/Scripts/Js/ui.js"></script>

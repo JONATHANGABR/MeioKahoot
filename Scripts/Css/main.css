@@ -1,32 +1,52 @@
 /* ================================================================
-   MeioKahoot — CSS v4.0
-   Roxo Kahoot + Verde Meio Ambiente + Inter
+   MeioKahoot — CSS v5.0  (Kahoot-Authentic Style)
+   Roxo profundo + cores Kahoot vibrantes + Montserrat
+   Minimalista, profissional, competitivo
 ================================================================ */
 
+/* ── Google Fonts fallback ── */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
 :root {
-  --purple:   #46178f;
-  --purple-d: #2e0e5f;
-  --purple-l: #6b28c8;
-  --green:    #16a34a;
-  --green-l:  #22c55e;
-  --green-d:  #14532d;
-  --teal:     #0d9488;
-  --red:      #e21b3c;
-  --blue:     #1368ce;
-  --yellow:   #d97706;
-  --amber:    #f59e0b;
-  --dark:     #111827;
-  --hud-h:    64px;
-  --timer-h:  6px;
+  /* Kahoot core palette */
+  --kahoot-purple: #46178f;
+  --kahoot-purple-deep: #2e0e5f;
+  --kahoot-purple-light: #864cbf;
+  --kahoot-red: #e21b3c;
+  --kahoot-blue: #1368ce;
+  --kahoot-yellow: #d89e00;
+  --kahoot-green: #26890c;
+  --kahoot-white: #ffffff;
+  --kahoot-dark: #1a1a2e;
+  --kahoot-bg: #46178f;
+
+  /* Answer shadows (3D Kahoot style) */
+  --red-shadow: #a8142d;
+  --blue-shadow: #0e4a96;
+  --yellow-shadow: #9e7400;
+  --green-shadow: #1a6008;
+
+  /* UI tokens */
+  --surface: rgba(255,255,255,0.08);
+  --surface2: rgba(255,255,255,0.12);
+  --border: rgba(255,255,255,0.15);
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,0.6);
+  --hud-h: 56px;
+  --timer-h: 5px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --font: 'Montserrat', 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; outline:none; }
-html { height:100%; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+html { height: 100%; }
 body {
-  /* Fundo verde-natureza em vez de roxo puro */
-  background: linear-gradient(145deg, #1a3a2a 0%, #0d2218 35%, var(--purple-d) 70%, #1a0f30 100%);
-  color: #fff;
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  background: var(--kahoot-purple);
+  background: linear-gradient(180deg, #46178f 0%, #2e0e5f 100%);
+  color: var(--text);
+  font-family: var(--font);
   height: 100dvh;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
@@ -34,73 +54,74 @@ body {
 }
 
 /* ================================================================
-   HUD — novo design
+   HUD — Barra superior limpa estilo Kahoot
 ================================================================ */
 .hud {
   position: fixed; top: 0; left: 0; right: 0;
   height: var(--hud-h);
   display: flex; align-items: center;
   justify-content: space-between;
-  gap: 8px; padding: 0 14px;
+  gap: 8px; padding: 0 16px;
   z-index: 300;
-  background: rgba(10, 20, 14, 0.88);
-  border-bottom: 1px solid rgba(34, 197, 94, 0.15);
-  backdrop-filter: blur(20px);
+  background: rgba(46, 14, 95, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 /* Botão de perfil (esquerda) */
 .hud-profile-btn {
-  display: flex; align-items: center; gap: 9px;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 40px;
-  padding: 5px 12px 5px 5px;
-  height: 48px; cursor: pointer;
-  min-width: 0; max-width: 220px;
-  transition: background .18s;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 4px 12px 4px 4px;
+  height: 40px; cursor: pointer;
+  min-width: 0; max-width: 200px;
+  transition: background .2s;
 }
-.hud-profile-btn:hover { background: rgba(255,255,255,.12); }
+.hud-profile-btn:hover { background: var(--surface2); }
 
 .hud-av {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--green); flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--kahoot-purple-light); flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: .95rem; color: #fff;
+  font-weight: 800; font-size: .82rem; color: #fff;
   position: relative; overflow: hidden;
-  border: 2px solid rgba(255,255,255,.25);
+  border: 2px solid rgba(255,255,255,0.3);
 }
 .hud-av span { z-index: 0; }
-.hud-av img  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.hud-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
 
 .hud-info { display: flex; flex-direction: column; min-width: 0; text-align: left; }
-.hud-name { font-weight: 700; font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
-.hud-sub  { font-size: .62rem; color: var(--green-l); margin-top: 1px; }
+.hud-name { font-weight: 700; font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
+.hud-sub { font-size: .58rem; color: rgba(255,255,255,0.5); margin-top: 1px; }
 
 /* Logo centro */
 .hud-logo {
   position: absolute; left: 50%; transform: translateX(-50%);
-  font-weight: 800; font-size: .92rem; white-space: nowrap;
-  color: rgba(255,255,255,.4); pointer-events: none; letter-spacing: .02em;
+  font-weight: 900; font-size: .82rem; white-space: nowrap;
+  color: rgba(255,255,255,0.35); pointer-events: none;
+  letter-spacing: .03em; text-transform: uppercase;
 }
 
 /* Chips direita */
-.hud-right { display: flex; align-items: center; gap: 6px; }
+.hud-right { display: flex; align-items: center; gap: 5px; }
 
 .hud-chip {
   display: inline-flex; align-items: center; justify-content: center;
-  height: 26px; padding: 0 9px; border-radius: 99px;
-  font-size: .7rem; font-weight: 700; white-space: nowrap;
+  height: 24px; padding: 0 9px; border-radius: 99px;
+  font-size: .65rem; font-weight: 700; white-space: nowrap;
 }
-.chip-green  { background: rgba(22,163,74,.75); }
-.chip-blue   { background: rgba(19,104,206,.75); }
-.chip-amber  { background: rgba(245,158,11,.85); color: #1a0a00; }
+.chip-green { background: rgba(38,137,12,0.7); }
+.chip-blue { background: rgba(19,104,206,0.7); }
+.chip-amber { background: rgba(216,158,0,0.85); color: #1a0a00; }
 
-/* PIN no HUD — contido, nunca transborda */
+/* PIN no HUD */
 .hud-pin {
   display: inline-flex; align-items: center; justify-content: center;
-  height: 28px; padding: 0 10px; border-radius: 8px;
-  background: #fff; color: var(--dark);
-  font-size: .8rem; font-weight: 800; letter-spacing: .1em;
+  height: 26px; padding: 0 10px; border-radius: var(--radius);
+  background: #fff; color: var(--kahoot-dark);
+  font-size: .75rem; font-weight: 800; letter-spacing: .12em;
   white-space: nowrap; max-width: 100px; overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -108,67 +129,79 @@ body {
 /* Botão ícone no HUD */
 .hud-icon-btn {
   width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(255,255,255,.1); border: none;
-  cursor: pointer; font-size: .95rem;
+  background: var(--surface); border: none;
+  cursor: pointer; font-size: .88rem;
   display: flex; align-items: center; justify-content: center;
-  transition: background .18s;
+  transition: background .2s;
 }
-.hud-icon-btn:hover { background: rgba(255,255,255,.2); }
+.hud-icon-btn:hover { background: var(--surface2); }
 
 /* ================================================================
-   TIMER
+   TIMER — Barra fina + Círculo lateral
 ================================================================ */
 .timer-bar {
   position: fixed; top: var(--hud-h); left: 0; right: 0;
   height: var(--timer-h); background: rgba(0,0,0,.3); z-index: 299;
 }
 .timer-fill {
-  height: 100%; background: var(--green-l);
+  height: 100%; background: #26890c;
   transition: width .25s linear, background .4s;
 }
-.timer-fill.warn   { background: var(--amber); }
-.timer-fill.urgent { background: var(--red); }
+.timer-fill.warn { background: var(--kahoot-yellow); }
+.timer-fill.urgent { background: var(--kahoot-red); animation: timerPulse .5s ease infinite; }
+
+@keyframes timerPulse { 0%,100%{opacity:1} 50%{opacity:.7} }
 
 .timer-circle-wrap {
   position: fixed;
-  top: calc(var(--hud-h) + var(--timer-h) + 8px);
-  right: 12px; z-index: 298;
-  width: 46px; height: 46px;
+  top: calc(var(--hud-h) + var(--timer-h) + 10px);
+  right: 14px; z-index: 298;
+  width: 50px; height: 50px;
   display: none; align-items: center; justify-content: center;
 }
-.timer-circle-wrap svg { width: 46px; height: 46px; transform: rotate(-90deg); }
-.tc-bg   { fill: none; stroke: rgba(255,255,255,.15); stroke-width: 3; }
+.timer-circle-wrap svg { width: 50px; height: 50px; transform: rotate(-90deg); }
+.tc-bg { fill: none; stroke: rgba(255,255,255,.12); stroke-width: 3; }
 .tc-ring {
-  fill: none; stroke: var(--green-l);
+  fill: none; stroke: #26890c;
   stroke-width: 3; stroke-linecap: round;
   transition: stroke-dashoffset .25s linear, stroke .4s;
 }
-.tc-ring.warn   { stroke: var(--amber); }
-.tc-ring.urgent { stroke: var(--red); }
+.tc-ring.warn { stroke: var(--kahoot-yellow); }
+.tc-ring.urgent { stroke: var(--kahoot-red); }
 .timer-num {
-  position: absolute; font-weight: 800; font-size: .9rem;
+  position: absolute; font-weight: 900; font-size: 1rem;
 }
 
 /* ================================================================
-   RESULTADO (tela cheia, kahoot style)
+   RESULTADO (tela cheia, Kahoot style — BOLD)
 ================================================================ */
 .result-overlay {
   position: fixed; inset: 0; z-index: 600;
   display: none;
   flex-direction: column; align-items: center; justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
-.result-overlay.show    { display: flex; animation: resIn .15s ease; }
-.result-overlay.correct { background: var(--green); }
-.result-overlay.wrong   { background: var(--red); }
+.result-overlay.show { display: flex; animation: resIn .18s ease; }
+.result-overlay.correct { background: var(--kahoot-green); }
+.result-overlay.wrong { background: var(--kahoot-red); }
 
-.result-icon  { font-size: 5rem; line-height: 1; animation: iconPop .3s cubic-bezier(.34,1.6,.64,1); }
-.result-label { font-size: 2.2rem; font-weight: 900; animation: iconPop .3s cubic-bezier(.34,1.6,.64,1) .05s both; }
-.result-pts   { font-size: 1.3rem; font-weight: 700; opacity: .9; animation: iconPop .3s cubic-bezier(.34,1.6,.64,1) .1s both; }
-.result-combo { font-size: .95rem; opacity: .8; }
+.result-icon {
+  font-size: 5rem; line-height: 1;
+  animation: iconPop .3s cubic-bezier(.34,1.6,.64,1);
+}
+.result-label {
+  font-size: 2.4rem; font-weight: 900; text-transform: uppercase;
+  letter-spacing: .02em;
+  animation: iconPop .3s cubic-bezier(.34,1.6,.64,1) .05s both;
+}
+.result-pts {
+  font-size: 1.4rem; font-weight: 700; opacity: .9;
+  animation: iconPop .3s cubic-bezier(.34,1.6,.64,1) .1s both;
+}
 
-@keyframes resIn  { from{opacity:0;} to{opacity:1;} }
-@keyframes iconPop{ from{transform:scale(.3);opacity:0;} to{transform:scale(1);opacity:1;} }
+
+@keyframes resIn { from{opacity:0;} to{opacity:1;} }
+@keyframes iconPop { from{transform:scale(.3);opacity:0;} to{transform:scale(1);opacity:1;} }
 
 /* ================================================================
    PÁGINAS
@@ -179,62 +212,78 @@ body {
   padding: 16px; padding-top: calc(var(--hud-h) + 16px);
   overflow-y: auto;
 }
-.page.active { display: flex; animation: pgIn .22s ease; }
-@keyframes pgIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:none;} }
+.page.active { display: flex; animation: pgIn .25s ease; }
+@keyframes pgIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
 
 .page-game {
   justify-content: flex-start;
-  padding-top: calc(var(--hud-h) + var(--timer-h) + 10px);
-  gap: 10px;
+  padding-top: calc(var(--hud-h) + var(--timer-h) + 12px);
+  gap: 12px;
 }
 
 /* ================================================================
-   BOTÕES
+   BOTÕES — Kahoot 3D style com sombra inferior
 ================================================================ */
 .btn {
   display: block; width: 100%;
-  padding: 13px 18px; border: none; border-radius: 10px;
-  font-family: inherit; font-weight: 700; font-size: .95rem;
+  padding: 14px 20px; border: none; border-radius: var(--radius);
+  font-family: var(--font); font-weight: 700; font-size: .92rem;
   cursor: pointer; text-align: center; text-decoration: none;
-  transition: filter .15s, transform .1s;
+  transition: filter .15s, transform .08s;
   white-space: nowrap;
 }
-.btn:active:not(:disabled) { transform: scale(.97); filter: brightness(.9); }
+.btn:active:not(:disabled) { transform: translateY(3px); filter: brightness(.92); }
 .btn:disabled { opacity: .4; cursor: not-allowed; }
 
-.btn-primary { background: var(--purple); color: #fff; }
-.btn-primary:hover { filter: brightness(1.15); }
+.btn-primary {
+  background: var(--kahoot-purple);
+  color: #fff;
+  box-shadow: 0 4px 0 var(--kahoot-purple-deep);
+}
+.btn-primary:hover:not(:disabled) { filter: brightness(1.1); }
 
-.btn-ghost   { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); border: 1px solid rgba(255,255,255,.18); }
-.btn-ghost:hover { background: rgba(255,255,255,.18); }
+.btn-ghost {
+  background: var(--surface);
+  color: rgba(255,255,255,.85);
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 0 rgba(0,0,0,.15);
+}
+.btn-ghost:hover { background: var(--surface2); }
 
-.btn-outline { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.35); }
-.btn-outline:hover { background: rgba(255,255,255,.08); }
+.btn-outline {
+  background: transparent; color: #fff;
+  border: 1.5px solid rgba(255,255,255,.3);
+}
+.btn-outline:hover { background: var(--surface); }
 
 .btn-confirm {
-  background: var(--green); color: #fff;
-  padding: 13px 24px; width: auto; margin: 0;
-  box-shadow: 0 4px 0 #14532d;
+  background: var(--kahoot-green); color: #fff;
+  padding: 14px 28px; width: auto; margin: 0;
+  box-shadow: 0 4px 0 var(--green-shadow);
+  font-size: 1rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .03em;
 }
-.btn-confirm:disabled { background: rgba(255,255,255,.15); box-shadow: none; }
+.btn-confirm:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.btn-confirm:disabled { background: rgba(255,255,255,.12); box-shadow: none; }
 
-.btn-sm { padding: 8px 14px; font-size: .82rem; width: auto; display: inline-flex; align-items: center; }
+.btn-sm { padding: 8px 14px; font-size: .8rem; width: auto; display: inline-flex; align-items: center; }
 
 .btn-create {
-  background: linear-gradient(135deg, var(--teal), var(--green));
+  background: linear-gradient(135deg, var(--kahoot-blue), var(--kahoot-purple-light));
   color: #fff;
+  box-shadow: 0 4px 0 var(--blue-shadow);
 }
-.btn-create:hover { filter: brightness(1.1); }
+.btn-create:hover { filter: brightness(1.08); }
 
 .btn-danger-ghost {
-  background: rgba(226,27,60,.12); color: #ef4444;
+  background: rgba(226,27,60,.1); color: #ef4444;
   border: 1px solid rgba(226,27,60,.25);
 }
 
 .btn-link {
   background: none; border: none; cursor: pointer;
-  color: rgba(255,255,255,.6); font-family: inherit;
-  font-size: .82rem; text-align: center; padding: 4px;
+  color: rgba(255,255,255,.55); font-family: var(--font);
+  font-size: .8rem; text-align: center; padding: 4px;
   transition: color .15s;
 }
 .btn-link:hover { color: #fff; }
@@ -245,130 +294,111 @@ body {
   padding: 16px 18px; text-align: left;
   font-size: 1rem;
 }
-.btn-hero-icon { font-size: 1.4rem; flex-shrink: 0; }
+.btn-hero-icon { font-size: 1.3rem; flex-shrink: 0; }
 .btn-hero-text { display: flex; flex-direction: column; gap: 2px; }
-.btn-hero-title{ font-weight: 800; font-size: .95rem; }
-.btn-hero-sub  { font-size: .72rem; opacity: .75; font-weight: 400; }
+.btn-hero-title { font-weight: 800; font-size: .92rem; text-transform: uppercase; letter-spacing: .02em; }
+.btn-hero-sub { font-size: .7rem; opacity: .7; font-weight: 400; text-transform: none; letter-spacing: 0; }
 
 /* ================================================================
-   AUTH
+   AUTH — Tela de login limpa
 ================================================================ */
 .auth-wrap {
   display: flex; flex-direction: column; align-items: center;
-  gap: 20px; width: 100%; max-width: 400px;
+  gap: 20px; width: 100%; max-width: 380px;
 }
 .brand { text-align: center; }
 .brand-leaf {
-  font-size: 3.5rem; display: block; margin-bottom: 8px;
-  animation: leafIn .6s cubic-bezier(.34,1.56,.64,1);
+  font-size: 3.2rem; display: block; margin-bottom: 8px;
+  animation: leafIn .5s cubic-bezier(.34,1.56,.64,1);
 }
 @keyframes leafIn { from{transform:scale(.4) rotate(-12deg);opacity:0;} to{transform:scale(1) rotate(0);opacity:1;} }
-.brand h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); font-weight: 900; letter-spacing: -.01em; }
-.brand p  { color: rgba(255,255,255,.55); font-size: .9rem; }
+.brand h1 {
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 900; letter-spacing: -.01em;
+}
+.brand p { color: var(--text-muted); font-size: .88rem; font-weight: 500; }
 
 /* Card branco da auth */
 .white-card {
-  background: #fff; color: var(--dark);
-  border-radius: 16px; padding: 26px 22px;
+  background: #fff; color: var(--kahoot-dark);
+  border-radius: var(--radius-xl); padding: 28px 24px;
   width: 100%; display: flex; flex-direction: column; gap: 10px;
-  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+  box-shadow: 0 16px 48px rgba(0,0,0,.4);
 }
-.white-card h2 { color: var(--purple); font-weight: 800; margin-bottom: 4px; }
-.white-card input { background: #f5f5f7; border: 1.5px solid #ddd; color: var(--dark); }
-.white-card input:focus { border-color: var(--purple); }
-.white-card input::placeholder { color: #aaa; }
-.white-card .btn-primary { background: var(--purple); }
-.white-card .btn-ghost { background: rgba(70,23,143,.08); color: var(--purple); border-color: rgba(70,23,143,.25); }
-.white-card .btn-link { color: var(--purple); }
+.white-card h2 { color: var(--kahoot-purple); font-weight: 800; margin-bottom: 2px; font-size: 1.15rem; }
+
+.white-card .btn-primary { background: var(--kahoot-purple); box-shadow: 0 4px 0 var(--kahoot-purple-deep); }
+.white-card .btn-ghost { background: rgba(70,23,143,.06); color: var(--kahoot-purple); border-color: rgba(70,23,143,.2); box-shadow: none; }
+.white-card .btn-link { color: var(--kahoot-purple); }
 
 /* Inputs base */
 input[type="text"], input[type="password"] {
   width: 100%; padding: 13px 15px;
-  background: rgba(255,255,255,.08);
-  border: 1.5px solid rgba(255,255,255,.18);
-  border-radius: 10px; color: #fff;
-  font-family: inherit; font-size: .95rem; font-weight: 500;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius); color: #fff;
+  font-family: var(--font); font-size: .92rem; font-weight: 500;
   transition: border-color .2s;
 }
-input:focus { border-color: rgba(255,255,255,.55); }
-input::placeholder { color: rgba(255,255,255,.4); }
+input:focus { border-color: rgba(255,255,255,.5); }
+input::placeholder { color: rgba(255,255,255,.35); }
+
+/* White card inputs (auth) — DEPOIS do genérico para ter prioridade */
+.white-card input[type="text"],
+.white-card input[type="password"] {
+  background: #f5f5f7; border: 1.5px solid #e0e0e0;
+  color: var(--kahoot-dark);
+}
+.white-card input:focus { border-color: var(--kahoot-purple); }
+.white-card input::placeholder { color: #aaa; }
 
 /* Avatar picker */
 .av-pick { display: flex; flex-direction: column; align-items: center; gap: 7px; }
 .av-preview {
-  width: 70px; height: 70px; border-radius: 50%;
-  background: rgba(255,255,255,.15);
-  border: 2px solid rgba(255,255,255,.2);
+  width: 68px; height: 68px; border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 3px solid rgba(255,255,255,.2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.7rem; font-weight: 700; position: relative; overflow: hidden;
+  font-size: 1.6rem; font-weight: 700; position: relative; overflow: hidden;
 }
-.av-preview.large { width: 84px; height: 84px; font-size: 2.1rem; }
+.av-preview.large { width: 82px; height: 82px; font-size: 2rem; }
 .av-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
 /* ================================================================
-   HOME
+   HOME — Menu principal
 ================================================================ */
 .home-wrap {
   display: flex; flex-direction: column; align-items: center;
-  gap: 10px; width: 100%; max-width: 460px; padding-bottom: 20px;
+  gap: 12px; width: 100%; max-width: 440px; padding-bottom: 20px;
 }
 
-/* Strip de perfil compacto */
+/* Strip de perfil */
 .profile-strip {
   display: flex; align-items: center; gap: 12px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 14px; padding: 12px 14px; width: 100%; position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px 16px; width: 100%;
+  position: relative;
 }
 .profile-av {
   width: 48px; height: 48px; border-radius: 50%;
-  background: var(--green); flex-shrink: 0;
+  background: var(--kahoot-purple-light); flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   font-weight: 800; font-size: 1.3rem;
   position: relative; overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.25);
 }
 .pa-letter { z-index: 0; }
-.pa-photo  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
-.profile-info strong { font-weight: 700; font-size: .97rem; display: block; }
+.pa-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.profile-info strong { font-weight: 700; font-size: .95rem; display: block; }
 .profile-stats-row {
   display: flex; gap: 10px; margin-top: 4px;
-  font-size: .75rem; color: rgba(255,255,255,.6); flex-wrap: wrap;
+  font-size: .73rem; color: var(--text-muted); flex-wrap: wrap;
 }
-.profile-stats-row b { color: #fff; font-weight: 600; }
+.profile-stats-row b { color: #fff; font-weight: 700; }
 
 /* Ações principais */
 .main-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-
-/* Menu de criação */
-.create-menu {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: 14px; padding: 14px; width: 100%;
-  animation: pgIn .2s ease;
-}
-.create-menu-header {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: .8rem; font-weight: 700; color: rgba(255,255,255,.6);
-  margin-bottom: 10px; text-transform: uppercase; letter-spacing: .06em;
-}
-
-/* Grid de temas */
-.theme-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 7px; margin-bottom: 8px;
-}
-.theme-btn {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  background: rgba(255,255,255,.08);
-  border: 1.5px solid rgba(255,255,255,.14);
-  border-radius: 10px; padding: 11px 6px;
-  color: #fff; font-size: .82rem; font-weight: 600;
-  cursor: pointer; font-family: inherit;
-  transition: background .15s, border-color .15s;
-}
-.theme-btn span { font-size: .68rem; font-weight: 500; opacity: .8; }
-.theme-btn:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.3); }
-.theme-btn.active { border-color: var(--green-l); color: var(--green-l); }
 
 /* Links secundários */
 .secondary-links {
@@ -376,68 +406,67 @@ input::placeholder { color: rgba(255,255,255,.4); }
   flex-wrap: wrap;
 }
 .sec-link {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.12);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 99px; padding: 8px 16px;
-  font-size: .8rem; font-weight: 600; color: rgba(255,255,255,.75);
-  cursor: pointer; font-family: inherit;
+  font-size: .78rem; font-weight: 600; color: rgba(255,255,255,.7);
+  cursor: pointer; font-family: var(--font);
   transition: background .15s, color .15s;
 }
-.sec-link:hover { background: rgba(255,255,255,.14); color: #fff; }
+.sec-link:hover { background: var(--surface2); color: #fff; }
 
 /* ================================================================
    LOBBY
 ================================================================ */
 .lobby-wrap {
   display: flex; flex-direction: column; align-items: center;
-  gap: 16px; width: 100%; max-width: 600px; padding-bottom: 20px;
+  gap: 16px; width: 100%; max-width: 560px; padding-bottom: 20px;
 }
 
-/* PIN card — dígitos separados, não transborda */
+/* PIN card — Kahoot style grande */
 .pin-card {
-  background: #fff; color: var(--dark);
-  border-radius: 16px; padding: 18px 24px;
+  background: #fff; color: var(--kahoot-dark);
+  border-radius: var(--radius-xl); padding: 20px 28px;
   text-align: center; width: 100%; max-width: 340px;
   box-shadow: 0 8px 32px rgba(0,0,0,.35);
 }
 .pin-label {
-  display: block; font-size: .62rem; font-weight: 800;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--purple); margin-bottom: 10px;
+  display: block; font-size: .6rem; font-weight: 800;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--kahoot-purple); margin-bottom: 10px;
 }
-/* Dígitos individuais — nunca estouram */
 .pin-row {
   display: flex; align-items: center; justify-content: center;
   gap: 4px; flex-wrap: nowrap;
 }
 .pin-digit {
-  width: 38px; height: 48px; border-radius: 8px;
-  background: #f3f0ff; border: 2px solid #e9e3ff;
+  width: 38px; height: 48px; border-radius: var(--radius);
+  background: #f3f0ff; border: 2px solid #e0d8ff;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.6rem; font-weight: 900; color: var(--purple);
+  font-size: 1.6rem; font-weight: 900; color: var(--kahoot-purple);
   flex-shrink: 0;
 }
 .pin-sep {
-  font-size: 1.4rem; color: #c4b5fd; font-weight: 700; padding: 0 2px;
+  font-size: 1.3rem; color: #c4b5fd; font-weight: 700; padding: 0 2px;
 }
 .pin-hint {
-  display: block; font-size: .68rem; color: #888; margin-top: 8px; font-weight: 500;
+  display: block; font-size: .66rem; color: #999; margin-top: 8px; font-weight: 500;
 }
 
 .lobby-status-row {
   display: flex; align-items: center; gap: 8px;
-  font-size: .88rem; color: rgba(255,255,255,.7);
+  font-size: .86rem; color: var(--text-muted);
 }
 .pulse-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--green-l);
+  width: 8px; height: 8px; border-radius: 50%; background: #26890c;
   animation: pulse 1.8s ease-in-out infinite;
 }
 @keyframes pulse { 0%,100%{opacity:.3;transform:scale(.8);} 50%{opacity:1;transform:scale(1.2);} }
 
 .count-badge {
-  background: rgba(34,197,94,.25); color: var(--green-l);
+  background: rgba(38,137,12,.2); color: #4ade80;
   border-radius: 99px; padding: 2px 10px;
-  font-size: .8rem; font-weight: 700;
+  font-size: .78rem; font-weight: 700;
 }
 
 /* Players */
@@ -446,247 +475,241 @@ input::placeholder { color: rgba(255,255,255,.4); }
 }
 .player-chip {
   display: flex; align-items: center; gap: 7px;
-  background: rgba(255,255,255,.1);
-  border: 1px solid rgba(255,255,255,.14);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 99px; padding: 6px 12px 6px 6px;
   animation: pgIn .2s ease;
 }
-.player-chip.offline { opacity: .4; }
+.player-chip.offline { opacity: .35; }
 .chip-av {
   width: 26px; height: 26px; border-radius: 50%;
-  background: var(--green); display: flex; align-items: center;
-  justify-content: center; font-weight: 700; font-size: .75rem;
+  background: var(--kahoot-purple-light); display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: .72rem;
   overflow: hidden; flex-shrink: 0;
 }
 .chip-av img { width: 100%; height: 100%; object-fit: cover; }
-.chip-name { font-size: .8rem; font-weight: 500; max-width: 88px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip-name { font-size: .78rem; font-weight: 600; max-width: 88px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .diff-row {
   display: flex; align-items: center; gap: 12px;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 10px; padding: 10px 14px; width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 14px; width: 100%;
 }
-.label-sm { font-size: .78rem; color: rgba(255,255,255,.55); font-weight: 600; }
+.label-sm { font-size: .76rem; color: var(--text-muted); font-weight: 600; }
 .diff-pills { display: flex; gap: 6px; }
 .diff-pill {
   padding: 6px 14px; border-radius: 99px;
   background: transparent; border: 1.5px solid rgba(255,255,255,.2);
-  color: rgba(255,255,255,.6); font-size: .8rem; font-weight: 600;
-  cursor: pointer; font-family: inherit; transition: background .15s, color .15s;
+  color: rgba(255,255,255,.55); font-size: .78rem; font-weight: 600;
+  cursor: pointer; font-family: var(--font); transition: all .15s;
 }
-.diff-pill.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+.diff-pill.active { background: var(--kahoot-purple); color: #fff; border-color: var(--kahoot-purple); }
 
 /* ================================================================
-   GAMEPLAY
+   GAMEPLAY — O coração do Kahoot
 ================================================================ */
 .q-header { width: 100%; max-width: 860px; display: flex; flex-direction: column; gap: 8px; }
-.q-meta   { display: flex; align-items: center; gap: 7px; }
+.q-meta { display: flex; align-items: center; gap: 7px; }
 
 .q-count {
   background: rgba(255,255,255,.15); border-radius: 99px;
-  padding: 4px 13px; font-size: .75rem; font-weight: 700; white-space: nowrap;
+  padding: 4px 12px; font-size: .72rem; font-weight: 800;
+  white-space: nowrap; letter-spacing: .02em;
 }
 .q-cat {
-  background: rgba(34,197,94,.75); border-radius: 99px;
-  padding: 4px 13px; font-size: .75rem; font-weight: 700; white-space: nowrap;
+  background: rgba(255,255,255,.2); border-radius: 99px;
+  padding: 4px 12px; font-size: .72rem; font-weight: 700;
+  white-space: nowrap; text-transform: uppercase; letter-spacing: .04em;
 }
-.q-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,.15); border-radius: 99px; overflow: hidden; }
-.q-bar { height: 100%; background: rgba(255,255,255,.55); border-radius: 99px; transition: width .4s ease; }
+.q-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,.12); border-radius: 99px; overflow: hidden; }
+.q-bar { height: 100%; background: rgba(255,255,255,.5); border-radius: 99px; transition: width .4s ease; }
 
-/* CAIXA BRANCA DA PERGUNTA */
+/* CAIXA DA PERGUNTA — Branca, grande, destaque Kahoot */
 .q-box {
   background: #fff; color: #111;
-  border-radius: 14px; padding: 20px 22px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  border-radius: var(--radius-lg); padding: 22px 24px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35);
   animation: qIn .2s ease;
 }
 @keyframes qIn { from{transform:scale(.97);opacity:.7;} to{transform:scale(1);opacity:1;} }
-.q-text { font-size: clamp(.95rem, 2.4vw, 1.25rem); font-weight: 700; line-height: 1.45; color: #111; }
+.q-text {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 700; line-height: 1.45; color: #111;
+  text-align: center;
+}
 
-/* Respostas */
+/* ── RESPOSTAS — Kahoot 3D buttons com formas geométricas ── */
 .answers {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 10px; width: 100%; max-width: 860px;
 }
 .ans {
-  min-height: 90px; border: none; border-radius: 12px;
-  color: #fff; font-family: inherit; font-weight: 700; font-size: .95rem;
+  min-height: 100px; border: none; border-radius: var(--radius);
+  color: #fff; font-family: var(--font); font-weight: 700; font-size: .95rem;
   cursor: pointer;
-  display: flex; align-items: center; gap: 12px; padding: 0 18px;
-  box-shadow: 0 5px 0 rgba(0,0,0,.25);
-  transition: filter .12s, transform .1s, box-shadow .1s;
+  display: flex; align-items: center; gap: 14px; padding: 0 20px;
+  transition: transform .08s, box-shadow .08s;
   text-align: left; position: relative; overflow: hidden;
 }
-/* Shimmer */
-.ans::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,.16), transparent);
-  transform: translateX(-100%); transition: transform .4s;
-  pointer-events: none;
-}
-.ans:hover::after { transform: translateX(100%); }
-.ans:hover:not(:disabled) { filter: brightness(1.1); }
-.ans:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,.25); }
+/* 3D press effect */
+.ans:active:not(:disabled) { transform: translateY(4px); }
 .ans:disabled { cursor: default; }
-.ans-sym { font-size: 1.5rem; flex-shrink: 0; line-height: 1; opacity: .88; }
 
-.ans-red    { background: var(--red);    box-shadow: 0 5px 0 #9b0a23; }
-.ans-blue   { background: var(--blue);   box-shadow: 0 5px 0 #0b429e; }
-.ans-yellow { background: var(--yellow); box-shadow: 0 5px 0 #7c4a00; }
-.ans-green  { background: #16a34a;       box-shadow: 0 5px 0 #14532d; }
-
-.ans.picked {
-  outline: 3px solid rgba(255,255,255,.85);
-  outline-offset: 2px;
+/* Símbolos geométricos — mais proeminentes */
+.ans-sym {
+  font-size: 1.8rem; flex-shrink: 0; line-height: 1;
+  opacity: .9; filter: drop-shadow(0 1px 2px rgba(0,0,0,.2));
 }
+
+/* Cores Kahoot autênticas com sombra 3D */
+.ans-red {
+  background: var(--kahoot-red);
+  box-shadow: 0 6px 0 var(--red-shadow);
+}
+.ans-blue {
+  background: var(--kahoot-blue);
+  box-shadow: 0 6px 0 var(--blue-shadow);
+}
+.ans-yellow {
+  background: var(--kahoot-yellow);
+  box-shadow: 0 6px 0 var(--yellow-shadow);
+}
+.ans-green {
+  background: var(--kahoot-green);
+  box-shadow: 0 6px 0 var(--green-shadow);
+}
+
+/* Selecionado */
+.ans.picked {
+  outline: 3px solid rgba(255,255,255,.9);
+  outline-offset: 2px;
+  transform: scale(1.02);
+}
+
+/* Correto — brilho pulsante */
 .ans.correct {
   outline: 3px solid #fff;
-  box-shadow: 0 0 0 4px rgba(255,255,255,.35), 0 5px 0 rgba(0,0,0,.25);
-  animation: correctPulse .5s ease infinite alternate;
+  box-shadow: 0 0 0 4px rgba(255,255,255,.4), 0 6px 0 rgba(0,0,0,.25);
+  animation: correctGlow .6s ease infinite alternate;
 }
-.ans.wrong { opacity: .2; filter: grayscale(.8); transform: none !important; }
-@keyframes correctPulse {
-  from { box-shadow: 0 0 0 3px rgba(255,255,255,.3), 0 5px 0 rgba(0,0,0,.25); }
-  to   { box-shadow: 0 0 0 6px rgba(255,255,255,.6), 0 5px 0 rgba(0,0,0,.25); }
+@keyframes correctGlow {
+  from { box-shadow: 0 0 0 3px rgba(255,255,255,.3), 0 6px 0 rgba(0,0,0,.25); }
+  to   { box-shadow: 0 0 0 8px rgba(255,255,255,.5), 0 6px 0 rgba(0,0,0,.25); }
 }
+
+/* Errado — desbotado */
+.ans.wrong {
+  opacity: .15; filter: grayscale(1) brightness(.7);
+  transform: none !important;
+}
+
+/* Pressed state */
+.ans-red:active:not(:disabled) { box-shadow: 0 2px 0 var(--red-shadow); }
+.ans-blue:active:not(:disabled) { box-shadow: 0 2px 0 var(--blue-shadow); }
+.ans-yellow:active:not(:disabled) { box-shadow: 0 2px 0 var(--yellow-shadow); }
+.ans-green:active:not(:disabled) { box-shadow: 0 2px 0 var(--green-shadow); }
 
 .game-bottom {
   display: flex; gap: 10px; align-items: center;
   width: 100%; max-width: 860px;
 }
 .status-pill {
-  flex: 1; padding: 12px 15px;
-  background: rgba(255,255,255,.09);
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 10px; font-size: .86rem; color: rgba(255,255,255,.7);
+  flex: 1; padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: .84rem;
+  color: var(--text-muted); font-weight: 500;
 }
 
 /* Score + Combo */
 .score-pill {
   position: fixed; bottom: 14px; right: 14px;
-  background: rgba(0,0,0,.6); border: 1px solid rgba(255,255,255,.15);
+  background: rgba(0,0,0,.65);
+  border: 1px solid rgba(255,255,255,.12);
   backdrop-filter: blur(12px); border-radius: 99px;
-  padding: 8px 16px;
+  padding: 8px 18px;
   display: none; align-items: center; gap: 4px;
-  font-weight: 800; font-size: 1.05rem; z-index: 100;
+  font-weight: 800; font-size: 1.1rem; z-index: 100;
 }
 .score-pill.bump { animation: bump .28s cubic-bezier(.34,1.6,.64,1); }
-@keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.22)} 100%{transform:scale(1)} }
-.score-unit { font-size: .68rem; color: rgba(255,255,255,.5); font-weight: 500; }
+@keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.25)} 100%{transform:scale(1)} }
+.score-unit { font-size: .65rem; color: rgba(255,255,255,.45); font-weight: 600; text-transform: uppercase; }
 
-.combo-pill {
-  position: fixed; bottom: 14px; left: 14px;
-  background: rgba(245,158,11,.2); border: 1.5px solid rgba(245,158,11,.4);
-  border-radius: 99px; padding: 7px 14px;
-  font-size: .86rem; font-weight: 700; color: #fbbf24;
-  z-index: 100; display: none; animation: pgIn .18s ease;
-}
+
+
+/* RANKING → separado em ranking.css */
 
 /* ================================================================
-   RANKING
-================================================================ */
-.rank-wrap {
-  width: min(780px, 96vw); max-height: 86dvh;
-  overflow: hidden; display: flex; flex-direction: column; gap: 12px;
-}
-.rank-header {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-}
-.rank-header h1 { font-size: 1.6rem; font-weight: 800; }
-.eyebrow { font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5); display: block; margin-bottom: 2px; }
-
-.rank-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
-.rstat {
-  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.1);
-  border-radius: 10px; padding: 11px;
-}
-.rstat label  { display: block; font-size: .62rem; color: rgba(255,255,255,.5); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 3px; }
-.rstat strong { font-size: 1.1rem; font-weight: 700; }
-
-.rank-tabs { display: flex; gap: 6px; }
-.rtab {
-  padding: 7px 16px; border-radius: 99px;
-  background: transparent; border: 1.5px solid rgba(255,255,255,.2);
-  color: rgba(255,255,255,.6); font-size: .8rem; font-weight: 600;
-  cursor: pointer; font-family: inherit; transition: background .15s;
-}
-.rtab.active { background: var(--purple); color: #fff; border-color: var(--purple); }
-
-.rank-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-.rank-row {
-  display: grid; grid-template-columns: 50px 1fr auto;
-  align-items: center; gap: 10px; padding: 11px 13px; border-radius: 10px;
-  background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.09);
-  animation: pgIn .2s ease;
-}
-.rank-row.top-1 { border-left: 3px solid #fbbf24; }
-.rank-row.top-2 { border-left: 3px solid #cbd5e1; }
-.rank-row.top-3 { border-left: 3px solid #cd7f32; }
-.rank-pos { font-size: 1.1rem; font-weight: 700; text-align: center; color: rgba(255,255,255,.5); }
-.rank-player { display: flex; align-items: center; gap: 9px; min-width: 0; }
-.rank-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--purple); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .82rem; font-weight: 700; overflow: hidden;
-}
-.rank-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.rank-player strong { display: block; font-weight: 600; font-size: .88rem; }
-.rank-player span   { font-size: .7rem; color: rgba(255,255,255,.5); }
-.rank-score { font-weight: 700; font-size: .92rem; white-space: nowrap; }
-.rank-score span { display: block; font-size: .62rem; color: rgba(255,255,255,.5); }
-
-/* ================================================================
-   PÓDIO FINAL
+   PÓDIO FINAL — Celebração Kahoot
 ================================================================ */
 .overlay-bottom {
   position: fixed; inset: 0; z-index: 500;
   display: flex; align-items: flex-end; justify-content: center;
-  background: rgba(0,0,0,.65); backdrop-filter: blur(6px);
+  background: rgba(0,0,0,.6); backdrop-filter: blur(8px);
   animation: pgIn .2s ease;
 }
 .podium-sheet {
-  background: linear-gradient(160deg, #1a3a2a 0%, var(--purple-d) 100%);
-  border-radius: 20px 20px 0 0; padding: 26px 20px 30px;
-  width: 100%; max-width: 520px;
+  background: linear-gradient(160deg, var(--kahoot-purple) 0%, var(--kahoot-purple-deep) 100%);
+  border-radius: 20px 20px 0 0; padding: 28px 22px 32px;
+  width: 100%; max-width: 500px;
   display: flex; flex-direction: column; gap: 18px;
   max-height: 92dvh; overflow-y: auto;
-  animation: slideUp .28s cubic-bezier(.34,1.2,.64,1);
+  animation: slideUp .3s cubic-bezier(.34,1.2,.64,1);
 }
 @keyframes slideUp { from{transform:translateY(50px);opacity:0;} to{transform:translateY(0);opacity:1;} }
-.podium-title { text-align: center; font-size: 1.35rem; font-weight: 800; }
+.podium-title {
+  text-align: center; font-size: 1.3rem; font-weight: 900;
+  text-transform: uppercase; letter-spacing: .03em;
+}
 
 .podium-top3 { display: flex; align-items: flex-end; justify-content: center; gap: 10px; }
-.pod-slot    { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.pod-av { border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-weight: 800; overflow: hidden; border: 2px solid rgba(255,255,255,.25); }
-.pod-av.sz-lg { width: 58px; height: 58px; font-size: 1.5rem; border-color: #fbbf24; }
+.pod-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pod-av {
+  border-radius: 50%; background: rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; overflow: hidden;
+  border: 3px solid rgba(255,255,255,.25);
+}
+.pod-av.sz-lg { width: 60px; height: 60px; font-size: 1.5rem; border-color: #fbbf24; }
 .pod-av.sz-md { width: 46px; height: 46px; font-size: 1.2rem; }
 .pod-av img { width: 100%; height: 100%; object-fit: cover; }
-.pod-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; border-radius: 10px 10px 0 0; padding: 9px 11px 7px; gap: 2px; }
-.pod-block.b1 { height: 96px; background: rgba(251,191,36,.15); border: 1.5px solid rgba(251,191,36,.35); min-width: 88px; }
-.pod-block.b2 { height: 70px; background: rgba(200,210,220,.1); border: 1.5px solid rgba(200,210,220,.2); min-width: 80px; }
-.pod-block.b3 { height: 52px; background: rgba(205,127,50,.12); border: 1.5px solid rgba(205,127,50,.28); min-width: 80px; }
+.pod-block {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: flex-end; border-radius: 10px 10px 0 0;
+  padding: 9px 11px 7px; gap: 2px;
+}
+.pod-block.b1 { height: 100px; background: rgba(251,191,36,.15); border: 1.5px solid rgba(251,191,36,.35); min-width: 88px; }
+.pod-block.b2 { height: 72px; background: rgba(200,210,220,.08); border: 1.5px solid rgba(200,210,220,.2); min-width: 80px; }
+.pod-block.b3 { height: 54px; background: rgba(205,127,50,.1); border: 1.5px solid rgba(205,127,50,.25); min-width: 80px; }
 .pod-medal { font-size: 1.05rem; }
-.pod-name  { font-size: .7rem; font-weight: 600; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pod-score { font-size: .66rem; color: rgba(255,255,255,.65); }
+.pod-name { font-size: .7rem; font-weight: 700; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pod-score { font-size: .64rem; color: var(--text-muted); }
 
 .podium-rest { display: flex; flex-direction: column; gap: 5px; }
 .pod-row {
-  display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 8px;
-  background: rgba(255,255,255,.07);
+  display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: var(--radius);
+  background: var(--surface);
   transform: translateX(30px); opacity: 0;
   transition: transform .35s ease, opacity .3s;
 }
 .pod-row.in { transform: none; opacity: 1; }
-.pod-row-pos   { font-size: .78rem; color: rgba(255,255,255,.5); min-width: 26px; }
-.pod-row-name  { flex: 1; font-weight: 600; font-size: .88rem; }
-.pod-row-score { font-weight: 700; font-size: .88rem; color: #fbbf24; }
+.pod-row-pos { font-size: .76rem; color: var(--text-muted); min-width: 26px; }
+.pod-row-name { flex: 1; font-weight: 700; font-size: .86rem; }
+.pod-row-score { font-weight: 800; font-size: .86rem; color: #fbbf24; }
 
 .podium-actions { display: flex; gap: 8px; }
-.pod-action { flex: 1; padding: 13px; border: none; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: .9rem; cursor: pointer; transition: filter .15s; }
-.pod-action.primary { background: var(--purple); color: #fff; }
-.pod-action.ghost   { background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); }
+.pod-action {
+  flex: 1; padding: 14px; border: none; border-radius: var(--radius);
+  font-family: var(--font); font-weight: 800; font-size: .88rem;
+  cursor: pointer; transition: filter .15s;
+  text-transform: uppercase; letter-spacing: .02em;
+}
+.pod-action.primary {
+  background: var(--kahoot-green); color: #fff;
+  box-shadow: 0 4px 0 var(--green-shadow);
+}
+.pod-action.ghost { background: var(--surface); color: rgba(255,255,255,.7); }
 
 /* ================================================================
    OVERLAYS / MODAIS
@@ -694,36 +717,38 @@ input::placeholder { color: rgba(255,255,255,.4); }
 .overlay-center {
   position: fixed; inset: 0; z-index: 500;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.65); backdrop-filter: blur(6px); padding: 16px;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(8px); padding: 16px;
   animation: pgIn .18s ease;
 }
 .modal-box {
-  background: #fff; color: var(--dark);
-  border-radius: 18px; padding: 26px 22px;
-  width: 100%; max-width: 420px; max-height: 90dvh; overflow-y: auto;
+  background: #fff; color: var(--kahoot-dark);
+  border-radius: var(--radius-xl); padding: 28px 24px;
+  width: 100%; max-width: 400px; max-height: 90dvh; overflow-y: auto;
   display: flex; flex-direction: column; gap: 11px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.5);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
   position: relative;
-  animation: mcIn .28s cubic-bezier(.34,1.2,.64,1);
+  animation: mcIn .25s cubic-bezier(.34,1.2,.64,1);
 }
 @keyframes mcIn { from{transform:scale(.88) translateY(18px);opacity:0;} to{transform:scale(1);opacity:1;} }
-.modal-box h2 { color: var(--purple); font-weight: 800; }
-.modal-box p  { color: #555; font-size: .88rem; line-height: 1.5; }
-.modal-box input { background: #f5f5f7; border: 1.5px solid #ddd; color: var(--dark); border-radius: 10px; }
-.modal-box input:focus { border-color: var(--purple); }
+.modal-box h2 { color: var(--kahoot-purple); font-weight: 800; font-size: 1.1rem; }
+.modal-box p { color: #666; font-size: .86rem; line-height: 1.5; }
+.modal-box input { background: #f5f5f7; border: 1.5px solid #e0e0e0; color: var(--kahoot-dark); border-radius: var(--radius); }
+.modal-box input:focus { border-color: var(--kahoot-purple); }
 .modal-box input::placeholder { color: #aaa; }
-.modal-box .btn-primary { background: var(--purple); }
-.modal-box .btn-ghost   { background: rgba(70,23,143,.07); color: var(--purple); border-color: rgba(70,23,143,.2); }
-.modal-box .btn-outline { color: var(--purple); border-color: rgba(70,23,143,.3); }
+.modal-box .btn-primary { background: var(--kahoot-purple); box-shadow: 0 4px 0 var(--kahoot-purple-deep); }
+.modal-box .btn-ghost { background: rgba(70,23,143,.06); color: var(--kahoot-purple); border-color: rgba(70,23,143,.15); box-shadow: none; }
+.modal-box .btn-outline { color: var(--kahoot-purple); border-color: rgba(70,23,143,.25); }
+.modal-box .btn-link { color: var(--kahoot-dark); }
+.modal-box .btn-link:hover { color: var(--kahoot-purple); }
 
 .modal-close {
   position: absolute; top: 12px; right: 12px;
-  background: #eee; border: none; border-radius: 50%;
+  background: #f0f0f0; border: none; border-radius: 50%;
   width: 28px; height: 28px; cursor: pointer; font-size: .8rem;
-  display: flex; align-items: center; justify-content: center; color: #666;
+  display: flex; align-items: center; justify-content: center; color: #888;
   transition: background .15s;
 }
-.modal-close:hover { background: #ddd; }
+.modal-close:hover { background: #e0e0e0; }
 .modal-icon { font-size: 2.5rem; text-align: center; margin-bottom: 4px; }
 
 /* ================================================================
@@ -733,7 +758,7 @@ input::placeholder { color: rgba(255,255,255,.4); }
   display: flex; gap: 8px; align-items: center;
 }
 .friends-add input {
-  flex: 1; padding: 10px 13px; font-size: .9rem;
+  flex: 1; padding: 10px 13px; font-size: .88rem;
 }
 .friends-list {
   display: flex; flex-direction: column; gap: 6px;
@@ -741,58 +766,62 @@ input::placeholder { color: rgba(255,255,255,.4); }
 }
 .friend-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px; border-radius: 10px;
+  padding: 9px 12px; border-radius: var(--radius);
   background: #f8f7ff; border: 1px solid #ede8ff;
 }
 .friend-av {
   width: 36px; height: 36px; border-radius: 50%;
-  background: var(--purple); color: #fff;
+  background: var(--kahoot-purple); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: .9rem; flex-shrink: 0;
+  font-weight: 700; font-size: .88rem; flex-shrink: 0;
 }
 .friend-info { flex: 1; min-width: 0; }
-.friend-name { font-weight: 700; font-size: .9rem; color: var(--dark); display: block; }
-.friend-sub  { font-size: .72rem; color: #888; }
+.friend-name { font-weight: 700; font-size: .88rem; color: var(--kahoot-dark); display: block; }
+.friend-sub { font-size: .7rem; color: #999; }
 .friend-rm {
   background: none; border: none; cursor: pointer;
   color: #ccc; font-size: 1rem; padding: 4px;
   transition: color .15s;
 }
-.friend-rm:hover { color: var(--red); }
+.friend-rm:hover { color: var(--kahoot-red); }
 
 /* ================================================================
    EDIT STATS
 ================================================================ */
 .edit-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
-.estat { background: rgba(70,23,143,.07); border-radius: 8px; padding: 9px 7px; text-align: center; }
-.estat label  { display: block; font-size: .6rem; color: #888; margin-bottom: 3px; }
-.estat strong { font-weight: 700; font-size: .88rem; color: var(--purple); }
+.estat { background: rgba(70,23,143,.06); border-radius: var(--radius); padding: 9px 7px; text-align: center; }
+.estat label { display: block; font-size: .58rem; color: #999; margin-bottom: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.estat strong { font-weight: 800; font-size: .86rem; color: var(--kahoot-purple); }
 
 /* ================================================================
    UTILITÁRIOS
 ================================================================ */
-.text-muted { color: rgba(255,255,255,.5); font-size: .86rem; }
+.text-muted { color: var(--text-muted); font-size: .84rem; }
 .icon-btn {
-  background: rgba(255,255,255,.1); border: none; border-radius: 8px;
-  width: 32px; height: 32px; cursor: pointer; font-size: .88rem;
+  background: var(--surface); border: none; border-radius: var(--radius);
+  width: 32px; height: 32px; cursor: pointer; font-size: .86rem;
   display: flex; align-items: center; justify-content: center;
-  color: rgba(255,255,255,.6); flex-shrink: 0; transition: background .18s;
+  color: rgba(255,255,255,.55); flex-shrink: 0; transition: background .2s;
 }
-.icon-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
+.icon-btn:hover { background: var(--surface2); color: #fff; }
 
 .pin-input {
   font-size: 2rem; font-weight: 800; letter-spacing: .3em; text-align: center;
-  padding: 15px; border-radius: 10px;
+  padding: 15px; border-radius: var(--radius);
 }
 
 .toast {
   position: fixed; bottom: 58px; left: 50%; transform: translateX(-50%);
-  background: rgba(0,0,0,.85); border-radius: 99px; padding: 8px 18px;
-  font-size: .83rem; font-weight: 600; color: #fff;
+  background: rgba(0,0,0,.88); border-radius: 99px; padding: 8px 20px;
+  font-size: .82rem; font-weight: 600; color: #fff;
   z-index: 700; pointer-events: none; white-space: nowrap; animation: pgIn .2s ease;
 }
-.net-badge { position: fixed; bottom: 9px; left: 11px; font-size: .66rem; font-weight: 600; color: var(--green-l); z-index: 100; pointer-events: none; opacity: .65; }
-.net-badge.off { color: var(--red); }
+.net-badge {
+  position: fixed; bottom: 9px; left: 11px;
+  font-size: .64rem; font-weight: 600;
+  color: #4ade80; z-index: 100; pointer-events: none; opacity: .6;
+}
+.net-badge.off { color: var(--kahoot-red); }
 
 /* ================================================================
    SPLASH
@@ -800,57 +829,58 @@ input::placeholder { color: rgba(255,255,255,.4); }
 #mk-splash {
   position: fixed; inset: 0; z-index: 1000;
   display: none; flex-direction: column;
-  align-items: center; justify-content: center; gap: 13px;
-  background: linear-gradient(145deg, #1a3a2a 0%, var(--purple-d) 100%);
+  align-items: center; justify-content: center; gap: 14px;
+  background: var(--kahoot-purple);
+  background: linear-gradient(180deg, #46178f 0%, #2e0e5f 100%);
   opacity: 0; transition: opacity .3s;
 }
 #mk-splash.visible { opacity: 1; }
-.splash-icon  { font-size: 3.5rem; animation: leafIn .5s cubic-bezier(.34,1.56,.64,1); }
-.splash-title { font-size: 1.5rem; font-weight: 900; }
-.splash-msg   { font-size: .86rem; color: rgba(255,255,255,.55); }
-.splash-dots  { display: flex; gap: 6px; }
-.splash-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.4); animation: pulse 1.4s ease-in-out infinite; }
+.splash-icon { font-size: 3.5rem; animation: leafIn .5s cubic-bezier(.34,1.56,.64,1); }
+.splash-title { font-size: 1.5rem; font-weight: 900; letter-spacing: .02em; }
+.splash-msg { font-size: .84rem; color: rgba(255,255,255,.5); }
+.splash-dots { display: flex; gap: 6px; }
+.splash-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.35); animation: pulse 1.4s ease-in-out infinite; }
 .splash-dots span:nth-child(2) { animation-delay: .2s; }
 .splash-dots span:nth-child(3) { animation-delay: .4s; }
 .splash-cancel {
-  margin-top: 6px; background: none; border: 1.5px solid rgba(255,255,255,.22);
+  margin-top: 6px; background: none; border: 1.5px solid rgba(255,255,255,.2);
   border-radius: 99px; padding: 7px 18px;
-  color: rgba(255,255,255,.55); font-size: .78rem; cursor: pointer; font-family: inherit;
-  transition: color .18s;
+  color: rgba(255,255,255,.5); font-size: .76rem; cursor: pointer;
+  font-family: var(--font); transition: color .18s;
 }
 .splash-cancel:hover { color: #fff; }
 
 /* ================================================================
    RESPONSIVO
 ================================================================ */
-body.device-mobile { --hud-h: 58px; }
-body.device-mobile .hud-logo    { display: none; }
-body.device-mobile #h-device    { display: none !important; }
-body.device-mobile .answers     { grid-template-columns: 1fr; gap: 8px; }
-body.device-mobile .ans         { min-height: 68px; }
+body.device-mobile { --hud-h: 54px; }
+body.device-mobile .hud-logo { display: none; }
+body.device-mobile #h-device { display: none !important; }
+body.device-mobile .answers { grid-template-columns: 1fr; gap: 8px; }
+body.device-mobile .ans { min-height: 72px; font-size: 1rem; }
+body.device-mobile .ans-sym { font-size: 2rem; }
 body.device-mobile .game-bottom { flex-direction: column; }
 body.device-mobile .btn-confirm { width: 100%; }
-body.device-mobile .rank-stats  { grid-template-columns: 1fr 1fr; }
-body.device-mobile .edit-stats  { grid-template-columns: 1fr 1fr; }
-body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem; }
+body.device-mobile .rank-stats { grid-template-columns: 1fr 1fr; }
+body.device-mobile .edit-stats { grid-template-columns: 1fr 1fr; }
+body.device-mobile .pin-digit { width: 32px; height: 42px; font-size: 1.35rem; }
 
 @media (max-width: 680px) {
-  .theme-grid  { grid-template-columns: repeat(2,1fr); }
-  .rank-stats  { grid-template-columns: 1fr 1fr; }
+  .theme-grid { grid-template-columns: repeat(2,1fr); }
+  .rank-stats { grid-template-columns: 1fr 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
 /* ================================================================
-   MODAL CRIAR SALA — popup com cards de tema
+   MODAL CRIAR SALA — Kahoot-style popup
 ================================================================ */
 .modal-create-box {
-  max-width: 480px;
-  padding: 24px 20px;
+  max-width: 460px;
+  padding: 26px 22px;
   gap: 16px;
 }
-
 .modal-create-header {
   text-align: center;
   padding-bottom: 4px;
@@ -861,12 +891,12 @@ body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem;
   margin-bottom: 6px;
 }
 .modal-create-header h2 {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   margin-bottom: 2px;
 }
 .modal-create-header p {
-  font-size: .82rem;
-  color: #888;
+  font-size: .8rem;
+  color: #999;
   margin: 0;
 }
 
@@ -876,7 +906,6 @@ body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-
 .theme-card {
   display: flex;
   flex-direction: column;
@@ -885,55 +914,46 @@ body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem;
   padding: 14px 14px 12px;
   background: #f8f6ff;
   border: 1.5px solid #ede8ff;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font);
   text-align: left;
-  transition: background .15s, border-color .15s, transform .12s;
+  transition: all .15s;
   position: relative;
   overflow: hidden;
 }
-.theme-card::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(70,23,143,.07), transparent);
-  transform: translateX(-100%);
-  transition: transform .4s;
-  pointer-events: none;
-}
-.theme-card:hover::after { transform: translateX(100%); }
 .theme-card:hover {
-  background: #f0ebff;
-  border-color: #c4b5fd;
+  background: #ede8ff;
+  border-color: var(--kahoot-purple-light);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(70,23,143,.15);
 }
 .theme-card:active {
   transform: scale(.97);
-  background: #e8e0ff;
+  background: #e0d4ff;
 }
-
 .theme-card-icon {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   line-height: 1;
   margin-bottom: 4px;
 }
 .theme-card-name {
-  font-size: .88rem;
+  font-size: .86rem;
   font-weight: 700;
-  color: var(--dark);
+  color: var(--kahoot-dark);
   display: block;
 }
 .theme-card-desc {
-  font-size: .7rem;
-  color: #888;
+  font-size: .68rem;
+  color: #999;
   display: block;
   font-weight: 400;
 }
 
 .modal-create-divider {
   text-align: center;
-  font-size: .75rem;
-  color: #bbb;
+  font-size: .73rem;
+  color: #ccc;
   font-weight: 600;
   letter-spacing: .06em;
   position: relative;
@@ -947,7 +967,7 @@ body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem;
   background: #eee;
 }
 .modal-create-divider::before { left: 0; }
-.modal-create-divider::after  { right: 0; }
+.modal-create-divider::after { right: 0; }
 
 /* Celular: 1 coluna */
 @media (max-width: 400px) {
@@ -956,174 +976,90 @@ body.device-mobile .pin-digit   { width: 32px; height: 42px; font-size: 1.35rem;
 }
 
 /* ================================================================
-   MODAL PERFIL — força letras pretas
+   PHOTO CROP — Editor de foto com arrastar + zoom
 ================================================================ */
-#modal-profile .modal-box,
-#modal-profile .modal-box h2,
-#modal-profile .modal-box p,
-#modal-profile .modal-box label,
-#modal-profile .modal-box strong,
-#modal-profile .modal-box span,
-#modal-profile .modal-box .btn-link,
-#modal-profile .modal-box .estat label,
-#modal-profile .modal-box .estat strong,
-#modal-profile .modal-box input {
-  color: #000 !important;
+#photo-crop-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.7); backdrop-filter: blur(10px);
+  padding: 16px;
+  animation: pgIn .18s ease;
 }
-#modal-profile .modal-box .btn-link {
-  color: #000 !important;
-  opacity: .85;
+.crop-modal {
+  background: #fff; color: var(--kahoot-dark);
+  border-radius: var(--radius-xl); padding: 24px 22px;
+  width: 100%; max-width: 340px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  animation: mcIn .25s cubic-bezier(.34,1.2,.64,1);
 }
-#modal-profile .modal-box .btn-primary { color: #fff !important; }
-#modal-profile .modal-box .btn-danger-ghost { color: #b91c1c !important; }
-#modal-profile .modal-box input::placeholder { color: #555 !important; }
-
-/* ================================================================
-   FIRE GIF — substitui o emoji 🔥 do combo
-================================================================ */
-.fire-icon {
-  display: inline-block;
-  width: 1.15em; height: 1.15em;
-  vertical-align: -0.25em;
-  object-fit: contain;
-  filter: drop-shadow(0 0 4px rgba(255,140,0,.45));
-  pointer-events: none;
+.crop-modal h3 {
+  font-size: 1.05rem; font-weight: 800;
+  color: var(--kahoot-purple); margin: 0;
 }
-.combo-pill .fire-icon { width: 1.35em; height: 1.35em; }
-.result-combo .fire-icon { width: 1.25em; height: 1.25em; }
-
-/* ================================================================
-   CROP MODAL — ajuste de foto estilo WhatsApp
-================================================================ */
-.crop-overlay { z-index: 700; }
-
-.crop-box {
-  background: #111;
-  color: #fff;
-  border-radius: 18px;
-  width: 100%;
-  max-width: 420px;
-  max-height: 95dvh;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.6);
+.crop-modal p {
+  font-size: .78rem; color: #888; margin: 0; text-align: center;
 }
-.crop-header { text-align: center; }
-.crop-header h2 {
-  color: #fff;
-  font-size: 1.15rem;
-  font-weight: 800;
-  margin-bottom: 2px;
+.crop-area {
+  width: 280px; height: 280px;
+  position: relative; overflow: hidden;
+  border-radius: var(--radius-lg);
+  cursor: grab; touch-action: none;
+  background: #222;
+  border: 2px solid #e0e0e0;
 }
-.crop-header p {
-  color: rgba(255,255,255,.6);
-  font-size: .8rem;
-}
-
-.crop-stage {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  max-width: 320px;
-  margin: 0 auto;
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  touch-action: none;
-  cursor: grab;
-  user-select: none;
-}
-.crop-stage:active { cursor: grabbing; }
-
-.crop-canvas-wrap {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#crop-img {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: none;
-  max-height: none;
-  pointer-events: none;
-  -webkit-user-drag: none;
-}
-
-/* Máscara escura ao redor do círculo */
-.crop-mask {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at center,
-    transparent 0,
-    transparent calc(50% - 1px),
-    rgba(0,0,0,.6) 50%
-  );
+.crop-area:active { cursor: grabbing; }
+.crop-area canvas {
+  display: block; width: 100%; height: 100%;
 }
 .crop-circle {
-  position: absolute;
-  inset: 0;
+  position: absolute; inset: 4px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255,255,255,.5);
   pointer-events: none;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px rgba(255,255,255,.85) inset;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0);
 }
-
-.crop-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 4px;
+.crop-zoom-row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
 }
-.crop-zoom-ic {
-  color: rgba(255,255,255,.7);
-  font-size: 1.2rem;
-  font-weight: 700;
-  width: 18px;
-  text-align: center;
+.crop-zoom-label {
+  font-size: 1rem; font-weight: 700; color: #999;
+  flex-shrink: 0; width: 18px; text-align: center;
 }
-#crop-zoom {
-  flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 4px;
-  background: rgba(255,255,255,.2);
-  border-radius: 99px;
-  outline: none;
+.crop-slider {
+  flex: 1; height: 6px; -webkit-appearance: none; appearance: none;
+  background: #e0e0e0; border-radius: 99px; outline: none;
 }
-#crop-zoom::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--green-l);
-  cursor: pointer;
-  border: 2px solid #fff;
+.crop-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--kahoot-purple); cursor: pointer;
+  border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
-#crop-zoom::-moz-range-thumb {
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--green-l);
-  cursor: pointer;
-  border: 2px solid #fff;
+.crop-slider::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--kahoot-purple); cursor: pointer;
+  border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
-
 .crop-actions {
-  display: flex;
-  gap: 8px;
+  display: flex; gap: 8px; width: 100%;
 }
-.crop-actions .btn { width: 100%; padding: 12px 16px; }
-.crop-box .btn-ghost {
-  background: rgba(255,255,255,.08);
-  color: #fff;
-  border-color: rgba(255,255,255,.15);
+.crop-btn {
+  flex: 1; padding: 12px; border: none; border-radius: var(--radius);
+  font-family: var(--font); font-weight: 700; font-size: .88rem;
+  cursor: pointer; transition: filter .15s;
 }
-.crop-box .btn-primary {
-  background: var(--green);
-  color: #fff;
+.crop-btn-cancel {
+  background: #f0f0f0; color: #666;
+}
+.crop-btn-cancel:hover { background: #e0e0e0; }
+.crop-btn-ok {
+  background: var(--kahoot-purple); color: #fff;
+  box-shadow: 0 4px 0 var(--kahoot-purple-deep);
+}
+.crop-btn-ok:active { transform: translateY(3px); box-shadow: none; }
+
+/* Celular: crop menor */
+@media (max-width: 360px) {
+  .crop-area { width: 240px; height: 240px; }
 }

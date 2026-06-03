@@ -299,6 +299,18 @@
       "answer": 0,
       "time": 20,
       "difficulty": "medio"
+    },
+    {
+      "question": "Qual é o papel das áreas de preservação ambiental no Brasil?",
+      "options": [
+        "Proteger a biodiversidade e os recursos naturais para as futuras gerações",
+        "Servir apenas para turismo sem restrições",
+        "Ser usadas para desmatamento controlado",
+        "Não ter nenhuma função importante"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
     }
   ],
   "reciclagem": [
@@ -601,6 +613,30 @@
       "answer": 0,
       "time": 20,
       "difficulty": "medio"
+    },
+    {
+      "question": "Qual é uma forma prática de reduzir o lixo em casa?",
+      "options": [
+        "Evitar produtos com embalagens excessivas e reutilizar o que for possível",
+        "Comprar tudo embalado individualmente",
+        "Jogar embalagens no lixo sem separar",
+        "Usar sacolas plásticas novas todo dia"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que fazer com pilhas e baterias usadas para não poluir?",
+      "options": [
+        "Levar a pontos de coleta específicos ou lojas que aceitam",
+        "Jogar no lixo comum ou no vaso",
+        "Enterrar no quintal",
+        "Queimar em fogueira"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
     }
   ],
   "agua": [
@@ -899,6 +935,30 @@
         "Pintura",
         "Congelamento obrigatório",
         "Mistura com óleo"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como podemos ajudar a proteger as matas ciliares?",
+      "options": [
+        "Não desmatar as margens dos rios e apoiar a restauração delas",
+        "Cortar todas as árvores perto de rios para 'limpar'",
+        "Construir casas bem na beira do rio",
+        "Jogar lixo nas margens"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual atitude ajuda a reduzir a poluição dos rios no Brasil?",
+      "options": [
+        "Não jogar lixo, óleo ou esgoto sem tratamento nos rios",
+        "Lavar carros e roupas diretamente no rio",
+        "Despejar restos de tinta e produtos químicos na água",
+        "Ignorar vazamentos de esgoto"
       ],
       "answer": 0,
       "time": 20,
@@ -1205,6 +1265,30 @@
       "answer": 0,
       "time": 20,
       "difficulty": "medio"
+    },
+    {
+      "question": "Qual é uma forma de ajudar a combater o aquecimento global no dia a dia?",
+      "options": [
+        "Reduzir o uso de carro particular e optar por transporte sustentável",
+        "Aumentar o uso de ar condicionado e aquecedores",
+        "Queimar folhas e lixo no quintal",
+        "Comprar produtos que viajam muito de avião"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que o Brasil pode fazer para ajudar no clima global?",
+      "options": [
+        "Proteger a Amazônia e aumentar o uso de energias renováveis",
+        "Desmatar mais para plantar soja",
+        "Queimar mais carvão e petróleo",
+        "Ignorar acordos internacionais"
+      ],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil"
     }
   ],
   "energia": [
@@ -1387,6 +1471,30 @@
       "answer": 0,
       "time": 25,
       "difficulty": "dificil"
+    },
+    {
+      "question": "Aproximadamente qual porcentagem da matriz elétrica brasileira vem de fontes renováveis (dados recentes)?",
+      "options": [
+        "Cerca de 85% ou mais",
+        "Menos de 30%",
+        "Cerca de 50%",
+        "Quase 0%, só carvão"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como podemos ajudar a promover energias limpas?",
+      "options": [
+        "Apoiar políticas de energia solar e eólica e economizar energia em casa",
+        "Usar só carvão e diesel em casa",
+        "Desligar painéis solares",
+        "Ignorar o consumo de energia"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
     }
   ],
   "sustentabilidade": [
@@ -1565,6 +1673,224 @@
         "Descartar tudo rapidamente",
         "Comprar sem precisar",
         "Escolher sempre mais embalagem"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que é consumo consciente?",
+      "options": [
+        "Comprar apenas o necessário, escolhendo produtos éticos e sustentáveis",
+        "Comprar tudo que aparece na propaganda",
+        "Desperdiçar comida e produtos",
+        "Ignorar o impacto das compras"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual é uma das melhores formas de ajudar a sustentabilidade no Brasil?",
+      "options": [
+        "Apoiar a preservação de biomas como Amazônia, Cerrado e Mata Atlântica",
+        "Apoiar o desmatamento ilegal",
+        "Usar agrotóxicos sem controle",
+        "Desperdiçar água e energia sem pensar"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como o reflorestamento ajuda a sustentabilidade?",
+      "options": [
+        "Recupera solos, absorve CO2, protege biodiversidade e regula o clima",
+        "Aumenta a erosão e poluição",
+        "Diminui a quantidade de oxigênio",
+        "Não tem impacto positivo"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    }
+  ],
+  "acoes": [
+    {
+      "question": "Qual é uma das melhores formas de ajudar a reduzir o desmatamento?",
+      "options": [
+        "Comprar produtos de origem sustentável e certificados",
+        "Usar mais papel descartável",
+        "Ignorar queimadas na vizinhança",
+        "Comprar madeira ilegal barata"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como podemos ajudar a economizar água no dia a dia?",
+      "options": [
+        "Tomar banhos de 5 minutos e consertar vazamentos",
+        "Deixar a torneira aberta o tempo todo",
+        "Lavar calçada com mangueira todos os dias",
+        "Usar água potável para regar plantas sem necessidade"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Qual atitude ajuda a combater as mudanças climáticas?",
+      "options": [
+        "Usar transporte coletivo, bicicleta ou caminhar mais",
+        "Deixar o carro ligado em ponto morto",
+        "Queimar lixo no quintal",
+        "Usar ar-condicionado o dia todo sem necessidade"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que significa 'recusar' no conceito dos 5 R's da sustentabilidade?",
+      "options": [
+        "Evitar comprar produtos desnecessários ou com muita embalagem",
+        "Jogar tudo no lixo comum",
+        "Comprar mais coisas sempre",
+        "Usar sacolas plásticas descartáveis"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como ajudar na preservação da biodiversidade brasileira?",
+      "options": [
+        "Não comprar animais silvestres ilegais e apoiar ONGs de conservação",
+        "Capturar pássaros da natureza para gaiola",
+        "Plantar espécies exóticas invasoras",
+        "Derrubar árvores para fazer churrasco"
+      ],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil"
+    },
+    {
+      "question": "Qual é uma boa prática para reduzir a pegada de carbono?",
+      "options": [
+        "Reduzir o consumo de carne vermelha e preferir alimentos locais",
+        "Comprar tudo importado de avião",
+        "Deixar luzes acesas 24h",
+        "Usar sacolas plásticas novas todos os dias"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "O que podemos fazer com restos de comida para ajudar o meio ambiente?",
+      "options": [
+        "Fazer compostagem em casa ou na escola",
+        "Jogar no lixo comum ou no rio",
+        "Queimar no quintal",
+        "Deixar apodrecer no chão"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Como ajudar a proteger os oceanos e rios do plástico?",
+      "options": [
+        "Participar de mutirões de limpeza e evitar plásticos descartáveis",
+        "Jogar embalagens no mar ou rio",
+        "Usar canudos plásticos sempre",
+        "Ignorar lixo nas praias"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual atitude em casa ajuda a preservar a energia e o clima?",
+      "options": [
+        "Trocar lâmpadas por LED e desligar aparelhos em stand-by",
+        "Deixar TV e computador ligados o dia todo",
+        "Usar aquecedor elétrico sem isolamento",
+        "Abrir geladeira várias vezes sem necessidade"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "Por que é importante denunciar crimes ambientais?",
+      "options": [
+        "Ajuda as autoridades a proteger florestas, rios e animais",
+        "Não faz diferença nenhuma",
+        "Só serve para multar vizinhos",
+        "Aumenta a poluição"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Uma forma de ajudar o meio ambiente ao comprar produtos é:",
+      "options": [
+        "Escolher produtos com selo verde ou de empresas sustentáveis",
+        "Comprar o mais barato sem olhar a origem",
+        "Preferir sempre embalagens plásticas",
+        "Escolher produtos com obsolescência programada"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como podemos ajudar na recuperação de áreas degradadas?",
+      "options": [
+        "Participar de projetos de reflorestamento e plantio de árvores nativas",
+        "Desmatar mais para 'limpar' a área",
+        "Jogar lixo em terrenos baldios",
+        "Usar fogo para limpar mato"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Qual é o impacto positivo de usar sacolas reutilizáveis?",
+      "options": [
+        "Reduz a quantidade de plástico descartável nos oceanos e aterros",
+        "Aumenta o lixo plástico",
+        "Não tem nenhum efeito",
+        "Faz as sacolas plásticas durarem mais"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil"
+    },
+    {
+      "question": "O que podemos fazer para apoiar a agricultura sustentável?",
+      "options": [
+        "Comprar de agricultores locais e produtos orgânicos quando possível",
+        "Comprar só alimentos importados com muita embalagem",
+        "Desperdiçar comida sem pensar",
+        "Apoiar monoculturas com agrotóxicos excessivos"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio"
+    },
+    {
+      "question": "Como a educação ambiental ajuda o meio ambiente?",
+      "options": [
+        "Ensinando as pessoas a fazerem escolhas conscientes e multiplicarem o conhecimento",
+        "Não ajuda em nada",
+        "Só serve para decorar fatos",
+        "Aumenta o consumo desnecessário"
       ],
       "answer": 0,
       "time": 20,

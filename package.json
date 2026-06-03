@@ -1,0 +1,17 @@
+{
+  "name": "meiokahoot",
+  "version": "1.0.0",
+  "description": "Um kahoot com o tema do meio ambiente para apresentação na escola",
+  "main": "Server/server.js",
+  "scripts": {
+    "start": "node Server/server.js",
+    "logs": "node Server/view-logs.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  },
+  "keywords": ["kahoot", "meio-ambiente", "quiz", "jogo-educativo"],
+  "author": "JONATHANGABR",
+  "license": "ISC"
+}

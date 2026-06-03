@@ -1,14 +1,16 @@
-/* MeioKahoot — Game.js (minimalista, competitivo) */
+/* MeioKahoot — Game.js v5.0 (sem combo) */
 const GameUI = (() => {
   let _picked = -1, _confirmed = false, _already = false;
-  let _score = 0, _combo = 0, _comboMax = 0, _correct = 0, _total = 0;
-  let _qid = null, _comboTO = null, _lastCorrect = -1, _waitingResult = false;
+  let _score = 0, _correct = 0, _total = 0;
+  let _qid = null, _lastCorrect = -1, _waitingResult = false;
+  let _active = false; // flag: estamos em jogo?
 
   function onQuestion(data) {
     _picked = -1; _confirmed = false; _already = data.alreadyAnswered || false;
     _waitingResult = false; _lastCorrect = -1;
     _qid = data.qid; _total++;
-    // Esconde overlay de resultado da rodada anterior
+    _active = true;
+
     const ov = document.getElementById('result-overlay');
     if (ov) ov.classList.remove('show');
 
@@ -21,7 +23,7 @@ const GameUI = (() => {
   }
 
   function pick(idx) {
-    if (_confirmed || _already) return;
+    if (_confirmed || _already || !_active) return;
     Sounds.play('click');
     _picked = idx;
     for (let i = 0; i < 4; i++) document.getElementById(`ans-${i}`)?.classList.remove('picked');
@@ -33,7 +35,7 @@ const GameUI = (() => {
   }
 
   function confirm() {
-    if (_confirmed || _picked < 0 || _already) return;
+    if (_confirmed || _picked < 0 || _already || !_active) return;
     _confirmed = true;
     Sounds.stop('timer');
     Sounds.play('click');
@@ -45,49 +47,55 @@ const GameUI = (() => {
   }
 
   function _onTimeout() {
+    if (!_active) return; // se já saiu, não faz nada
     Sounds.stop('timer');
     _lock('Tempo esgotado');
     if (!_confirmed) { _confirmed = true; SocketClient.sendAnswer(-1); }
   }
 
   function onReveal(data) {
+    if (!_active) return;
     UI.stopTimer(); Sounds.stop('timer');
     UI.revealAnswer(data.correct);
     _lastCorrect = data.correct;
     const was = _picked === data.correct;
     if (was) { Sounds.play('correct'); _correct++; }
-    else      { Sounds.play('wrong'); }
-    // O overlay de resultado será mostrado quando chegar o 'result' do servidor
-    // Se não vier (reconexão etc), mostra com dados locais
+    else     { Sounds.play('wrong'); }
     if (!_waitingResult) {
-      UI.showResult(was, 0, _combo);
+      UI.showResult(was, 0);
     }
     _waitingResult = true;
   }
 
   function onScoreSync(data) {
+    if (!_active) return;
     _waitingResult = false;
-    _score    = data.totalScore || 0;
-    _combo    = data.combo      || 0;
-    _comboMax = Math.max(_comboMax, _combo);
+    _score = data.totalScore || 0;
     const pts = data.earned || 0;
     const was = _lastCorrect >= 0 && _picked === _lastCorrect;
 
     UI.updateScore(_score);
-    UI.showResult(was, pts, _combo);
-    if (_combo >= 2) UI.showCombo(_combo);
+    UI.showResult(was, pts);
   }
 
   function onGameOver(rank) {
     Sounds.stopAll(); Sounds.play('win'); UI.stopTimer();
-    Profile.recordMatch({ score: _score, correct: _correct, total: _total, comboMax: _comboMax });
+    Profile.recordMatch({ score: _score, correct: _correct, total: _total, comboMax: 0 });
     _reset();
     Podium.show(rank);
   }
 
   function _reset() {
     _picked = -1; _confirmed = false; _waitingResult = false; _lastCorrect = -1;
-    _score = 0; _combo = 0; _comboMax = 0; _correct = 0; _total = 0; _qid = null;
+    _score = 0; _correct = 0; _total = 0; _qid = null;
+    _active = false;
+  }
+
+  /* Chamado pelo logout — para tudo imediatamente */
+  function forceReset() {
+    _reset();
+    UI.stopTimer();
+    UI.hideResult();
   }
 
   function _lock(msg) {
@@ -98,7 +106,7 @@ const GameUI = (() => {
     if (cf) cf.disabled = true;
   }
 
-  return { pick, confirm, onQuestion, onReveal, onScoreSync, onGameOver };
+  return { pick, confirm, onQuestion, onReveal, onScoreSync, onGameOver, forceReset };
 })();
 
 /* ── Pódio ───────────────────────────────────────────────── */
@@ -141,7 +149,6 @@ const Podium = (() => {
     if (!stage) return;
     stage.innerHTML = '';
 
-    // ordem visual: 2 | 1 | 3
     const order  = [1, 0, 2];
     const bClass = ['b2', 'b1', 'b3'];
     const medals = ['🥈', '🥇', '🥉'];
@@ -153,11 +160,9 @@ const Podium = (() => {
       const slot = document.createElement('div');
       slot.className = 'pod-slot';
 
-      // Avatar
       const avSize = pos === 0 ? 'sz-lg' : 'sz-md';
       slot.appendChild(_av(p, avSize));
 
-      // Bloco
       const blk = document.createElement('div');
       blk.className = `pod-block ${bClass[vi]}`;
       blk.innerHTML = `

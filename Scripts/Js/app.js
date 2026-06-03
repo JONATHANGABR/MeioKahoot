@@ -95,8 +95,31 @@ const Auth = {
 
   logout() {
     AutoLogin.clear();
+
+    // Para tudo do jogo (timer, sons, overlays, estado)
+    GameUI.forceReset();
     Sounds.stopAll();
+
+    // Desconecta da sala e limpa estado do socket
+    SocketClient.leaveGame();
+
+    // Fecha qualquer modal aberto
     Modal.close('modal-profile');
+    Modal.close('modal-friends');
+    Modal.close('modal-create');
+    Modal.close('modal-credits');
+    Podium.hide();
+
+    // Reseta o HUD para estado de visitante
+    UI.resetHud();
+
+    // Limpa campos de login
+    const lu = document.getElementById('login-user');
+    const lp = document.getElementById('login-pass');
+    if (lu) lu.value = '';
+    if (lp) lp.value = '';
+
+    // Volta para a tela de auth
     UI.showPage('p-auth');
     Auth.showLogin();
     UI.toast('Você saiu da conta.');

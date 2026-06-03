@@ -1,1 +1,58 @@
+/* ================================================================
+   MeioKahoot — Ranking v5.0  (Kahoot-Authentic Style)
+================================================================ */
 
+.rank-wrap {
+  width: min(760px, 96vw); max-height: 86dvh;
+  overflow: hidden; display: flex; flex-direction: column; gap: 12px;
+}
+.rank-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.rank-header h1 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: .02em; }
+.eyebrow {
+  font-size: .62rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-muted);
+  display: block; margin-bottom: 2px;
+}
+
+.rank-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.rstat {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 11px;
+}
+.rstat label { display: block; font-size: .6rem; color: var(--text-muted); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 3px; }
+.rstat strong { font-size: 1.05rem; font-weight: 800; }
+
+.rank-tabs { display: flex; gap: 6px; }
+.rtab {
+  padding: 7px 16px; border-radius: 99px;
+  background: transparent; border: 1.5px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.55); font-size: .78rem; font-weight: 700;
+  cursor: pointer; font-family: var(--font); transition: all .15s;
+}
+.rtab.active { background: var(--kahoot-purple-light); color: #fff; border-color: var(--kahoot-purple-light); }
+
+.rank-list { overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.rank-row {
+  display: grid; grid-template-columns: 48px 1fr auto;
+  align-items: center; gap: 10px; padding: 11px 13px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  animation: pgIn .2s ease;
+}
+.rank-row.top-1 { border-left: 3px solid #fbbf24; }
+.rank-row.top-2 { border-left: 3px solid #cbd5e1; }
+.rank-row.top-3 { border-left: 3px solid #cd7f32; }
+.rank-pos { font-size: 1.05rem; font-weight: 800; text-align: center; color: var(--text-muted); }
+.rank-player { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.rank-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--kahoot-purple); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 700; overflow: hidden;
+}
+.rank-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.rank-player strong { display: block; font-weight: 700; font-size: .86rem; }
+.rank-player span { font-size: .68rem; color: var(--text-muted); }
+.rank-score { font-weight: 800; font-size: .9rem; white-space: nowrap; }
+.rank-score span { display: block; font-size: .6rem; color: var(--text-muted); font-weight: 500; }

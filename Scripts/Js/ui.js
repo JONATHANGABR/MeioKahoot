@@ -1,4 +1,4 @@
-/* MeioKahoot — UI.js v4.0 */
+/* MeioKahoot — UI.js v5.0 */
 const UI = {
   _cur: null,
 
@@ -26,7 +26,7 @@ const UI = {
     if (ro) ro.classList.remove('show');
 
     // Reset chips
-    hide('h-device','h-phase','h-players','h-pin','timer-bar','timer-circle-wrap','score-pill','combo-pill');
+    hide('h-device','h-phase','h-players','h-pin','timer-bar','timer-circle-wrap','score-pill');
 
     // Logo: só em auth e home
     const logo = document.getElementById('hud-logo');
@@ -99,6 +99,7 @@ const UI = {
 
   stopTimer() {
     clearInterval(this._int); clearTimeout(this._to);
+    this._int = null; this._to = null;
     const fill = document.getElementById('timer-fill');
     const num  = document.getElementById('timer-num');
     const ring = document.getElementById('timer-ring');
@@ -115,34 +116,20 @@ const UI = {
     if (pill) { pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump'); }
   },
 
-  // ── Resultado overlay — SEM delay automático
-  //    O servidor decide quando vem a próxima questão.
-  //    O overlay fica visível ATÉ a próxima questão chegar
-  //    (onQuestion() vai escondê-lo automaticamente).
-  showResult(correct, pts, combo) {
+  // ── Resultado overlay ─────────────────────────────────────
+  showResult(correct, pts) {
     const ov    = document.getElementById('result-overlay');
     const icon  = document.getElementById('result-icon');
     const label = document.getElementById('result-label');
     const ptsEl = document.getElementById('result-pts');
-    const cmbEl = document.getElementById('result-combo');
     if (!ov) return;
 
     ov.className = 'result-overlay show ' + (correct ? 'correct' : 'wrong');
     if (icon)  icon.textContent  = correct ? '✔' : '✗';
     if (label) label.textContent = correct ? 'Correto!' : 'Incorreto!';
     if (ptsEl) ptsEl.textContent = (correct && pts > 0) ? `+${pts.toLocaleString('pt-BR')} pts` : '';
-    if (cmbEl) {
-      if (correct && combo >= 2) {
-        cmbEl.innerHTML = `<img class="fire-icon" src="/Assets/Animations/Fire.gif" alt="combo"/> Combo x${combo}`;
-      } else {
-        cmbEl.textContent = '';
-      }
-    }
 
     if (navigator.vibrate) navigator.vibrate(correct ? [40] : [80, 40, 80]);
-
-    // NÃO tem setTimeout aqui — o overlay fica até a próxima questão.
-    // Isso faz a transição parecer imediata e conectada.
   },
 
   hideResult() {
@@ -150,22 +137,10 @@ const UI = {
     if (ov) ov.classList.remove('show');
   },
 
-  flash(correct) { this.showResult(correct, 0, 0); },
-
-  // ── Combo pill ──────────────────────────────────────────────
-  showCombo(n) {
-    const el  = document.getElementById('combo-pill');
-    const txt = document.getElementById('combo-txt');
-    if (!el) return;
-    if (txt) txt.textContent = 'x' + n;
-    el.style.display = 'flex';
-    clearTimeout(this._comboTO);
-    this._comboTO = setTimeout(() => { el.style.display = 'none'; }, 2000);
-  },
+  flash(correct) { this.showResult(correct, 0); },
 
   // ── Questão ────────────────────────────────────────────────
   renderQuestion(q, n, total) {
-    // Esconde resultado IMEDIATAMENTE ao chegar nova questão
     this.hideResult();
 
     const txt  = document.getElementById('q-txt');
@@ -208,13 +183,11 @@ const UI = {
     if (cf) cf.disabled = true;
   },
 
-  // ── PIN — separado em dígitos ──────────────────────────────
+  // ── PIN ────────────────────────────────────────────────────
   setPin(pin) {
-    // HUD chip (compacto)
     const chip = document.getElementById('h-pin');
     if (chip) chip.textContent = pin;
 
-    // Card do lobby (dígitos separados — nunca transborda)
     const digits = String(pin).padStart(6, '0').split('');
     digits.forEach((d, i) => {
       const el = document.getElementById(`pin-d${i}`);
@@ -232,6 +205,39 @@ const UI = {
     if (!e) return;
     e.textContent = online ? '● Online' : '● Offline';
     e.className   = 'net-badge' + (online ? '' : ' off');
+  },
+
+  // ── Reset HUD (usado no logout) ───────────────────────────
+  resetHud() {
+    // Reseta nome e avatar para visitante
+    const name = document.getElementById('u-name');
+    const xp   = document.getElementById('u-xp');
+    const avL  = document.getElementById('av-letter');
+    const avP  = document.getElementById('av-photo');
+    if (name) name.textContent = 'Visitante';
+    if (xp)   xp.textContent   = '0 pts · Nível 1';
+    if (avL)  avL.textContent  = '?';
+    if (avP)  { avP.src = ''; avP.style.display = 'none'; }
+
+    // Reseta home strip
+    const hn = document.getElementById('home-name');
+    const hi = document.getElementById('home-initial');
+    const ha = document.getElementById('home-avatar');
+    if (hn) hn.textContent = '---';
+    if (hi) hi.textContent = '?';
+    if (ha) { ha.src = ''; ha.style.display = 'none'; }
+
+    // Reseta stats
+    ['st-best','st-games','st-acc','st-combo'].forEach(id => {
+      const e = document.getElementById(id);
+      if (e) e.textContent = '0';
+    });
+
+    // Esconde score pill
+    const sp = document.getElementById('score-pill');
+    if (sp) sp.style.display = 'none';
+    const sn = document.getElementById('score-num');
+    if (sn) sn.textContent = '0';
   },
 
   // ── Toast ──────────────────────────────────────────────────
