@@ -76,12 +76,19 @@ const GameUI = (() => {
 
     UI.updateScore(_score);
     UI.showResult(was, pts);
+    
+    // DETECÇÃO DE FIM DE JOGO
+    const isLast = data.isLastQuestion === true || (data.n && data.total && data.n >= data.total);
+    if (isLast) {
+      setTimeout(() => { if (_active) GameUI.onGameOver(data.rank || []); }, 2200);
+    }
   }
 
   function onGameOver(payload) {
     const rank = Array.isArray(payload) ? payload : (payload?.rank || []);
     const stats = Array.isArray(payload) ? null : (payload?.stats || null);
     Sounds.stopAll(); Sounds.play('win'); UI.stopTimer();
+    UI.hideResult();
     Profile.recordMatch({ score: _score, correct: _correct, total: _total, comboMax: 0 });
     _reset();
     Podium.show(rank, stats);
