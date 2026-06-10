@@ -121,154 +121,102 @@ const GameUI = (() => {
 /* ── Pódio ───────────────────────────────────────────────── */
 const Podium = (() => {
 
+  function confettiFall() {
+    const colors = ['#facc15', '#ef4444', '#3b82f6', '#22c55e', '#a855f7', '#ec4899'];
+    for (let i = 0; i < 100; i++) {
+      const div = document.createElement('div');
+      div.className = 'confetti';
+      div.style.left = Math.random() * 100 + 'vw';
+      div.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      div.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      div.style.animationDelay = (Math.random() * 2) + 's';
+      div.style.opacity = Math.random();
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 5000);
+    }
+  }
+
   function show(rank, stats) {
     const sorted = [...rank].sort((a, b) => (a.position || 999) - (b.position || 999) || (b.score || 0) - (a.score || 0));
-    const el = document.getElementById('modal-podium');
-    if (!el) return;
+    const page = document.getElementById('p-podium');
+    if (!page) return;
 
-    _setTitle(sorted, stats);
-    _buildTop3(sorted);
-    _buildStats(sorted, stats);
-    _buildRest(sorted);
-    _buildActions();
-
-    el.style.display = 'flex';
-    setTimeout(() => _revealRest(), 400);
-  }
-
-  function hide() {
-    const el = document.getElementById('modal-podium');
-    if (el) el.style.display = 'none';
-  }
-
-
-  function _setTitle(sorted, stats) {
+    // Título
     const title = document.getElementById('podium-title');
-    if (!title) return;
-    const topTie = stats?.topTie || sorted.filter(p => (p.score || 0) === (sorted[0]?.score || -1)).length > 1;
-    title.textContent = topTie ? 'Resultado Final — Empate!' : 'Resultado Final';
-  }
-
-  function _ensureStatsBox() {
-    let box = document.getElementById('podium-stats');
-    const stage = document.getElementById('podium-top3');
-    if (!box && stage) {
-      box = document.createElement('div');
-      box.id = 'podium-stats';
-      box.className = 'podium-stats';
-      stage.insertAdjacentElement('afterend', box);
+    if (title) {
+      const topTie = stats?.topTie || sorted.filter(p => (p.score || 0) === (sorted[0]?.score || -1)).length > 1;
+      title.textContent = topTie ? 'Resultado Final — Empate!' : 'Resultado Final';
     }
-    return box;
-  }
 
-  function _buildStats(sorted, stats) {
-    const box = _ensureStatsBox();
-    if (!box) return;
-
-    const humans = sorted.filter(p => !p.isBot);
-    const totalAnswers = stats?.totalAnswers ?? humans.reduce((s, p) => s + (p.answers || 0), 0);
-    const totalCorrect = stats?.totalCorrect ?? humans.reduce((s, p) => s + (p.correct || 0), 0);
-    const accuracy = stats?.accuracy ?? (totalAnswers ? Math.round(totalCorrect / totalAnswers * 100) : 0);
-    const questions = stats?.questions ?? '—';
-    const topTie = stats?.topTie || sorted.filter(p => (p.score || 0) === (sorted[0]?.score || -1)).length > 1;
-
-    box.innerHTML = `
-      ${topTie ? '<div class="podium-tie-banner" style="grid-column:1/-1">🤝 Empate detectado no placar!</div>' : ''}
-      <div class="podium-stat"><label>Jogadores</label><strong>${sorted.length}</strong></div>
-      <div class="podium-stat"><label>Perguntas</label><strong>${questions}</strong></div>
-      <div class="podium-stat"><label>Acertos</label><strong>${totalCorrect}/${totalAnswers}</strong></div>
-      <div class="podium-stat"><label>Precisão</label><strong>${accuracy}%</strong></div>
-    `;
-  }
-
-  function _av(p, size) {
-    const letter = (p.name?.[0] || '?').toUpperCase();
-    const div = document.createElement('div');
-    div.className = `pod-av ${size}`;
-    if (p.photo) {
-      const img = document.createElement('img');
-      img.src = p.photo; img.onerror = () => { img.remove(); div.textContent = letter; };
-      div.appendChild(img);
-    } else {
-      div.textContent = letter;
-    }
-    return div;
-  }
-
-  function _buildTop3(sorted) {
-    const stage = document.getElementById('podium-top3');
-    if (!stage) return;
-    stage.innerHTML = '';
-
-    const order  = [1, 0, 2];
-    const bClass = ['b2', 'b1', 'b3'];
-    const medals = ['🥈', '🥇', '🥉'];
-
-    order.forEach((pos, vi) => {
-      const p = sorted[pos];
+    // Stage (Top 3)
+    const stage = document.getElementById('podium-stage');
+    if (stage) {
+      stage.innerHTML = '';
+    const order = [2, 1, 0]; // 3º, 2º, 1º
+    const bClass = ['b3', 'b2', 'b1'];
+    
+    order.forEach((posIdx, i) => {
+      const p = sorted[posIdx];
       if (!p) return;
 
       const slot = document.createElement('div');
-      slot.className = 'pod-slot';
+      slot.className = 'pod-winner-slot';
+      if (posIdx === 0) slot.classList.add('champion'); // Adiciona aura ao 1º lugar
+      
+      const av = document.createElement('div');
+      av.className = 'pod-winner-av';
+      if (p.photo) {
+        const img = document.createElement('img');
+        img.src = p.photo;
+        av.appendChild(img);
+      } else {
+        av.textContent = (p.name?.[0] || '?').toUpperCase();
+      }
 
-      const avSize = pos === 0 ? 'sz-lg' : 'sz-md';
-      slot.appendChild(_av(p, avSize));
-
-      const blk = document.createElement('div');
-      blk.className = `pod-block ${bClass[vi]}`;
-      blk.innerHTML = `
-        <span class="pod-medal">${p.tie ? '🤝' : medals[vi]}</span>
-        <span class="pod-position">${p.position ? p.position + 'º lugar' : ''}</span>
-        <span class="pod-name">${p.name || '?'}${p.isBot ? ' 🤖' : ''}</span>
-        <span class="pod-score">${(p.score || 0).toLocaleString('pt-BR')} pts</span>
+      const block = document.createElement('div');
+      block.className = `pod-winner-block ${bClass[i]}`;
+      block.innerHTML = `
+        <div class="pod-winner-name">${posIdx === 0 ? '👑 ' : ''}${p.name || 'Jogador'}</div>
+        <div class="pod-winner-score">${(p.score || 0).toLocaleString('pt-BR')} pts</div>
       `;
-      slot.appendChild(blk);
+
+      slot.appendChild(av);
+      slot.appendChild(block);
       stage.appendChild(slot);
+
+      // Animação sequencial
+      setTimeout(() => slot.classList.add('show'), i * 800);
     });
+
+    }
+
+    // Stats Grid
+    const statsEl = document.getElementById('podium-stats');
+    if (statsEl) {
+      const humans = sorted.filter(p => !p.isBot);
+      const totalAnswers = stats?.totalAnswers ?? humans.reduce((s, p) => s + (p.answers || 0), 0);
+      const totalCorrect = stats?.totalCorrect ?? humans.reduce((s, p) => s + (p.correct || 0), 0);
+      const accuracy = stats?.accuracy ?? (totalAnswers ? Math.round(totalCorrect / totalAnswers * 100) : 0);
+      
+      statsEl.innerHTML = `
+        <div class="pod-stat-item"><label>Jogadores</label><strong>${sorted.length}</strong></div>
+        <div class="pod-stat-item"><label>Perguntas</label><strong>${stats?.questions || '—'}</strong></div>
+        <div class="pod-stat-item"><label>Acertos</label><strong>${totalCorrect}/${totalAnswers}</strong></div>
+        <div class="pod-stat-item"><label>Precisão</label><strong>${accuracy}%</strong></div>
+      `;
+    }
+
+    UI.showPage('p-podium');
+    confettiFall();
+    
+    // Confetti extra para o 1º lugar
+    setTimeout(() => confettiFall(), 1600); 
   }
 
-  function _buildRest(sorted) {
-    const list = document.getElementById('podium-rest');
-    if (!list) return;
-    list.innerHTML = '';
-    sorted.slice(3).forEach((p, i) => {
-      const row = document.createElement('div');
-      row.className = 'pod-row' + (p.tie ? ' tie' : '');
-      const av = _av(p, '');
-      av.style.cssText = 'width:32px;height:32px;font-size:.82rem;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;flex-shrink:0;';
-      row.innerHTML = `<span class="pod-row-pos">#${p.position || (i + 4)}</span>`;
-      row.appendChild(av);
-      row.insertAdjacentHTML('beforeend', `
-        <span class="pod-row-name">${p.name || 'Jogador'}${p.isBot ? ' 🤖' : ''}</span>
-        <span class="pod-row-score">${(p.score || 0).toLocaleString('pt-BR')} pts</span>
-      `);
-      list.appendChild(row);
-    });
-  }
-
-  function _revealRest() {
-    document.querySelectorAll('.pod-row').forEach((row, i) => {
-      setTimeout(() => row.classList.add('in'), i * 150);
-    });
-  }
-
-  function _buildActions() {
-    const wrap = document.getElementById('podium-actions');
-    if (!wrap) return;
-    wrap.innerHTML = '';
-
-    const play = document.createElement('button');
-    play.className = 'pod-action primary';
-    play.textContent = 'Jogar de novo';
-    play.onclick = () => { Podium.hide(); Sounds.stopAll(); Sounds.playBg('lobby'); UI.showPage('p-home'); };
-
-    const leave = document.createElement('button');
-    leave.className = 'pod-action ghost';
-    leave.textContent = 'Sair';
-    leave.onclick = () => { Podium.hide(); Sounds.stopAll(); Sounds.playBg('lobby'); UI.showPage('p-home'); };
-
-    wrap.appendChild(play);
-    wrap.appendChild(leave);
+  function hide() {
+    UI.showPage('p-home');
+    Sounds.stopAll();
+    Sounds.playBg('lobby');
   }
 
   return { show, hide };
@@ -276,7 +224,7 @@ const Podium = (() => {
 
 /* ── HomeUI ──────────────────────────────────────────────── */
 const HomeUI = (() => {
-  let _theme = 'ciencias', _diff = 'normal';
+  let _theme = 'unificado', _diff = 'facil';
 
   function showJoin() {
     hideCreateMenu();
@@ -326,11 +274,16 @@ const HomeUI = (() => {
   function startGame() { Sounds.play('click'); SocketClient.startGame(); }
 
   function setDiff(btn, diff) {
-    _diff = diff === 'hard' ? 'hard' : 'normal';
+    _diff = diff;
     SocketClient.setDifficulty?.(_diff);
     document.querySelectorAll('.diff-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    UI.toast(_diff === 'hard' ? 'Modo difícil: mais questões (12)' : 'Modo normal: menos questões (6)');
+    const msg = {
+      facil: 'Modo fácil: apenas questões simples (6)',
+      medio: 'Modo médio: questões simples e difíceis (12)',
+      extremo: 'Modo extremo: todas as questões disponíveis'
+    }[diff] || 'Dificuldade alterada';
+    UI.toast(msg);
   }
 
   function goRanking() {
@@ -504,7 +457,7 @@ const RankingBoard = (() => {
       const meta = p.games
         ? `<span>🎮 ${p.games} · 🏆 ${p.wins || 0} · 🥉 ${p.podiums || 0} · média ${(p.avgScore || 0).toLocaleString('pt-BR')} · tema ${_themeName(p.favoriteTheme || p.theme || '')}</span>`
         : `<span>${p.theme ? 'Tema: ' + _themeName(p.theme) : ''}${p.tie ? ' · 🤝 empate' : ''}${p.date ? ' · ' + new Date(p.date).toLocaleDateString('pt-BR') : ''}</span>`;
-      return `<div class="rank-row ${cls}">
+      return `<div class="rank-row ${cls}" style="animation-delay:${i * 50}ms">
         <span class="rank-pos">${p.position ? '#' + p.position : med}</span>
         <div class="rank-player">${av}<div>
           <strong>${_esc(p.name || 'Jogador')} ${badges}</strong>

@@ -1,20 +1,27 @@
-/* MeioKahoot — socket.js v5.1 */
+/* MeioKahoot — socket.js v5.2 */
 const socket = io(window.location.origin, {
   reconnection: true, reconnectionAttempts: 12, reconnectionDelay: 1500, timeout: 8000,
 });
 
+// Tornar o socket acessível globalmente para outros módulos (como Profile.js)
+window.mkSocket = socket;
+
 let _lu = '', _lp = '';
 
 const SocketClient = {
-  _pin: null, _isHost: false, _withBots: false, _qid: null, _inLobby: false, _difficulty: 'normal',
-  _loggedIn: false, // ← flag de sessão
+  _pin: null, _isHost: false, _withBots: false, _qid: null, _inLobby: false, _difficulty: 'facil',
+  _loggedIn: false,
+
+  // Método auxiliar para emitir eventos de forma centralizada
+  emit(event, data) {
+    socket.emit(event, data);
+  },
 
   connect() {
     socket.on('connect',    () => UI.setNetStatus(true));
     socket.on('disconnect', () => { UI.setNetStatus(false); UI.toast('Conexão perdida. Reconectando...'); });
     socket.on('reconnect',  () => {
       UI.setNetStatus(true); UI.toast('Reconectado!');
-      // Só tenta reentrar se estiver logado E tiver pin
       if (this._loggedIn && this._pin) this.joinRoom(this._pin);
     });
 
@@ -44,8 +51,6 @@ const SocketClient = {
       if (wasAutoLogin) AutoLogin.clear();
       Splash.hide();
 
-      // Correção mobile/autologin: se o login falhar antes de uma página ser exibida,
-      // força a volta para a tela de login em vez de deixar a tela vazia.
       const showLogin = () => {
         UI.showPage('p-auth');
         Auth.showLogin();
@@ -83,7 +88,7 @@ const SocketClient = {
     socket.on('matchStarting', () => {});
 
     socket.on('q', data => {
-      if (!this._loggedIn || !this._pin) return; // ← IGNORA se deslogou
+      if (!this._loggedIn || !this._pin) return;
       this._inLobby = false;
       this._qid = data.qid;
       Sounds.stopBg();
@@ -111,6 +116,12 @@ const SocketClient = {
       GameUI.onGameOver(payload);
     });
 
+    socket.on('profileUpdated', data => {
+      if (!this._loggedIn) return;
+      Profile.setFromAuth(data);
+      UI.toast('Perfil sincronizado com servidor! ✅');
+    });
+
     socket.on('leaderboardData', p => RankingBoard.render(p));
     socket.on('roomsData', data => RoomsBrowser.render(data));
     socket.on('roomInvite', data => RoomInvites.show(data));
@@ -129,10 +140,10 @@ const SocketClient = {
   },
   createRoomWithBots(theme) {
     this._withBots = true;
-    socket.emit('createRoom', { playerName: Profile.getName(), playerPhoto: Profile.getPhoto(), device: DeviceManager.current(), theme });
+    socket.emit('createRoom', { playerName: Profile.getName(), playerPhoto: Profile.getPhoto(), device: DeviceManager.current(), theme, isBotMatch: true });
   },
   joinRoom(pin)  { socket.emit('joinRoom', { pin, name: Profile.getName(), photo: Profile.getPhoto(), device: DeviceManager.current() }); },
-  setDifficulty(diff) { this._difficulty = diff === 'hard' ? 'hard' : 'normal'; },
+  setDifficulty(diff) { this._difficulty = diff; },
   startGame()    { if (this._pin) socket.emit('startGame', { pin: this._pin, difficulty: this._difficulty }); },
   sendAnswer(idx){ if (!this._pin) return; socket.emit('answer', { pin: this._pin, idx, qid: this._qid }); },
   loadRanking()  { socket.emit('getLeaderboard'); },
@@ -146,7 +157,6 @@ const SocketClient = {
   currentPin() { return this._pin; },
   canInvite() { return this._loggedIn && this._inLobby && !!this._pin; },
 
-  /* Chamado pelo logout — desconecta da sala e bloqueia eventos */
   leaveGame() {
     if (this._pin) {
       socket.emit('leaveRoom', this._pin);
@@ -155,7 +165,7 @@ const SocketClient = {
     this._isHost = false;
     this._withBots = false;
     this._inLobby = false;
-    this._difficulty = 'normal';
+    this._difficulty = 'facil';
     this._qid = null;
     this._loggedIn = false;
   },

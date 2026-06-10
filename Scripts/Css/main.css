@@ -4,8 +4,7 @@
    Minimalista, profissional, competitivo
 ================================================================ */
 
-/* ── Google Fonts fallback ── */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
 :root {
   /* Kahoot core palette */
@@ -19,6 +18,7 @@
   --kahoot-white: #ffffff;
   --kahoot-dark: #1a1a2e;
   --kahoot-bg: #46178f;
+
 
   /* Answer shadows (3D Kahoot style) */
   --red-shadow: #a8142d;
@@ -90,7 +90,15 @@ body {
   border: 2px solid rgba(255,255,255,0.3);
 }
 .hud-av span { z-index: 0; }
-.hud-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.hud-av img { 
+  position: absolute; 
+  inset: 0; 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  display: none; 
+  z-index: 2;
+}
 
 .hud-info { display: flex; flex-direction: column; min-width: 0; text-align: left; }
 .hud-name { font-weight: 700; font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
@@ -99,10 +107,53 @@ body {
 /* Logo centro */
 .hud-logo {
   position: absolute; left: 50%; transform: translateX(-50%);
-  font-weight: 900; font-size: .82rem; white-space: nowrap;
-  color: rgba(255,255,255,0.35); pointer-events: none;
-  letter-spacing: .03em; text-transform: uppercase;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700; font-size: 1.1rem; white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: .02em;
 }
+.hud-logo {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700; font-size: 1.2rem; white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: .02em;
+  animation: logoShine 3s infinite linear;
+  background: linear-gradient(90deg, #fff 0%, #fff 40%, rgba(255,255,255,0.5) 50%, #fff 60%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo-meio { 
+  -webkit-text-fill-color: var(--kahoot-green); 
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1));
+}
+.logo-kahoot { 
+  -webkit-text-fill-color: var(--kahoot-white); 
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,0.1));
+}
+
+@keyframes logoShine {
+  to { background-position: 200% center; }
+}
+
+/* Animação de "Salvando" para o perfil */
+.saving-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: #fff; font-family: 'Fredoka', sans-serif;
+  animation: fadeIn .3s ease;
+}
+.saving-spinner {
+  width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3);
+  border-top-color: var(--kahoot-green); border-radius: 50%;
+  animation: spin 1s linear infinite; margin-bottom: 15px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
 
 /* Chips direita */
 .hud-right { display: flex; align-items: center; gap: 5px; }
@@ -177,31 +228,45 @@ body {
 ================================================================ */
 .result-overlay {
   position: fixed; inset: 0; z-index: 600;
-  display: none;
+  display: flex;
   flex-direction: column; align-items: center; justify-content: center;
   gap: 8px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s ease, visibility .3s;
 }
-.result-overlay.show { display: flex; animation: resIn .18s ease; }
+.result-overlay.show { 
+  opacity: 1; 
+  visibility: visible;
+  pointer-events: auto;
+  animation: resIn .3s cubic-bezier(.34,1.56, .64,1); 
+}
 .result-overlay.correct { background: var(--kahoot-green); }
-.result-overlay.wrong { background: var(--kahoot-red); }
+.result-overlay.wrong { background: var(--kahoot-red); animation: shake .4s ease; }
 
 .result-icon {
-  font-size: 5rem; line-height: 1;
-  animation: iconPop .3s cubic-bezier(.34,1.6,.64,1);
+  font-size: 6rem; line-height: 1;
+  animation: iconPop .4s cubic-bezier(.34,1.6,.64,1);
 }
 .result-label {
-  font-size: 2.4rem; font-weight: 900; text-transform: uppercase;
+  font-size: 2.8rem; font-weight: 900; text-transform: uppercase;
   letter-spacing: .02em;
-  animation: iconPop .3s cubic-bezier(.34,1.6,.64,1) .05s both;
+  animation: iconPop .4s cubic-bezier(.34,1.6,.64,1) .05s both;
 }
 .result-pts {
-  font-size: 1.4rem; font-weight: 700; opacity: .9;
-  animation: iconPop .3s cubic-bezier(.34,1.6,.64,1) .1s both;
+  font-size: 1.6rem; font-weight: 700; opacity: .9;
+  animation: iconPop .4s cubic-bezier(.34,1.6,.64,1) .1s both;
 }
 
 
-@keyframes resIn { from{opacity:0;} to{opacity:1;} }
+@keyframes resIn { from{opacity:0; transform: scale(1.1);} to{opacity:1; transform: scale(1);} }
 @keyframes iconPop { from{transform:scale(.3);opacity:0;} to{transform:scale(1);opacity:1;} }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
 
 /* ================================================================
    PÁGINAS
@@ -212,8 +277,25 @@ body {
   padding: 16px; padding-top: calc(var(--hud-h) + 16px);
   overflow-y: auto;
 }
-.page.active { display: flex; animation: pgIn .25s ease; }
-@keyframes pgIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+.page.active { 
+  display: flex !important; 
+  animation: pageTransition .4s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes pageTransition {
+  from { transform: scale(0.98) translateY(5px); }
+  to { transform: scale(1) translateY(0); }
+}
+
+
+/* Flash de feedback total */
+.screen-flash {
+  position: fixed; inset: 0; z-index: 700;
+  pointer-events: none; opacity: 0;
+  transition: opacity .1s ease;
+}
+.screen-flash.correct { background: rgba(38,137,12,0.3); }
+.screen-flash.wrong { background: rgba(226,27,60,0.3); }
+.screen-flash.active { opacity: 1; }
 
 .page-game {
   justify-content: flex-start;
@@ -284,9 +366,21 @@ body {
   background: none; border: none; cursor: pointer;
   color: rgba(255,255,255,.55); font-family: var(--font);
   font-size: .8rem; text-align: center; padding: 4px;
-  transition: color .15s;
+  transition: all .2s;
 }
-.btn-link:hover { color: #fff; }
+.btn-link:hover { color: #fff; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
+.btn-link.random-btn {
+  color: var(--kahoot-purple); 
+  font-weight: 700;
+  background: rgba(70,23,143,.1);
+  border-radius: 99px;
+  padding: 6px 12px;
+  border: 1px solid rgba(70,23,143,.2);
+}
+.btn-link.random-btn:hover {
+  background: rgba(70,23,143,.2);
+  color: var(--kahoot-purple-light);
+}
 
 /* Hero buttons (criar sala / entrar sala) */
 .btn-hero {
@@ -353,16 +447,44 @@ input::placeholder { color: rgba(255,255,255,.35); }
 .white-card input::placeholder { color: #aaa; }
 
 /* Avatar picker */
-.av-pick { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.av-pick { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 10px;
+}
 .av-preview {
   width: 68px; height: 68px; border-radius: 50%;
-  background: rgba(255,255,255,.12);
-  border: 3px solid rgba(255,255,255,.2);
+  background: #f0f0f0; 
+  border: 3px solid rgba(70,23,143,.2);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.6rem; font-weight: 700; position: relative; overflow: hidden;
+  transition: transform .2s, border-color .2s;
 }
-.av-preview.large { width: 82px; height: 82px; font-size: 2rem; }
-.av-preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.av-preview:hover { transform: scale(1.05); border-color: var(--kahoot-purple); }
+.av-preview.large { width: 90px; height: 90px; font-size: 2rem; animation: avPulse 3s ease-in-out infinite; }
+@keyframes avPulse {
+  0%, 100% { transform: scale(1); border-color: rgba(70,23,143,.2); }
+  50% { transform: scale(1.05); border-color: var(--kahoot-purple); }
+}
+
+.av-preview img { 
+  position: absolute; 
+  inset: 0; 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 50%;
+  z-index: 2;
+}
+/* Estilo específico para as fotos do DiceBear/SVG para garantir preenchimento total */
+.av-preview img[src*="dicebear"], 
+.hud-av img[src*="dicebear"], 
+.pa-photo[src*="dicebear"] {
+  object-fit: contain;
+  background: #fff;
+}
 
 /* ================================================================
    HOME — Menu principal
@@ -641,75 +763,68 @@ input::placeholder { color: rgba(255,255,255,.35); }
 /* RANKING → separado em ranking.css */
 
 /* ================================================================
-   PÓDIO FINAL — Celebração Kahoot
+   PÓDIO FINAL — Full Screen Celebration
 ================================================================ */
-.overlay-bottom {
-  position: fixed; inset: 0; z-index: 500;
+.page-podium {
+  background: radial-gradient(circle at center, var(--kahoot-purple-light) 0%, var(--kahoot-purple-deep) 100%);
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 40px; text-align: center;
+}
+.podium-hero-title {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 3rem; font-weight: 700; color: #fff;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.2);
+  animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+.podium-stage {
   display: flex; align-items: flex-end; justify-content: center;
-  background: rgba(0,0,0,.6); backdrop-filter: blur(8px);
-  animation: pgIn .2s ease;
+  gap: 20px; width: 100%; max-width: 800px; height: 300px;
 }
-.podium-sheet {
-  background: linear-gradient(160deg, var(--kahoot-purple) 0%, var(--kahoot-purple-deep) 100%);
-  border-radius: 20px 20px 0 0; padding: 28px 22px 32px;
-  width: 100%; max-width: 500px;
-  display: flex; flex-direction: column; gap: 18px;
-  max-height: 92dvh; overflow-y: auto;
-  animation: slideUp .3s cubic-bezier(.34,1.2,.64,1);
-}
-@keyframes slideUp { from{transform:translateY(50px);opacity:0;} to{transform:translateY(0);opacity:1;} }
-.podium-title {
-  text-align: center; font-size: 1.3rem; font-weight: 900;
-  text-transform: uppercase; letter-spacing: .03em;
-}
-
-.podium-top3 { display: flex; align-items: flex-end; justify-content: center; gap: 10px; }
-.pod-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.pod-av {
-  border-radius: 50%; background: rgba(255,255,255,.15);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; overflow: hidden;
-  border: 3px solid rgba(255,255,255,.25);
-}
-.pod-av.sz-lg { width: 60px; height: 60px; font-size: 1.5rem; border-color: #fbbf24; }
-.pod-av.sz-md { width: 46px; height: 46px; font-size: 1.2rem; }
-.pod-av img { width: 100%; height: 100%; object-fit: cover; }
-.pod-block {
+.pod-winner-slot {
   display: flex; flex-direction: column; align-items: center;
-  justify-content: flex-end; border-radius: 10px 10px 0 0;
-  padding: 9px 11px 7px; gap: 2px;
+  gap: 12px; 
+  transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(200px) scale(0.5); 
+  opacity: 0;
 }
-.pod-block.b1 { height: 100px; background: rgba(251,191,36,.15); border: 1.5px solid rgba(251,191,36,.35); min-width: 88px; }
-.pod-block.b2 { height: 72px; background: rgba(200,210,220,.08); border: 1.5px solid rgba(200,210,220,.2); min-width: 80px; }
-.pod-block.b3 { height: 54px; background: rgba(205,127,50,.1); border: 1.5px solid rgba(205,127,50,.25); min-width: 80px; }
-.pod-medal { font-size: 1.05rem; }
-.pod-name { font-size: .7rem; font-weight: 700; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pod-score { font-size: .64rem; color: var(--text-muted); }
+.pod-winner-slot.show { 
+  transform: translateY(0) scale(1); 
+  opacity: 1; 
+}
 
-.podium-rest { display: flex; flex-direction: column; gap: 5px; }
-.pod-row {
-  display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: var(--radius);
-  background: var(--surface);
-  transform: translateX(30px); opacity: 0;
-  transition: transform .35s ease, opacity .3s;
+.pod-winner-av {
+  width: 100px; height: 100px; border-radius: 50%;
+  border: 5px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  overflow: hidden; background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 800;
 }
-.pod-row.in { transform: none; opacity: 1; }
-.pod-row-pos { font-size: .76rem; color: var(--text-muted); min-width: 26px; }
-.pod-row-name { flex: 1; font-weight: 700; font-size: .86rem; }
-.pod-row-score { font-weight: 800; font-size: .86rem; color: #fbbf24; }
+.pod-winner-av img { width: 100%; height: 100%; object-fit: cover; }
 
-.podium-actions { display: flex; gap: 8px; }
-.pod-action {
-  flex: 1; padding: 14px; border: none; border-radius: var(--radius);
-  font-family: var(--font); font-weight: 800; font-size: .88rem;
-  cursor: pointer; transition: filter .15s;
-  text-transform: uppercase; letter-spacing: .02em;
+.pod-winner-block {
+  border-radius: 12px 12px 0 0; width: 140px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; color: #fff; font-weight: 800;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
 }
-.pod-action.primary {
-  background: var(--kahoot-green); color: #fff;
-  box-shadow: 0 4px 0 var(--green-shadow);
+.pod-winner-block.b1 { height: 180px; background: linear-gradient(to top, #d97706, #fbbf24); }
+.pod-winner-block.b2 { height: 130px; background: linear-gradient(to top, #64748b, #cbd5e1); }
+.pod-winner-block.b3 { height: 80px; background: linear-gradient(to top, #92400e, #cd7f32); }
+
+.pod-winner-name { font-size: 1.2rem; margin-bottom: 5px; }
+.pod-winner-score { font-size: 0.9rem; opacity: 0.9; }
+
+.podium-stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;
+  background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+  padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+  width: min(600px, 90vw);
 }
-.pod-action.ghost { background: var(--surface); color: rgba(255,255,255,.7); }
+.pod-stat-item { display: flex; flex-direction: column; align-items: center; }
+.pod-stat-item label { font-size: 0.7rem; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.pod-stat-item strong { font-size: 1.2rem; color: #fff; }
+
+@keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
 /* ================================================================
    OVERLAYS / MODAIS
@@ -900,27 +1015,28 @@ body.device-mobile .pin-digit { width: 32px; height: 42px; font-size: 1.35rem; }
   margin: 0;
 }
 
-/* Grid de cards de tema — 2 colunas */
+/* Grade de temas simplificada para botão único */
 .theme-grid-popup {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
 }
 .theme-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 3px;
-  padding: 14px 14px 12px;
+  padding: 20px;
   background: #f8f6ff;
   border: 1.5px solid #ede8ff;
   border-radius: var(--radius-lg);
   cursor: pointer;
   font-family: var(--font);
-  text-align: left;
+  text-align: center;
   transition: all .15s;
   position: relative;
   overflow: hidden;
+  width: 260px;
 }
 .theme-card:hover {
   background: #ede8ff;
@@ -933,18 +1049,18 @@ body.device-mobile .pin-digit { width: 32px; height: 42px; font-size: 1.35rem; }
   background: #e0d4ff;
 }
 .theme-card-icon {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   line-height: 1;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 .theme-card-name {
-  font-size: .86rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--kahoot-dark);
   display: block;
 }
 .theme-card-desc {
-  font-size: .68rem;
+  font-size: .75rem;
   color: #999;
   display: block;
   font-weight: 400;
@@ -1161,7 +1277,13 @@ body.device-mobile .room-main span { max-width: 150px; }
 .credits-hero {
   display:flex; flex-direction:column; align-items:center; text-align:center; gap:3px;
   padding:16px; border-radius:var(--radius-lg); background:#f8f6ff; border:1px solid #ede8ff;
+  animation: creditPop .4s cubic-bezier(.34,1.56,.64,1);
 }
+@keyframes creditPop {
+  from { transform: scale(.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 .credits-logo { font-size:2.4rem; }
 .credits-hero strong { color:var(--kahoot-purple); font-size:1.2rem; font-weight:900; }
 .credits-hero small { color:#777; font-weight:600; }
@@ -1295,8 +1417,15 @@ body.device-mobile .room-main span { max-width: 150px; }
 .ans.picked {
   outline: 5px solid #fff;
   outline-offset: 3px;
-  transform: scale(1.015);
+  transform: scale(1.05);
+  animation: pickPop 0.2s cubic-bezier(.34,1.56,.64,1);
 }
+@keyframes pickPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1.05); }
+}
+
 
 .game-bottom {
   position: fixed;
@@ -1354,3 +1483,35 @@ body.device-mobile .room-main span { max-width: 150px; }
   .game-bottom { flex-direction: column; }
   .btn-confirm { width: 100%; }
 }
+
+/* Confetti effect */
+.confetti {
+  position: fixed; top: -10px; z-index: 601;
+  width: 10px; height: 10px;
+  pointer-events: none;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(105vh) rotate(360deg); }
+}
+
+.pod-winner-slot.champion {
+  animation: championGlow 2s infinite alternate;
+}
+@keyframes championGlow {
+  from { filter: drop-shadow(0 0 10px rgba(251,191,36,0.4)); transform: translateY(0) scale(1); }
+  to { filter: drop-shadow(0 0 25px rgba(251,191,36,0.8)); transform: translateY(-10px) scale(1.05); }
+}
+
+.player-chip {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 99px; padding: 6px 12px 6px 6px;
+  animation: chipPop 0.4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes chipPop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+

@@ -10,11 +10,13 @@ const UI = {
       if (prev) { prev.classList.remove('active'); prev.style.display = 'none'; }
     }
     next.style.display = 'flex';
+    // Trigger reflow para reiniciar a animação de transição
     void next.offsetWidth;
     next.classList.add('active');
     this._cur = id;
     this._ctx(id);
   },
+
 
   _ctx(id) {
     const hide = (...ids) => ids.forEach(i => { const e = document.getElementById(i); if (e) e.style.display = 'none'; });
@@ -48,7 +50,12 @@ const UI = {
       show('timer-circle-wrap', 'flex');
       show('score-pill', 'flex');
     }
+    if (id === 'p-podium') {
+      hide('h-device'); hide('h-pin'); hide('h-phase');
+      set('h-phase', '🏆 Vitória!');
+    }
   },
+
 
   // ── Timer ──────────────────────────────────────────────────
   _int: null, _to: null,
@@ -67,27 +74,32 @@ const UI = {
     if (num) num.textContent = seconds;
 
     const start = Date.now(), total = seconds * 1000;
-    this._int = setInterval(() => {
+    
+    const update = () => {
       const elapsed = Date.now() - start;
       const rem = Math.max(0, seconds - Math.floor(elapsed / 1000));
       const pct = Math.max(0, (total - elapsed) / total * 100);
 
-      fill.style.transition = 'width .25s linear';
       fill.style.width = pct + '%';
       if (num) num.textContent = rem;
 
       const cls = pct <= 20 ? 'urgent' : pct <= 40 ? 'warn' : '';
-      fill.className = 'timer-fill' + (cls ? ' ' + cls : '');
-      if (ring) {
-        ring.className = 'tc-ring' + (cls ? ' ' + cls : '');
-        ring.style.strokeDashoffset = 100 - pct;
+      if (fill.className !== 'timer-fill' + (cls ? ' ' + cls : '')) {
+        fill.className = 'timer-fill' + (cls ? ' ' + cls : '');
+        if (ring) ring.className = 'tc-ring' + (cls ? ' ' + cls : '');
       }
+      if (ring) ring.style.strokeDashoffset = 100 - pct;
 
-      if (rem <= 0) clearInterval(this._int);
-    }, 250);
+      if (elapsed < total) {
+        this._int = requestAnimationFrame(update);
+      } else {
+        this.stopTimer();
+        onEnd?.();
+      }
+    };
 
+    this._int = requestAnimationFrame(update);
     this._to = setTimeout(() => {
-      clearInterval(this._int);
       this.stopTimer();
       onEnd?.();
     }, total);
@@ -99,7 +111,8 @@ const UI = {
   },
 
   stopTimer() {
-    clearInterval(this._int); clearTimeout(this._to);
+    if (this._int) cancelAnimationFrame(this._int);
+    clearTimeout(this._to);
     this._int = null; this._to = null;
     const fill = document.getElementById('timer-fill');
     const num  = document.getElementById('timer-num');
@@ -113,7 +126,23 @@ const UI = {
   updateScore(score) {
     const el   = document.getElementById('score-num');
     const pill = document.getElementById('score-pill');
-    if (el) el.textContent = score.toLocaleString('pt-BR');
+    if (!el) return;
+    
+    const current = parseInt(el.textContent.replace(/\./g, '')) || 0;
+    const target = score;
+    const diff = target - current;
+    const step = diff !== 0 ? Math.ceil(diff / 10) : 0;
+    let count = current;
+
+    const timer = setInterval(() => {
+      count += step;
+      if ((step > 0 && count >= target) || (step < 0 && count <= target) || step === 0) {
+        count = target;
+        clearInterval(timer);
+      }
+      el.textContent = count.toLocaleString('pt-BR');
+    }, 30);
+
     if (pill) { pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump'); }
   },
 
@@ -123,15 +152,33 @@ const UI = {
     const icon  = document.getElementById('result-icon');
     const label = document.getElementById('result-label');
     const ptsEl = document.getElementById('result-pts');
+    const flash = document.getElementById('screen-flash');
     if (!ov) return;
 
     ov.className = 'result-overlay show ' + (correct ? 'correct' : 'wrong');
     if (icon)  icon.textContent  = correct ? '✔' : '✗';
     if (label) label.textContent = correct ? 'Correto!' : 'Incorreto!';
-    if (ptsEl) ptsEl.textContent = (correct && pts > 0) ? `+${pts.toLocaleString('pt-BR')} pts` : '';
+
+    // Flash de tela para impacto emocional
+    if (flash) {
+      flash.className = 'screen-flash active ' + (correct ? 'correct' : 'wrong');
+      setTimeout(() => flash.classList.remove('active'), 200);
+    }
+
+    if (ptsEl) {
+      if (correct && pts > 0) {
+        ptsEl.textContent = `+${pts.toLocaleString('pt-BR')} pts`;
+        ptsEl.style.animation = 'none';
+        void ptsEl.offsetWidth; // trigger reflow
+        ptsEl.style.animation = 'iconPop .3s cubic-bezier(.34,1.6,.64,1)';
+      } else if (pts === 0 && !correct) {
+        ptsEl.textContent = '';
+      }
+    }
 
     if (navigator.vibrate) navigator.vibrate(correct ? [40] : [80, 40, 80]);
   },
+
 
   hideResult() {
     const ov = document.getElementById('result-overlay');
@@ -177,8 +224,12 @@ const UI = {
     for (let i = 0; i < 4; i++) {
       const b = document.getElementById(`ans-${i}`);
       if (!b) continue;
-      b.disabled = true;
-      b.classList.add(i === idx ? 'correct' : 'wrong');
+      
+      // Adiciona um pequeno delay para cada botão para criar efeito de cascata
+      setTimeout(() => {
+        b.disabled = true;
+        b.classList.add(i === idx ? 'correct' : 'wrong');
+      }, i * 100);
     }
     const cf = document.getElementById('btn-confirm');
     if (cf) cf.disabled = true;

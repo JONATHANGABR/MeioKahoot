@@ -46,8 +46,12 @@ const Splash = {
     const el = document.getElementById('mk-splash');
     if (!el) return;
     el.classList.remove('visible');
-    setTimeout(() => { el.style.display = 'none'; }, 320);
+    // Aceleramos a remoção para evitar tela branca
+    setTimeout(() => { 
+      el.style.display = 'none'; 
+    }, 150);
   },
+
   cancel() {
     AutoLogin.cancelTimer(); AutoLogin.clear();
     this.hide();
@@ -95,6 +99,9 @@ const Auth = {
 
   logout() {
     AutoLogin.clear();
+    
+    // LIMPEZA RADICAL DE TODOS OS DADOS LOCAIS
+    localStorage.clear();
 
     // Para tudo do jogo (timer, sons, overlays, estado)
     GameUI.forceReset();
@@ -122,7 +129,7 @@ const Auth = {
     // Volta para a tela de auth
     UI.showPage('p-auth');
     Auth.showLogin();
-    UI.toast('Você saiu da conta.');
+    UI.toast('Sessão encerrada e dados limpos.');
   },
 };
 
@@ -176,20 +183,22 @@ function _setBtn(sel, t) { const b = document.querySelector(sel); if (b) { b.tex
 function _resetBtn(sel, t) { const b = document.querySelector(sel); if (b) { b.textContent = t; b.disabled = false; } }
 
 /* ── Init ───────────────────────────────────────────────── */
-window.addEventListener('load', () => {
-  _bind('login-user', Auth.login.bind(Auth));
-  _bind('login-pass', Auth.login.bind(Auth));
-  _bind('reg-user',   Auth.register.bind(Auth));
-  _bind('join-pin',   HomeUI.joinRoom.bind(HomeUI));
+  window.addEventListener('load', () => {
+    _bind('login-user', Auth.login.bind(Auth));
+    _bind('login-pass', Auth.login.bind(Auth));
+    _bind('reg-user',   Auth.register.bind(Auth));
+    _bind('join-pin',   HomeUI.joinRoom.bind(HomeUI));
 
-  DeviceManager.showModal();
-  Profile.renderHud();
+    DeviceManager.detect();
+    DeviceManager.apply();
+    Profile.renderHud();
 
-  if (!AutoLogin.attempt()) {
-    UI.showPage('p-auth');
-    Auth.showLogin();
-  }
+    if (!AutoLogin.attempt()) {
+      UI.showPage('p-auth');
+      Auth.showLogin();
+    }
 
-  window.addEventListener('online',  () => UI.setNetStatus(true));
-  window.addEventListener('offline', () => UI.setNetStatus(false));
-});
+    window.addEventListener('online',  () => UI.setNetStatus(true));
+    window.addEventListener('offline', () => UI.setNetStatus(false));
+  });
+

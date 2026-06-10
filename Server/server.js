@@ -34,7 +34,7 @@ const io     = new Server(server, {
 // ═══════════════════════════════════════════════════════
 //  ARQUIVOS
 // ═══════════════════════════════════════════════════════
-const USERS_FILE       = path.join(__dirname, '../Data/Config/users.json');
+const USERS_FILE       = path.join(__dirname, '../.contas/users.json');
 const QUESTIONS_FILE   = path.join(__dirname, '../Data/Questoes/master.json');
 const LEADERBOARD_FILE = path.join(__dirname, '../Data/Config/ranking.json');
 
@@ -97,8 +97,16 @@ function emitFriendsFor(username) {
     if (String(user).toLowerCase() === String(username).toLowerCase()) io.to(sid).emit('friendsData', friendPayload(u));
   }
 }
-function publicAuthUser(u) {
-  return { user: u.user, name: u.name || u.user, photo: u.photo || '', xp: u.xp || 0, friends: u.friends || [], friendRequests: u.friendRequests || [] };
+function publicAuthUser(u, stats = {}) {
+  return { 
+    user: u.user, 
+    name: u.name || u.user, 
+    photo: u.photo || '', 
+    xp: u.xp || 0, 
+    friends: u.friends || [], 
+    friendRequests: u.friendRequests || [],
+    stats: stats // Inclui as estatísticas do servidor
+  };
 }
 
 function getFriendKeys(user) {
@@ -135,6 +143,7 @@ function publicRoomsPayload(username) {
   const list = [];
   for (const [pin, room] of rooms) {
     if (room.status !== ROOM_PHASE.LOBBY) continue;
+    if (room.isBotMatch) continue; // NÃO EXIBE SALAS DE TREINO COM BOTS
     const humans = [...room.players.entries()].filter(([, p]) => !p.isBot && p.connected !== false);
     const hostName = getRoomHostName(room);
     const friendNames = humans
@@ -200,7 +209,7 @@ const ROOM_PHASE = {
 const RECONNECT_GRACE_MS = 60 * 1000;
 const REVEAL_MS          = 4000;
 const RANKING_CLEANUP_MS = 30 * 1000;
-const QUESTION_LIMITS = { normal: 6, hard: 12 };
+const QUESTION_LIMITS = { facil: 6, medio: 12, extremo: 999 };
 
 // ═══════════════════════════════════════════════════════
 //  SISTEMA DE LOGS — ring buffer, categorias
@@ -586,17 +595,37 @@ function clearRoomTimers(room) {
   room.questionTimer = room.nextTimer = room.cleanupTimer = null;
 }
 
-function resetRoomForNewMatch(room, difficulty = 'normal') {
+function resetRoomForNewMatch(room, difficulty = 'facil') {
   clearRoomTimers(room);
-  room.curIdx = room.questionStartedAt = room.deadlineAt = 0;
+  room.curIdx = room.questionStartedHAt = room.deadlineAt = 0;
   room.status            = ROOM_PHASE.LOBBY;
   room.answered          = new Set();
   room.currentQuestionId = null;
   room.players.forEach(p => { p.score = 0; p.combo = 0; p.maxCombo = 0; p.answers = 0; p.correct = 0; p.fastestMs = null; p.totalEarned = 0; p.lastQuestionId = null; });
   const allQ = getQuestions();
-  room.difficulty = difficulty === 'hard' ? 'hard' : 'normal';
-  const pool = shuffle(allQ[room.theme] || allQ.ciencias || []);
-  const limit = QUESTION_LIMITS[room.difficulty] || QUESTION_LIMITS.normal;
+  room.difficulty = difficulty;
+  
+  // CORREÇÃO: Tema Unificado com Filtro de Dificuldade
+  const allUnificado = allQ.unificado || [];
+  let pool = [];
+
+  if (difficulty === 'facil') {
+    pool = allUnificado.filter(q => q.difficulty === 'facil');
+  } else if (difficulty === 'medio') {
+    pool = allUnificado.filter(q => q.difficulty === 'medio' || q.difficulty === 'dificil');
+  } else {
+    // extremo ou qualquer outro: todas
+    pool = allUnificado;
+  }
+
+  if (pool.length === 0) {
+    log('ERROR', `Sem questões para dificuldade ${difficulty} no tema unificado. Usando fallback.`);
+    pool = shuffle(allUnificado);
+  } else {
+    pool = shuffle(pool);
+  }
+
+  const limit = QUESTION_LIMITS[difficulty] || QUESTION_LIMITS.facil;
   room.questions = pool.slice(0, Math.min(limit, pool.length));
 }
 
@@ -917,6 +946,28 @@ io.on('connection', (socket) => {
   if (connectedSockets.size > peakConnections) peakConnections = connectedSockets.size;
   log('CONNECT', `Socket conectado: ${socket.id.slice(0, 8)}`);
 
+  socket.on('updateProfile', (data) => {
+    const username = socketUsers.get(socket.id);
+    if (!username) return socket.emit('err', 'Faça login para atualizar perfil.');
+    
+    const users = normalizeUsers(getUsers());
+    const u = findUser(users, username);
+    if (!u) return socket.emit('err', 'Usuário não encontrado.');
+
+    if (data.photo) {
+      u.photo = data.photo;
+      log('AUTH', `Foto atualizada para ${username}`);
+    }
+    if (data.name) {
+      u.name = data.name;
+      log('AUTH', `Nome alterado para ${data.name} (${username})`);
+    }
+
+    saveUsers(users);
+    // Retorna o objeto completo e atualizado para o cliente sincronizar
+    socket.emit('profileUpdated', publicAuthUser(u));
+  });
+
   socket.on('register', (d) => {
     const users = normalizeUsers(getUsers());
     if (users.find(u => String(u.user || '').toLowerCase() === String(d.user || '').toLowerCase()))
@@ -938,7 +989,17 @@ io.on('connection', (socket) => {
       totalLogins++;
       log('AUTH', `Login: ${d.user}`);
       socketUsers.set(socket.id, u.user);
-      socket.emit('authOk', publicAuthUser(u));
+      
+      // Buscar estatísticas do usuário no leaderboard
+      const lb = getLeaderboard();
+      const userRecords = lb.filter(r => String(r.name || '').toLowerCase() === String(u.user || '').toLowerCase());
+      const stats = {
+        best: userRecords.length > 0 ? Math.max(...userRecords.map(r => r.score || 0)) : 0,
+        games: userRecords.length,
+        wins: userRecords.filter(r => r.position === 1).length,
+      };
+
+      socket.emit('authOk', publicAuthUser(u, stats));
       socket.emit('friendsData', friendPayload(u));
       emitRoomsFor(socket);
     } else {
@@ -961,12 +1022,13 @@ io.on('connection', (socket) => {
       answered: new Set(), currentQuestionId: null,
       questionStartedAt: 0, deadlineAt: 0,
       questionTimer: null, nextTimer: null, cleanupTimer: null,
+      isBotMatch: !!d.isBotMatch, // Marca se é partida de treino com bots
     };
 
     room.players.set(socket.id, createPlayer({ playerName: d.playerName, playerPhoto: d.playerPhoto, device: d.device }));
     rooms.set(pin, room);
     totalRoomsCreated++;
-    log('ROOM', `Sala ${pin} criada por ${d.playerName} · ${theme}`);
+    log('ROOM', `Sala ${pin} criada por ${d.playerName} · ${theme}${d.isBotMatch ? ' (Treino)' : ''}`);
 
     socket.join(pin);
     socket.emit('roomCreated', pin);
@@ -1020,7 +1082,7 @@ io.on('connection', (socket) => {
 
   socket.on('startGame', (payload) => {
     const pin = typeof payload === 'object' ? payload.pin : payload;
-    const difficulty = (typeof payload === 'object' ? payload.difficulty : 'normal') === 'hard' ? 'hard' : 'normal';
+    const difficulty = (typeof payload === 'object' ? payload.difficulty : 'facil') || 'facil';
     if (!pin) return;
     const room = rooms.get(pin);
     if (!room)                   return socket.emit('err', 'Sala não existe.');
@@ -1267,4 +1329,4 @@ process.on('exit',    () => process.stdout.write(`${ESC}?25h`));
 process.on('SIGINT',  () => { process.stdout.write(`${ESC}?25h\n`); process.exit(0); });
 process.on('SIGTERM', () => { process.stdout.write(`${ESC}?25h\n`); process.exit(0); });
 
-start(3001);
+start(process.env.PORT || 3001);
