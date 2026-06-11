@@ -1,4 +1,4 @@
-/* MeioKahoot — Profile.js v6.1 (Com Fotos & Persistência) */
+/* MeioKahoot — Profile.js v7.0 (Com Fotos, Crop & Persistência) */
 const Profile = (() => {
   const K  = 'mk_profile';
   const KS = 'mk_stats';
@@ -31,7 +31,7 @@ const Profile = (() => {
       const colors = ['#ff4d4d', '#4d79ff', '#4dff88', '#ffcc4d', '#ff4dff', '#4dffff'];
       const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       letter.style.backgroundColor = colors[hash % colors.length];
-      letter.style.display = photo ? 'none' : 'flex';
+      letter.style.display = photo ? 'none' : '';
     }
     if (img) {
       if (photo) {
@@ -72,33 +72,97 @@ const Profile = (() => {
     Modal.open('modal-profile');
   }
 
-  function previewEdit(input) {
+  /* Foto com crop integrado */
+  function previewPhoto(input) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
+    
+    // Reduz tamanho se muito grande
     const reader = new FileReader();
     reader.onload = (e) => {
       const base64 = e.target.result;
-      const img = document.getElementById('edit-av-photo');
-      const letEl = document.getElementById('edit-av-letter');
-      if (img) { img.src = base64; img.style.display = 'block'; }
-      if (letEl) { letEl.style.display = 'none'; }
-      // Guardamos temporariamente no input para o saveEdit pegar
-      input.dataset.base64 = base64;
+      
+      // Redimensiona a imagem para no máximo 256x256
+      _resizeImage(base64, 256, (resized) => {
+        // Tenta usar o crop se disponível
+        if (typeof PhotoCrop !== 'undefined') {
+          PhotoCrop.open(resized, (cropped) => {
+            _applyPhotoToRegister(cropped);
+          });
+        } else {
+          _applyPhotoToRegister(resized);
+        }
+      });
     };
     reader.readAsDataURL(file);
   }
 
+  function _applyPhotoToRegister(base64) {
+    const img = document.getElementById('reg-photo-img');
+    const letEl = document.getElementById('reg-initial');
+    if (img) { img.src = base64; img.style.display = 'block'; }
+    if (letEl) { letEl.style.display = 'none'; }
+    const input = document.getElementById('reg-file');
+    if (input) input.dataset.base64 = base64;
+  }
+
+  function previewEdit(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result;
+      
+      _resizeImage(base64, 256, (resized) => {
+        // Tenta usar o crop se disponível
+        if (typeof PhotoCrop !== 'undefined') {
+          PhotoCrop.open(resized, (cropped) => {
+            _applyPhotoToEdit(cropped);
+          });
+        } else {
+          _applyPhotoToEdit(resized);
+        }
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function _applyPhotoToEdit(base64) {
+    const img = document.getElementById('edit-av-photo');
+    const letEl = document.getElementById('edit-av-letter');
+    if (img) { img.src = base64; img.style.display = 'block'; }
+    if (letEl) { letEl.style.display = 'none'; }
+    const input = document.getElementById('edit-file');
+    if (input) input.dataset.base64 = base64;
+    Sounds.play('click');
+  }
+
+  function _resizeImage(base64, maxSize, callback) {
+    const img = new Image();
+    img.onload = () => {
+      if (img.width <= maxSize && img.height <= maxSize) {
+        callback(base64);
+        return;
+      }
+      const canvas = document.createElement('canvas');
+      const scale = Math.min(maxSize / img.width, maxSize / img.height);
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      callback(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.src = base64;
+  }
+
   function randomizePhoto() {
-    const colors = ['#ff4d4d', '#4d79ff', '#4dff88', '#ffcc4d', '#ff4dff', '#4dffff'];
-    const randColor = colors[Math.floor(Math.random() * colors.length)];
-    // Para randomizar a foto, vamos usar um avatar do DiceBear com seed aleatória
     const seed = Math.random().toString(36).substring(7);
     const url = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`;
     const img = document.getElementById('edit-av-photo');
     const letEl = document.getElementById('edit-av-letter');
     if (img) { img.src = url; img.style.display = 'block'; }
     if (letEl) { letEl.style.display = 'none'; }
-    // Salva no input hidden ou dataset para persistir no save
     const input = document.getElementById('edit-file');
     if (input) input.dataset.base64 = url;
     Sounds.play('click');
@@ -106,7 +170,7 @@ const Profile = (() => {
 
   function saveEdit() {
     const p = get();
-    const name = document.getElementById('edit-name')?.value?.trim() || p.name || p.user || 'Jogador';
+    const name = p.name || p.user || 'Jogador';
     const photo = document.getElementById('edit-file')?.dataset?.base64 || p.photo || '';
     
     // Efeito de "Salvando"
@@ -118,13 +182,28 @@ const Profile = (() => {
     if (window.SocketClient) {
       SocketClient.emit('updateProfile', { name, photo });
       
-      // Remove o overlay após um tempo ou quando o servidor responder (via profileUpdated)
+      // Atualiza localmente
+      p.name = name;
+      p.photo = photo;
+      save(p);
+      renderHud();
+      renderHome();
+
       setTimeout(() => {
         overlay.remove();
         Modal.close('modal-profile');
         Sounds.play('click');
+        UI.toast('Perfil salvo! ✅');
+        
+        // Efeito de confirmação
+        KahootAnim.screenFlash('rgba(34,197,94,0.2)', 400);
       }, 1000);
     } else {
+      p.name = name;
+      p.photo = photo;
+      save(p);
+      renderHud();
+      renderHome();
       overlay.remove();
       Modal.close('modal-profile');
     }
@@ -154,7 +233,7 @@ const Profile = (() => {
   return {
     get, save, getSt, saveSt, recordMatch,
     renderHud, renderHome,
-    openEdit, saveEdit, previewEdit, randomizePhoto,
+    openEdit, saveEdit, previewEdit, previewPhoto, randomizePhoto,
     setFromAuth, getName, getPhoto,
   };
 })();

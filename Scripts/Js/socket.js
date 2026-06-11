@@ -18,11 +18,38 @@ const SocketClient = {
   },
 
   connect() {
-    socket.on('connect',    () => UI.setNetStatus(true));
-    socket.on('disconnect', () => { UI.setNetStatus(false); UI.toast('Conexão perdida. Reconectando...'); });
-    socket.on('reconnect',  () => {
-      UI.setNetStatus(true); UI.toast('Reconectado!');
-      if (this._loggedIn && this._pin) this.joinRoom(this._pin);
+    socket.on('connect', () => {
+      UI.setNetStatus(true);
+      // Se não está logado e tem credenciais salvas, tenta auto-login
+      if (!this._loggedIn) {
+        const saved = AutoLogin.getSaved();
+        if (saved?.user && saved?.pass) {
+          // Verifica se o splash já está visível (tentativa em andamento)
+          const splash = document.getElementById('mk-splash');
+          if (!splash || splash.style.display === 'none') {
+            AutoLogin.attempt();
+          }
+        }
+      }
+    });
+    socket.on('disconnect', () => {
+      UI.setNetStatus(false);
+      UI.toast('Conexão perdida. Reconectando...');
+    });
+    socket.on('reconnect', () => {
+      UI.setNetStatus(true);
+      UI.toast('Reconectado!');
+      // Se estava logado, tenta re-logar com credenciais salvas
+      if (this._loggedIn) {
+        // Re-entra na sala se estava em uma
+        if (this._pin) this.joinRoom(this._pin);
+      } else {
+        // Não estava logado — tenta auto-login
+        const saved = AutoLogin.getSaved();
+        if (saved?.user && saved?.pass) {
+          AutoLogin.attempt();
+        }
+      }
     });
 
     socket.on('authOk', data => {
@@ -167,7 +194,7 @@ const SocketClient = {
     this._inLobby = false;
     this._difficulty = 'facil';
     this._qid = null;
-    this._loggedIn = false;
+    // NÃO seta _loggedIn = false aqui — leaveGame é pra sair da sala, não deslogar
   },
 };
 

@@ -11,7 +11,12 @@
     "express": "^5.2.1",
     "socket.io": "^4.8.3"
   },
-  "keywords": ["kahoot", "meio-ambiente", "quiz", "jogo-educativo"],
+  "keywords": [
+    "kahoot",
+    "meio-ambiente",
+    "quiz",
+    "jogo-educativo"
+  ],
   "author": "JONATHANGABR",
   "license": "ISC"
 }

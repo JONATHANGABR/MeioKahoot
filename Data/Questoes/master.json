@@ -1,124 +1,1768 @@
 {
   "unificado": [
     {
-      "question": "Qual material NÃO deve ser descartado junto com papel reciclável?",
-      "options": ["Papel carbono ou plastificado", "Jornais velhos", "Revistas", "Folhas de caderno"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "question": "O que são os manguezais e qual sua função ambiental?",
+      "options": [
+        "Áreas de descarte de resíduos",
+        "Áreas urbanas alagadas",
+        "Filtram água, protegem contra tempestades e abrigam espécies",
+        "Produzem água potável"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos2.jpg"
+    },
+    {
+      "question": "Qual a consequência de jogar lixo nos rios?",
+      "options": [
+        "O lixo serve de alimento para peixes",
+        "Polui a água, mata a fauna aquática e entope o leito",
+        "Os rios se limpam sozinhos",
+        "Não tem consequência grave"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
+    },
+    {
+      "question": "Quantos anos uma garrafa plástica (PET) leva para se decompor na natureza?",
+      "options": [
+        "De 5 a 10 anos",
+        "De 50 a 100 anos",
+        "Mais de 400 anos",
+        "De 10 a 20 anos"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-lixeiras.jpg"
+    },
+    {
+      "question": "Qual ação NÃO ajuda na conservação da água?",
+      "options": [
+        "Reaproveitar água da chuva",
+        "Lavar calçadas com mangueira",
+        "Consertar vazamentos",
+        "Usar equipamentos economizadores"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
+    },
+    {
+      "question": "Qual a consequência do fast fashion (moda rápida) para o meio ambiente?",
+      "options": [
+        "Não tem impacto",
+        "Gera enorme quantidade de resíduos têxteis e poluição na produção",
+        "Reduz o consumo de água",
+        "Ajuda a economia local"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "O que causa a poluição do ar nas grandes cidades?",
+      "options": [
+        "Apenas indústrias",
+        "Apenas carros",
+        "Queima de combustíveis fósseis, indústrias e desmatamento",
+        "Vapores de cozinha"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-fabrica-fumaca.jpg"
+    },
+    {
+      "question": "Qual o principal uso da água no Brasil (maior consumo)?",
+      "options": [
+        "Uso doméstico (banho, torneira)",
+        "Irrigação na agricultura (cerca de 50%)",
+        "Uso industrial",
+        "Geração de energia"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-torneira-velha.jpg"
+    },
+    {
+      "question": "O que é biomassa e como pode gerar energia?",
+      "options": [
+        "Massa de animais extintos",
+        "Matéria orgânica (plantas, resíduos) transformada em energia",
+        "Gasolina vegetal",
+        "Energia solar armazenada"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-paineis-campo.jpg"
+    },
+    {
+      "question": "O que são os ODS (Objetivos de Desenvolvimento Sustentável) da ONU?",
+      "options": [
+        "17 metas globais para 2030 incluindo clima, água e vida terrestre",
+        "Regras de comércio internacional",
+        "Metas só para países ricos",
+        "Um acordo militar"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/consumo-papel.jpg"
     },
     {
       "question": "O que acontece quando lixo reciclável é misturado ao lixo orgânico?",
-      "options": ["Contamina os recicláveis e dificulta a separação", "Torna a reciclagem mais rápida", "Não há impacto", "O lixo orgânico é purificado"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "options": [
+        "Nada, funciona igual",
+        "Contamina os recicláveis e dificulta a separação",
+        "Acelera a decomposição",
+        "O lixo orgânico vira adubo mais rápido"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-corredor.jpg"
     },
     {
-      "question": "Qual é a cor da lixeira destinada ao descarte de PLÁSTICOS?",
-      "options": ["Vermelho", "Azul", "Verde", "Amarelo"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "question": "Quanto do alimentos produzidos no Brasil acabam desperdiçados?",
+      "options": [
+        "Cerca de 5%",
+        "Cerca de 10%",
+        "Cerca de 30%",
+        "Cerca de 50%"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
     },
     {
-      "question": "Quanto tempo uma garrafa plástica pode levar para se decompor na natureza?",
-      "options": ["Centenas de anos", "Cerca de 10 anos", "Cerca de 1 ano", "Decompõe-se em semanas"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "Que porcentagem da água do mundo é doce e disponível para consumo?",
+      "options": [
+        "Cerca de 70%",
+        "Cerca de 25%",
+        "Cerca de 2,5%",
+        "Cerca de 50%"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos.jpg"
+    },
+    {
+      "question": "Qual atitude reduz o consumo de plástico descartável?",
+      "options": [
+        "Usar mais canudos de plástico",
+        "Comprar mais garrafas PET",
+        "Usar sacolas retornáveis e garrafas reutilizáveis",
+        "Jogar plástico na coleta orgânica"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Qual o principal impacto ambiental da mineração?",
+      "options": [
+        "Geração de empregos",
+        "Destruição de habitats e contaminação do solo e água",
+        "Aumento do turismo",
+        "Melhoria da qualidade do ar"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
     },
     {
       "question": "Qual atitude ajuda a economizar água em casa?",
-      "options": ["Fechar a torneira ao escovar os dentes", "Banhos de 30 minutos", "Deixar torneira pingando", "Lavar calçada com mangueira"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "options": [
+        "Lavar calçadas com mangueira",
+        "Deixar a torneira aberta ao escovar os dentes",
+        "Fechar a torneira ao escovar os dentes",
+        "Tomar banhos mais longos"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-torneira-velha.jpg"
     },
     {
-      "question": "Por que nunca devemos jogar óleo de cozinha na pia?",
-      "options": ["Porque entope canos e polui a água", "Porque o óleo evapora", "Porque estraga o sabão", "Não há problema"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "O que é a pegada hídrica?",
+      "options": [
+        "Marca deixada pela água no chão",
+        "Indicador do consumo direto e indireto de água",
+        "Tipo de calçado ecológico",
+        "Medida de umidade do ar"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-cachoeira.jpg"
     },
     {
-      "question": "Qual destas fontes de energia é considerada renovável e limpa?",
-      "options": ["Energia Solar", "Petróleo", "Carvão Mineral", "Gás Natural"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "question": "Por que os oceanos estão ficando mais ácidos?",
+      "options": [
+        "Por despejos de ácido industrial diretos",
+        "Por absorverem excesso de CO₂ da atmosfera",
+        "Por causa da pesca excessiva",
+        "Por derretimento das geleiras"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-garrafa-praia.jpg"
     },
     {
-      "question": "O que significa 'eficiência energética'?",
-      "options": ["Usar menos energia para obter o mesmo resultado", "Gastar mais energia", "Desligar tudo para sempre", "Usar lâmpadas antigas"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "O que é economia circular?",
+      "options": [
+        "Modelo onde tudo é jogado fora",
+        "Modelo de reduzir, reutilizar e reciclar continuamente",
+        "Tipo de comércio internacional",
+        "Sistema de moeda verde"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
     },
     {
-      "question": "O que é o efeito estufa?",
-      "options": ["Processo natural que mantém a Terra aquecida (está se intensificando)", "Apenas fumaça de fábricas", "Fenômeno do Polo Norte", "Ausência de atmosfera"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "O que é a chuva ácida e sua principal causa?",
+      "options": [
+        "Chuva com areia do deserto",
+        "Chuva com pH baixo causada por poluentes industriais",
+        "Chuva muito fria",
+        "Chuva salobra do mar"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-fabrica-fumaca.jpg"
     },
     {
-      "question": "Qual atividade humana mais aumenta a emissão de CO₂?",
-      "options": ["Queima de combustíveis fósseis e desmatamento", "Plantar árvores", "Andar de bicicleta", "Usar energia solar"],
-      "answer": 0, "time": 20, "difficulty": "medio"
-    },
-    {
-      "question": "O que significa consumo consciente?",
-      "options": ["Comprar apenas o necessário considerando o impacto ambiental", "Comprar tudo em promoção", "Não comprar nada nunca", "Comprar com muita embalagem"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "Qual a importância das matas ciliares para os rios?",
+      "options": [
+        "Servem apenas para embelezar a paisagem",
+        "Protegem contra erosão e filtram poluentes",
+        "São áreas para construção civil",
+        "Produzem madeira para venda"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos.jpg"
     },
     {
       "question": "Qual a diferença entre reutilizar e reciclar?",
-      "options": ["Reutilizar é usar de novo; reciclar é transformar o material", "São a mesma coisa", "Reciclar é mais simples", "Reutilizar polui mais"],
-      "answer": 0, "time": 25, "difficulty": "dificil"
+      "options": [
+        "São a mesma coisa",
+        "Reutilizar é usar de novo; reciclar é transformar em novo material",
+        "Reciclar é mais barato que reutilizar",
+        "Reutilizar só funciona com plástico"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-mercado.jpg"
     },
     {
-      "question": "Quanto tempo o vidro leva para se decompor?",
-      "options": ["Milhares de anos (tempo indeterminado)", "10 anos", "100 anos", "1 ano"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "question": "Qual atividade humana mais aumenta a emissão de CO₂ no Brasil?",
+      "options": [
+        "Reciclagem",
+        "Desmatamento e queima de combustíveis fósseis",
+        "Plantio de árvores",
+        "Uso de energia solar"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-troncos.jpg"
     },
     {
-      "question": "Qual o impacto do lixo jogados nos rios?",
-      "options": ["Polui a água e mata a fauna aquática", "Ajuda a limpar a água", "Alimenta os peixes", "Não tem impacto"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "O que significa consumo consciente?",
+      "options": [
+        "Comprar sempre o mais barato",
+        "Comprar o máximo possível",
+        "Comprar apenas o necessário, considerando impacto ambiental",
+        "Comprar só produtos importados"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/consumo-desperdicio.jpg"
     },
     {
-      "question": "O que fazer com pilhas e baterias usadas?",
-      "options": ["Entregar em postos de coleta específicos", "Jogar no lixo comum", "Queimar no quintal", "Jogar no vaso"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "Por que preferir produtos locais ajuda o meio ambiente?",
+      "options": [
+        "Porque são mais baratos",
+        "Porque reduzem emissões de transporte e apoiam a economia local",
+        "Porque são mais bonitos",
+        "Porque duram mais"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
     },
     {
-      "question": "O que significam os 3Rs?",
-      "options": ["Reduzir, Reutilizar e Reciclar", "Recolher, Reter e Repor", "Rápido, Racional e Real", "Recortar, Remover e Rasgar"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "question": "Qual a cor da lixeira para METAIS (latas, alumínio)?",
+      "options": [
+        "Azul",
+        "Verde",
+        "Vermelho",
+        "Amarelo"
+      ],
+      "answer": 3,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-lixeiras.jpg"
     },
     {
-      "question": "Qual atitude reduz a poluição do ar nas cidades?",
-      "options": ["Usar transporte público, bicicleta ou caminhar", "Usar carro para tudo", "Queimar lixo", "Deixar carro ligado parado"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "Quanto tempo uma ponta de cigarro leva para se decompor?",
+      "options": [
+        "1 mês",
+        "1 ano",
+        "2 anos ou mais",
+        "10 anos"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-garrafa-praia.jpg"
     },
     {
-      "question": "O que é compostagem?",
-      "options": ["Transformar resíduos orgânicos em adubo", "Queimar plástico", "Jogar lixo no rio", "Misturar vidro com metal"],
-      "answer": 0, "time": 20, "difficulty": "medio"
-    },
-    {
-      "question": "Como a preservação de florestas ajuda o clima?",
-      "options": ["As árvores absorvem o gás carbônico (CO₂)", "As árvores produzem calor", "Impedem a chuva", "Liberam CO₂"],
-      "answer": 0, "time": 25, "difficulty": "dificil"
-    },
-    {
-      "question": "Qual a função da mata ciliar nas margens dos rios?",
-      "options": ["Proteger contra erosão e filtrar poluentes", "Aumentar a poluição", "Impedir que peixes nadem", "Tirar água do rio"],
-      "answer": 0, "time": 25, "difficulty": "dificil"
+      "question": "Por que o descarte incorreto de medicamentos é prejudicial aos rios?",
+      "options": [
+        "Porque custa caro",
+        "Porque contamina o solo e lençóis freáticos com substâncias químicas",
+        "Porque causa mau cheiro",
+        "Porque atrai insetos"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
     },
     {
       "question": "Qual fonte de energia aproveita a força dos ventos?",
-      "options": ["Energia Eólica", "Energia Solar", "Carvão", "Diesel"],
-      "answer": 0, "time": 15, "difficulty": "facil"
+      "options": [
+        "Energia Solar",
+        "Energia Nuclear",
+        "Energia Eólica",
+        "Energia Térmica"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-eolica-por-do-sol.jpg"
     },
     {
-      "question": "O que é a 'Pegada Ecológica'?",
-      "options": ["Medida do impacto do consumo humano na natureza", "Marca do pé na terra", "Tipo de adubo", "Tamanho de floresta"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "A lixeira de cor MARROM é destinada a que tipo de resíduo?",
+      "options": [
+        "Plástico",
+        "Vidro",
+        "Resíduos orgânicos",
+        "Metal"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-lixeiras.jpg"
     },
     {
-      "question": "Qual a melhor forma de reduzir plásticos nos oceanos?",
-      "options": ["Evitar plásticos descartáveis", "Jogar lixo na areia", "Usar plástico biodegradável no mar", "Aumentar o uso de plástico"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "Qual destas é uma fonte de energia NÃO renovável?",
+      "options": [
+        "Energia Solar",
+        "Energia Eólica",
+        "Carvão mineral",
+        "Energia Hidrelétrica"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-paineis-campo.jpg"
     },
     {
-      "question": "O que fazer com restos de frutas e legumes para ajudar o planeta?",
-      "options": ["Fazer compostagem", "Jogar no lixo comum", "Queimar", "Jogar na pia"],
-      "answer": 0, "time": 20, "difficulty": "medio"
+      "question": "A temperatura da Amazônia aumentou quantos graus entre 1985 e 2020?",
+      "options": [
+        "0,5 °C",
+        "1 °C",
+        "Cerca de 2 °C",
+        "5 °C"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-troncos.jpg"
+    },
+    {
+      "question": "Qual o principal gás responsável pelo aquecimento global?",
+      "options": [
+        "Oxigênio (O₂)",
+        "Nitrogênio (N₂)",
+        "Dióxido de carbono (CO₂)",
+        "Hélio (He)"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/clima-derretimento.jpg"
+    },
+    {
+      "question": "Quanto tempo o VIDRO leva para se decompor na natureza?",
+      "options": [
+        "100 anos",
+        "500 anos",
+        "Mais de 1 milhão de anos",
+        "50 anos"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-simbolo.jpg"
+    },
+    {
+      "question": "Qual a cor da lixeira para descarte de PLÁSTICO, segundo o CONAMA?",
+      "options": [
+        "Azul",
+        "Vermelho",
+        "Verde",
+        "Amarelo"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "Qual a vantagem do transporte coletivo sobre o individual para o meio ambiente?",
+      "options": [
+        "É mais rápido",
+        "É mais confortável",
+        "Reduz emissão de poluentes por passageiro",
+        "É mais barato"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-solar-deserto.jpg"
+    },
+    {
+      "question": "Qual a melhor forma de reutilizar água em casa?",
+      "options": [
+        "Jogar água de lavar roupa na rua",
+        "Usar água da máquina de lavar para limpar o quintal",
+        "Deixar a torneira pingando",
+        "Não tem como reutilizar"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos2.jpg"
+    },
+    {
+      "question": "O que significa o selo 'Orgânico' nos alimentos?",
+      "options": [
+        "Que são importados",
+        "Que foram produzidos sem agrotóxicos e aditivos químicos",
+        "Que são mais caros",
+        "Que são processados industrialmente"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Como a chuva ácida afeta os rios e lagos?",
+      "options": [
+        "Não tem efeito na água",
+        "Aumenta o pH, tornando a água mais alcalina",
+        "Reduz o pH, acidificando a água e prejudicando a vida aquática",
+        "Faz a água evaporar mais rápido"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos2.jpg"
+    },
+    {
+      "question": "O que são gases de efeito estufa (GEE)?",
+      "options": [
+        "Gases que resfriam a atmosfera",
+        "Gases que retêm calor na atmosfera como CO₂ e metano",
+        "Gases que purificam o ar",
+        "Gases que filtram a luz solar"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-troncos.jpg"
+    },
+    {
+      "question": "Uma lata de alumínio reciclada volta às prateleiras como nova lata em quanto tempo?",
+      "options": [
+        "1 ano",
+        "6 meses",
+        "60 dias (2 meses)",
+        "5 anos"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-plastico-garrafas.jpg"
+    },
+    {
+      "question": "Qual o impacto do lixo nos oceanos?",
+      "options": [
+        "Alimenta os peixes",
+        "Mata animais marinhos por ingestão e sufocamento",
+        "Não tem impacto significativo",
+        "Torna a água mais limpa"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Qual a consequência do derretimento das geleiras?",
+      "options": [
+        "Aumento do nível do mar e perda de habitats polares",
+        "Resfriamento global",
+        "Mais neve no Brasil",
+        "Não tem consequência"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/clima-derretimento.jpg"
+    },
+    {
+      "question": "Qual material leva MAIS tempo para se decomponer na natureza?",
+      "options": [
+        "Ponta de cigarro (2 anos)",
+        "Garrafa PET (400+ anos)",
+        "Vidro (1 milhão+ anos)",
+        "Chiclete (5 anos)"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-garrafa-praia.jpg"
+    },
+    {
+      "question": "Uma fralda descartável leva quanto tempo para se decompor?",
+      "options": [
+        "1 ano",
+        "50 anos",
+        "Cerca de 450 a 600 anos",
+        "10 anos"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-chamines.jpg"
+    },
+    {
+      "question": "O que é energia geotérmica?",
+      "options": [
+        "Energia dos oceanos",
+        "Energia gerada pelo calor interno da Terra",
+        "Energia de usinas nucleares",
+        "Energia da queima de carvão"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-paineis-campo.jpg"
+    },
+    {
+      "question": "O que são microplásticos e por que são perigosos?",
+      "options": [
+        "Plásticos de uso médico",
+        "Fragmentos menores que 5mm que contaminam alimentos e água",
+        "Plásticos biodegradáveis",
+        "Plásticos reciclados de alta qualidade"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "O que é o Acordo de Paris (2015)?",
+      "options": [
+        "Acordo para limitar o aquecimento global abaixo de 2°C",
+        "Tratado comercial entre países europeus",
+        "Acordo sobre produção de petróleo",
+        "Protocolo de pesca sustentável"
+      ],
+      "answer": 0,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-velho.jpg"
+    },
+    {
+      "question": "Qual bioma brasileiro é o MAIOR em extensão territorial?",
+      "options": [
+        "Mata Atlântica",
+        "Caatinga",
+        "Cerrado",
+        "Amazônia"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/sustentabilidade-transporte.jpg"
+    },
+    {
+      "question": "Na coleta seletiva, a lixeira VERDE é usada para qual material?",
+      "options": [
+        "Plástico",
+        "Metal",
+        "Papel",
+        "Vidro"
+      ],
+      "answer": 3,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-mercado.jpg"
+    },
+    {
+      "question": "O que é o tratamento de esgoto e por que é importante?",
+      "options": [
+        "Processo de filtragem de areia",
+        "Processo que remove poluentes da água usada antes de devolvê-la à natureza",
+        "Processo de dessalinização da água do mar",
+        "Forma de guardar água da chuva"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos.jpg"
+    },
+    {
+      "question": "O que é a camada de ozônio e qual gás a destrói?",
+      "options": [
+        "Camada que esquenta a Terra, destruída por CO₂",
+        "Camada que filtra raios UV, destruída por CFCs",
+        "Camada de nuvens, destruída por poluição",
+        "Camada de ar puro na estratosfera"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-lixo-praia2.jpg"
+    },
+    {
+      "question": "O que significam os 3Rs da sustentabilidade?",
+      "options": [
+        "Reduzir, Reutilizar e Reciclar",
+        "Reparar, Recolher e Refazer",
+        "Rejeitar, Repensar e Replantar",
+        "Recuperar, Reconstruir e Renovar"
+      ],
+      "answer": 0,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "O que é o efeito estufa?",
+      "options": [
+        "Processo que resfria a Terra",
+        "Processo natural que retém calor na atmosfera, essencial para a vida",
+        "Doença das plantas",
+        "Tipo de poluição sonora"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-posto.jpg"
+    },
+    {
+      "question": "Que porcentagem da eletricidade no Brasil vem de fontes renováveis?",
+      "options": [
+        "Cerca de 20%",
+        "Cerca de 45%",
+        "Cerca de 87%",
+        "Cerca de 100%"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-solar-deserto.jpg"
+    },
+    {
+      "question": "O que é o conceito de 'lixo zero'?",
+      "options": [
+        "Não produzir lixo nenhum jamais",
+        "Reduzir ao máximo resíduos e destinar 100% para reciclagem ou compostagem",
+        "Queimar todo o lixo",
+        "Jogar tudo num único lixão"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Qual material NÃO deve ser descartado junto com papel reciclável?",
+      "options": [
+        "Jornais velhos",
+        "Caixas de papelão",
+        "Papel carbono ou plastificado",
+        "Revistas"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "O que é compostagem doméstica?",
+      "options": [
+        "Guardar lixo em casa",
+        "Transformar restos orgânicos em adubo natural",
+        "Reciclar plástico em casa",
+        "Fazer horta vertical"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/sustentabilidade-compostagem.jpg"
+    },
+    {
+      "question": "Qual material leva MENOS tempo para se decompor na natureza?",
+      "options": [
+        "Lata de alumínio (200+ anos)",
+        "Garrafa de vidro (1 milhão+ anos)",
+        "Casca de banana (1 a 3 meses)",
+        "Ponta de cigarro (2 anos)"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "O que é reflorestamento e por que é importante?",
+      "options": [
+        "Corte de árvores antigas para plantar novas",
+        "Plantio de árvores em áreas degradadas para recuperar ecossistemas",
+        "Processo de urbanização de áreas verdes",
+        "Extração de madeira sustentável"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/geral-mao-planta.jpg"
+    },
+    {
+      "question": "Qual porcentagem do lixo brasileiro é efetivamente reciclada?",
+      "options": [
+        "Cerca de 30%",
+        "Cerca de 50%",
+        "Cerca de 3 a 4%",
+        "Cerca de 15%"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-simbolo.jpg"
+    },
+    {
+      "question": "Por que nunca devemos jogar óleo de cozinha na pia?",
+      "options": [
+        "Porque estraga o sabor da comida",
+        "Porque entope canos e polui a água",
+        "Porque é perigoso para a saúde",
+        "Porque o óleo evapora e polui o ar"
+      ],
+      "answer": 1,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos.jpg"
+    },
+    {
+      "question": "Quais são os 3Rs complementares: Repensar, Recusar e...?",
+      "options": [
+        "Reclamar",
+        "Reagir",
+        "Reduzir",
+        "Relaxar"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/consumo-papel.jpg"
+    },
+    {
+      "question": "Qual a cor da lixeira destinada a PAPEL e PAPELÃO?",
+      "options": [
+        "Vermelho",
+        "Verde",
+        "Azul",
+        "Amarelo"
+      ],
+      "answer": 2,
+      "time": 15,
+      "difficulty": "facil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-corredor.jpg"
+    },
+    {
+      "question": "Qual lei brasileira estabelece a Política Nacional de Resíduos Sólidos?",
+      "options": [
+        "Lei nº 12.305/2010",
+        "Lei nº 9.605/1998",
+        "Lei nº 11.428/2006",
+        "Lei nº 6.938/1981"
+      ],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-corredor.jpg"
+    },
+    {
+      "question": "Segundo dados de 2023, o Brasil recicla que porcentagem do plástico que descarta?",
+      "options": [
+        "Cerca de 25%",
+        "Cerca de 15%",
+        "Apenas cerca de 1%",
+        "Cerca de 10%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-plastico-garrafas.jpg"
+    },
+    {
+      "question": "Quantas vezes o alumínio pode ser reciclado sem perder qualidade?",
+      "options": [
+        "10 vezes",
+        "100 vezes",
+        "Infinitamente",
+        "3 vezes"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-corredor.jpg"
+    },
+    {
+      "question": "Qual a cor da lixeira para resíduos PERIGOSOS (pilhas, baterias, tinta), segundo o CONAMA?",
+      "options": [
+        "Vermelho",
+        "Laranja",
+        "Preto",
+        "Amarelo"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-lixeiras.jpg"
+    },
+    {
+      "question": "Quanto tempo o CHICLETE leva para se decompor na natureza?",
+      "options": [
+        "1 ano",
+        "5 anos",
+        "20 anos",
+        "50 anos"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-plastico-garrafas.jpg"
+    },
+    {
+      "question": "Quantas toneladas de resíduos sólidos o Brasil gera por dia?",
+      "options": [
+        "100 mil toneladas",
+        "300 mil toneladas",
+        "1 milhão de toneladas",
+        "50 mil toneladas"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-mercado.jpg"
+    },
+    {
+      "question": "O que é 'upcycling' (suprareciclagem)?",
+      "options": [
+        "Jogar o lixo para cima",
+        "Transformar resíduos em produtos de MAIOR valor",
+        "Reciclar plástico em plástico",
+        "Queimar lixo para gerar energia"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-simbolo.jpg"
+    },
+    {
+      "question": "Quais resíduos vão na lixeira de cor BRANCA (CONAMA 275)?",
+      "options": [
+        "Papel reciclado",
+        "Vidro transparente",
+        "Resíduos de serviços de saúde",
+        "Plástico branco"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "O vidro pode ser reciclado infinitamente. Quanto de energia se economiza reciclando 1 tonelada de vidro?",
+      "options": [
+        "10%",
+        "25%",
+        "Cerca de 30%",
+        "5%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-plastico-garrafas.jpg"
+    },
+    {
+      "question": "Qual o país que MAIS recicla no mundo (taxa geral)?",
+      "options": [
+        "Japão",
+        "Alemanha",
+        "Suécia",
+        "Brasil"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-mercado.jpg"
+    },
+    {
+      "question": "O que são ecopontos?",
+      "options": [
+        "Lojas de produtos ecológicos",
+        "Locais para descarte voluntário de grandes volumes e recicláveis",
+        "Hortas comunitárias",
+        "Pontos de coleta de água da chuva"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-plastico-garrafas.jpg"
+    },
+    {
+      "question": "Reciclar 1 tonelada de papel evita o corte de quantas árvores adultas aproximadamente?",
+      "options": [
+        "5 árvores",
+        "10 árvores",
+        "20 árvores",
+        "50 árvores"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-corredor.jpg"
+    },
+    {
+      "question": "Qual a cor da lixeira para resíduos RADIOATIVOS?",
+      "options": [
+        "Laranja",
+        "Preto",
+        "Roxo",
+        "Vermelho"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-corredor.jpg"
+    },
+    {
+      "question": "A reciclagem do papel gera que tipo de economia comparado à produção com celulose virgem?",
+      "options": [
+        "10% menos energia",
+        "Economiza cerca de 64% de energia e 35 mil litros de água/ton",
+        "Não gera economia significativa",
+        "Economiza apenas transporte"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "reciclagem",
+      "image": "/Assets/Questoes/Fotos/reciclagem-bins-sol.jpg"
+    },
+    {
+      "question": "Quantos litros de água são necessários para produzir 1 kg de carne bovina?",
+      "options": [
+        "Cerca de 500 litros",
+        "Cerca de 2.000 litros",
+        "Cerca de 15.000 litros",
+        "Cerca de 50.000 litros"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
+    },
+    {
+      "question": "O que é a 'crise hídrica' que afetou o Brasil em 2021-2025?",
+      "options": [
+        "Falta de tecnologia para tratamento",
+        "Redução drástica nos níveis dos reservatórios das hidrelétricas",
+        "Poluição de todos os rios",
+        "Excesso de chuvas"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-torneira-velha.jpg"
+    },
+    {
+      "question": "Qual a porcentagem de esgoto tratado no Brasil (dados 2023)?",
+      "options": [
+        "Cerca de 80%",
+        "Cerca de 65%",
+        "Cerca de 50%",
+        "Cerca de 30%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos2.jpg"
+    },
+    {
+      "question": "Quantos litros de água são desperdiçados por um vazamento de 1 furo de 2mm por dia?",
+      "options": [
+        "50 litros",
+        "200 litros",
+        "Mais de 3.000 litros",
+        "10 litros"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
+    },
+    {
+      "question": "Quantos litros de água são gastos em um banho médio de 15 minutos?",
+      "options": [
+        "Cerca de 45 litros",
+        "Cerca de 120 litros",
+        "Cerca de 200 litros",
+        "Cerca de 30 litros"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
+    },
+    {
+      "question": "O que é 'água virtual' (ou água incorporada)?",
+      "options": [
+        "Água que existe apenas em simulações",
+        "Água utilizada na produção de um bem ou serviço",
+        "Água mineral adicionada artificialmente",
+        "Água da chuva armazenada"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-maos2.jpg"
+    },
+    {
+      "question": "1 litro de óleo de cozinha jogado na pia contamina quantos litros de água?",
+      "options": [
+        "100 litros",
+        "1.000 litros",
+        "25.000 litros",
+        "100.000 litros"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-cachoeira.jpg"
+    },
+    {
+      "question": "Quanto da água doce disponível no Brasil está na Região Amazônica?",
+      "options": [
+        "Cerca de 20%",
+        "Cerca de 50%",
+        "Cerca de 73%",
+        "Cerca de 90%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-cachoeira.jpg"
+    },
+    {
+      "question": "O que são aquíferos e por que são importantes?",
+      "options": [
+        "Rios subterrâneos naturais que armazenam 97% da água doce líquida",
+        "Lagos artificiais",
+        "Reservatórios de água da chuva",
+        "Canais de irrigação"
+      ],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-goteira.jpg"
+    },
+    {
+      "question": "O Brasil tem qual porcentagem da água doce superficial do mundo?",
+      "options": [
+        "Cerca de 5%",
+        "Cerca de 12%",
+        "Cerca de 20%",
+        "Cerca de 33%"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "agua",
+      "image": "/Assets/Questoes/Fotos/agua-cachoeira.jpg"
+    },
+    {
+      "question": "Quantos anos uma pilha comum leva para se decompor e pode contaminar o solo por quanto tempo?",
+      "options": [
+        "10 anos / contamina 5m³ de solo",
+        "50 anos / contamina 1m³",
+        "100 anos / não contamina",
+        "5 anos / contamina pouco"
+      ],
+      "answer": 0,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-garrafa-praia.jpg"
+    },
+    {
+      "question": "Qual a principal fonte de poluição do ar nas cidades brasileiras?",
+      "options": [
+        "Indústrias (70%)",
+        "Veículos automotores (até 90%)",
+        "Queimadas (80%)",
+        "Agricultura (60%)"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-chamines.jpg"
+    },
+    {
+      "question": "Quantos milhões de toneladas de plástico entram nos oceanos por ano?",
+      "options": [
+        "1 milhão",
+        "4 milhões",
+        "8 a 12 milhões",
+        "50 milhões"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-lixo.jpg"
+    },
+    {
+      "question": "O que é 'ilha de lixo' no Oceano Pacífico e qual seu tamanho estimado?",
+      "options": [
+        "Pequena concentração de plástico de 1km²",
+        "Grande concentração de detritos com 1,6 milhão km²",
+        "Lixo depositado por navios",
+        "Um aterro sanitário flutuante"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Qual o pH da chuva ácida comparado à chuva normal?",
+      "options": [
+        "pH 7,0 (neutro)",
+        "pH 5,6 (chuva normal) vs pH 2,0–4,0 (chuva ácida)",
+        "pH 8,0 (básico)",
+        "pH 6,5 (igual à normal)"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Quanto tempo uma BATERIA de celular leva para se decompor?",
+      "options": [
+        "50 anos",
+        "100 anos",
+        "Mais de 100 anos e contamina solo e água com metais pesados",
+        "10 anos"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-chamines.jpg"
+    },
+    {
+      "question": "Quantas pessoas morrem por ano no mundo devido à poluição do ar, segundo a OMS?",
+      "options": [
+        "1 milhão",
+        "3 milhões",
+        "Cerca de 7 milhões",
+        "500 mil"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-lixo.jpg"
+    },
+    {
+      "question": "O que é 'smog' e em que tipo de cidade é mais comum?",
+      "options": [
+        "Tipo de vegetação em cidades verdes",
+        "Névoa poluente comum em grandes centros urbanos com muitas indústrias",
+        "Chuva intensa em regiões litorâneas",
+        "Neblina natural de regiões frias"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-fabrica-fumaca.jpg"
+    },
+    {
+      "question": "Qual a consequência da eutrofização em lagos e rios?",
+      "options": [
+        "Aumento da biodiversidade",
+        "Excesso de nutrientes causa proliferação de algas e morte de peixes",
+        "Água fica mais limpa",
+        "Aumento do nível da água"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "poluicao",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-lixo.jpg"
+    },
+    {
+      "question": "Quantos litros de água são gastos para produzir UMA camiseta de algodão?",
+      "options": [
+        "Cerca de 100 litros",
+        "Cerca de 700 litros",
+        "Cerca de 2.700 litros",
+        "Cerca de 50 litros"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/consumo-papel.jpg"
+    },
+    {
+      "question": "A indústria têxtil (fast fashion) responde por qual porcentagem das emissões globais de CO₂?",
+      "options": [
+        "Cerca de 2%",
+        "Cerca de 10%",
+        "Cerca de 20%",
+        "Cerca de 5%"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/consumo-desperdicio.jpg"
+    },
+    {
+      "question": "Quantos quilômetros de transporte representam a pegada de carbono de 1 kg de carne bovina?",
+      "options": [
+        "50 km de carro",
+        "250 km de carro",
+        "Cerca de 100 km de carro",
+        "10 km de carro"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "O que é 'greenwashing' (lavagem verde)?",
+      "options": [
+        "Lavar produtos com produtos ecológicos",
+        "Quando empresas usam marketing enganoso para parecer sustentáveis",
+        "Lavar roupas com menos água",
+        "Limpar rios e lagos"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Quantos anos leva para uma garrafa de vidro se decompor, e quanto da produção de vidro é reciclada no Brasil?",
+      "options": [
+        "100 anos, 47% reciclado",
+        "1 milhão+ anos, cerca de 47% reciclado",
+        "500 anos, 10% reciclado",
+        "1 milhão+ anos, 90% reciclado"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "O Brasil desperdiça quantas toneladas de alimentos por ano e qual o valor financeiro?",
+      "options": [
+        "5 milhões ton, R$ 10 bilhões",
+        "46 milhões ton, R$ 61,3 bilhões",
+        "10 milhões ton, R$ 20 bilhões",
+        "100 milhões ton, R$ 200 bilhões"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "O que é a 'pegada de carbono' (carbon footprint)?",
+      "options": [
+        "Marca deixada por carvão no chão",
+        "Quantidade total de gases de efeito estufa emitidos por uma pessoa ou organização",
+        "Tipo de impressão ecológica",
+        "Medida da poluição visual"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/consumo-desperdicio.jpg"
+    },
+    {
+      "question": "Quantas vezes uma roupa é usada em média antes de ser descartada no modelo fast fashion?",
+      "options": [
+        "30 vezes",
+        "15 vezes",
+        "7 vezes ou menos",
+        "50 vezes"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "consumo",
+      "image": "/Assets/Questoes/Fotos/poluicao-praia-plastico.jpg"
+    },
+    {
+      "question": "Qual a meta de limite de aquecimento global estabelecida pelo Acordo de Paris?",
+      "options": [
+        "Limite de 3°C acima dos níveis pré-industriais",
+        "Manter bem abaixo de 2°C, idealmente 1,5°C",
+        "Reduzir para 0°C",
+        "Limite de 5°C"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-velho.jpg"
+    },
+    {
+      "question": "Quanto o nível do mar pode subir até 2100 se nada for feito, segundo o IPCC?",
+      "options": [
+        "5 cm",
+        "20 cm",
+        "Até 1 metro ou mais",
+        "3 metros"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-velho.jpg"
+    },
+    {
+      "question": "O que é o ponto de 'tipping point' (ponto de inflexão) da Amazônia?",
+      "options": [
+        "Quando a floresta fica muito grande",
+        "Quando 20-25% da floresta é desmatada e ela se transforma em savana irreversivelmente",
+        "Quando chove muito na Amazônia",
+        "Quando a temperatura sobe 0,5°C"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-velho.jpg"
+    },
+    {
+      "question": "Qual o percentual do desmatamento da Amazônia responsável pela redução de chuvas?",
+      "options": [
+        "10%",
+        "25%",
+        "74,5%",
+        "50%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/clima-derretimento.jpg"
+    },
+    {
+      "question": "O Brasil é o ___ maior emissor de CO₂ do mundo?",
+      "options": [
+        "10º",
+        "15º",
+        "6º",
+        "20º"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/clima-natureza-verde.jpg"
+    },
+    {
+      "question": "Qual setor é responsável pela MAIOR parte das emissões de GEE no Brasil?",
+      "options": [
+        "Transporte",
+        "Indústria",
+        "Mudança de uso da terra e florestas (desmatamento)",
+        "Geração de energia"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-troncos.jpg"
+    },
+    {
+      "question": "O que é o IPCC e qual seu papel?",
+      "options": [
+        "Instituto de Pesquisa Climática do Brasil",
+        "Painel Intergovernamental sobre Mudanças Climáticas da ONU que avalia ciência climática",
+        "Protocolo Internacional de Controle Poluidor",
+        "Índice de Poluição e Clima Planetário"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/desmatamento-velho.jpg"
+    },
+    {
+      "question": "Desde a era pré-industrial (1850), a temperatura global já subiu quantos graus?",
+      "options": [
+        "0,3°C",
+        "0,8°C",
+        "Cerca de 1,1°C a 1,2°C",
+        "2,5°C"
+      ],
+      "answer": 2,
+      "time": 20,
+      "difficulty": "dificil",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/clima-natureza-verde.jpg"
+    },
+    {
+      "question": "O que são 'eventos climáticos extremos' que se tornaram mais frequentes?",
+      "options": [
+        "Apenas furacões",
+        "Ondas de calor, enchentes, secas severas, tempestades intensas",
+        "Apenas secas",
+        "Somente frio extremo"
+      ],
+      "answer": 1,
+      "time": 20,
+      "difficulty": "medio",
+      "category": "clima",
+      "image": "/Assets/Questoes/Fotos/clima-derretimento.jpg"
+    },
+    {
+      "question": "Qual a capacidade instalada total de energia elétrica no Brasil em 2025?",
+      "options": [
+        "Cerca de 100 GW",
+        "Cerca de 150 GW",
+        "Cerca de 259,5 GW",
+        "Cerca de 500 GW"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-paineis-campo.jpg"
+    },
+    {
+      "question": "Qual país gera a maior porcentagem de eletricidade por energia geotérmica?",
+      "options": [
+        "Brasil",
+        "Estados Unidos",
+        "Islândia (cerca de 70%)",
+        "Japão"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-solar-paineis.jpg"
+    },
+    {
+      "question": "Quanto cresceu a energia solar no Brasil entre 2020 e 2025?",
+      "options": [
+        "50%",
+        "100%",
+        "Mais de 300%",
+        "20%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-solar-paineis.jpg"
+    },
+    {
+      "question": "Qual a participação combinada de solar + eólica na matriz elétrica brasileira (2025)?",
+      "options": [
+        "Cerca de 10%",
+        "Cerca de 34%",
+        "Cerca de 50%",
+        "Cerca de 20%"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-eolica-solar.jpg"
+    },
+    {
+      "question": "Quantos painéis solares são necessários para abastecer uma casa média brasileira?",
+      "options": [
+        "2 a 5 painéis",
+        "6 a 8 painéis",
+        "10 a 15 painéis",
+        "30 painéis"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-solar-deserto.jpg"
+    },
+    {
+      "question": "O que é a 'energia verde' e como ela difere da energia renovável?",
+      "options": [
+        "São a mesma coisa",
+        "Energia verde é gerada por fontes renováveis com baixo impacto ambiental",
+        "Energia verde é a mais barata",
+        "Energia verde vem apenas de fontes solares"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-solar-paineis.jpg"
+    },
+    {
+      "question": "Qual a vantagem da energia eólica offshore (no mar) sobre a onshore (em terra)?",
+      "options": [
+        "É mais barata",
+        "Ventos mais fortes e constantes no mar, gerando mais energia",
+        "Não precisa de manutenção",
+        "Não afeta aves"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "energia",
+      "image": "/Assets/Questoes/Fotos/energia-eolica-por-do-sol.jpg"
+    },
+    {
+      "question": "O que é o 'selo verde' em produtos e por que é importante verificá-lo?",
+      "options": [
+        "Apenas uma cor de embalagem",
+        "Certificação que garante práticas sustentáveis na produção, mas cuidado com greenwashing",
+        "Indica que o produto é verde",
+        "Significa que o produto é barato"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/sustentabilidade-planta.jpg"
+    },
+    {
+      "question": "Quanto do lixo doméstico brasileiro é composto por resíduos orgânicos que poderiam ser compostados?",
+      "options": [
+        "Cerca de 10%",
+        "Cerca de 25%",
+        "Cerca de 50%",
+        "Cerca de 80%"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/sustentabilidade-compostagem.jpg"
+    },
+    {
+      "question": "O Cerrado é considerado a savana mais biodiversa do mundo. Quantas espécies de plantas ele abriga?",
+      "options": [
+        "Cerca de 1.000",
+        "Cerca de 5.000",
+        "Mais de 12.000 espécies",
+        "Cerca de 3.000"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/geral-mao-planta.jpg"
+    },
+    {
+      "question": "Qual o impacto do transporte individual (carro) vs bicicleta nas emissões de CO₂?",
+      "options": [
+        "Carro emite 10x mais",
+        "Carro emite cerca de 150g CO₂/km, bicicleta emite 0",
+        "Ambos emitem igual",
+        "Bicicleta emite mais (produção)"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/sustentabilidade-arvore.jpg"
+    },
+    {
+      "question": "O que é permacultura?",
+      "options": [
+        "Cultura de países permanentes",
+        "Design de ecossistemas humanos sustentáveis e autossuficientes",
+        "Agricultura permanente sem rotação",
+        "Tipo de construção civil"
+      ],
+      "answer": 1,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/geral-mao-planta.jpg"
+    },
+    {
+      "question": "Quantos ODS (Objetivos de Desenvolvimento Sustentável) existem e até quando devem ser alcançados?",
+      "options": [
+        "10 ODS até 2025",
+        "12 ODS até 2050",
+        "17 ODS até 2030",
+        "20 ODS até 2040"
+      ],
+      "answer": 2,
+      "time": 25,
+      "difficulty": "dificil",
+      "category": "sustentabilidade",
+      "image": "/Assets/Questoes/Fotos/sustentabilidade-transporte.jpg"
     }
   ]
 }

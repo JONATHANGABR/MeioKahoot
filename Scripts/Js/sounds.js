@@ -6,7 +6,7 @@ const Sounds = (() => {
     wrong:   'Incorrect.mp3',
     timer:   'Coundown.mp3',
     lobby:   'Lobby.mp3',
-    win:     'victory.mp3',
+    win:     'Correct.mp3',
   };
   const VOL = { lobby: .45, timer: .65, default: .8 };
 

@@ -34,3 +34,42 @@ Pesquisa e melhorias nas questões de meio ambiente:
 - Pesquisa realizada sobre: cores de coleta seletiva (CONAMA), consumo de água no Brasil (ANA ~50% irrigação), % água doce (~2.5-3%), energias renováveis Brasil (~85-88%), dicas práticas de sustentabilidade 2026.
 - Ênfase em tornar o jogo mais inspirador para ações reais dos alunos.
 
+-------- 10/06/2026 — v6.0 Pódio Epic + Animações Kahoot --------
+
+RENOVAÇÃO COMPLETA DE ANIMAÇÕES E VISUAL:
+- ✅ Pódio épico totalmente novo com animações Kahoot-themed
+  - Pedestais coloridos (ouro, prata, bronze) com sequência animada
+  - Coroa que cai no avatar do 1º lugar
+  - Score count-up animado nos pedestais
+  - Fogos de artifício + confetti burst duplo
+  - Estrelas animadas no fundo
+  - Partículas eco (🌿⭐✨) no champion
+  - Lista de posições 4º+ com animação stagger
+  - Stats grid animado com reveal sequencial
+  - Botões "Jogar Novamente" e "Sair" separados
+- ✅ Motor de animações (KahootAnim) com 13+ efeitos reutilizáveis
+  - confettiBurst, fireworks, spawnParticles, screenFlash
+  - countdown, shake, bounceIn, pulseRing, trophySpin
+  - scoreCountUp, staggerReveal, crownDrop, bgGradientPulse
+- ✅ Logo "MEIO" em VERDE (#22c55e) + "KAHOOT" em BRANCO com Fredoka
+  - Animação logoFloat no HUD
+  - Aplicado em todas as telas (login, splash, créditos)
+  - Glow verde no "Meio" e sombra no "Kahoot"
+- ✅ Removida tela de "Dispositivo Detectado" — detecta silenciosamente
+- ✅ Foto de perfil re-adicionada com suporte a crop
+  - PhotoCrop integrado no fluxo de registro e edição
+  - Redimensionamento automático para 256x256
+  - Botão "🎲 Foto aleatória" com DiceBear avatars
+- ✅ Perfil melhorado com stats visuais
+  - Edit stats em grid 2x2
+  - Flash verde de confirmação ao salvar
+  - Botão sair da conta em vermelho
+- ✅ Animações Kahoot em todo o jogo
+  - Respostas aparecem com stagger reveal
+  - Score count-up suave com easing
+  - Toast com animação bounce-in
+  - Dígitos do PIN animados individualmente
+  - Partículas quando acerta (+⭐✨)
+- ✅ Zero arquivos Java — 100% Node.js + HTML + CSS + JS
+
+

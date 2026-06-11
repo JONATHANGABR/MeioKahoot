@@ -1,4 +1,4 @@
-/* MeioKahoot — app.js */
+/* MeioKahoot — app.js v7.0 (Login automático robusto + device permanente) */
 
 /* ── AutoLogin ─────────────────────────────────────────── */
 const AutoLogin = {
@@ -11,12 +11,14 @@ const AutoLogin = {
     const c = this.getSaved();
     if (!c?.user || !c?.pass) return false;
     Splash.show(c.user);
+    // Tenta login direto — se socket não conectou ainda, 
+    // o socket.io-client enfileira o emit automaticamente
     SocketClient.login(c.user, c.pass);
     this._t = setTimeout(() => {
       Splash.hide(); AutoLogin.clear();
       UI.showPage('p-auth'); Auth.showLogin();
       UI.toast('Não foi possível entrar. Faça login.');
-    }, 4500);
+    }, 6000);
     return true;
   },
 };
@@ -28,7 +30,7 @@ const Splash = {
     const d = document.createElement('div'); d.id = 'mk-splash';
     d.innerHTML = `
       <span class="splash-icon">🌿</span>
-      <div class="splash-title">MeioKahoot</div>
+      <div class="splash-title"><span class="logo-meio">Meio</span><span class="logo-kahoot">Kahoot</span></div>
       <p class="splash-msg" id="splash-msg">Carregando...</p>
       <div class="splash-dots"><span></span><span></span><span></span></div>
       <button class="splash-cancel" onclick="Splash.cancel()">Usar outra conta</button>
@@ -46,7 +48,6 @@ const Splash = {
     const el = document.getElementById('mk-splash');
     if (!el) return;
     el.classList.remove('visible');
-    // Aceleramos a remoção para evitar tela branca
     setTimeout(() => { 
       el.style.display = 'none'; 
     }, 150);
@@ -109,13 +110,14 @@ const Auth = {
 
     // Desconecta da sala e limpa estado do socket
     SocketClient.leaveGame();
+    SocketClient._loggedIn = false;
 
     // Fecha qualquer modal aberto
     Modal.close('modal-profile');
     Modal.close('modal-friends');
     Modal.close('modal-create');
     Modal.close('modal-credits');
-    Podium.hide();
+    Podium.exit();
 
     // Reseta o HUD para estado de visitante
     UI.resetHud();
@@ -126,6 +128,10 @@ const Auth = {
     if (lu) lu.value = '';
     if (lp) lp.value = '';
 
+    // Restaura o HUD (caso tenha sido escondido pelo pódio)
+    const hud = document.getElementById('hud');
+    if (hud) hud.style.display = '';
+
     // Volta para a tela de auth
     UI.showPage('p-auth');
     Auth.showLogin();
@@ -133,7 +139,7 @@ const Auth = {
   },
 };
 
-/* ── DeviceManager ─────────────────────────────────────── */
+/* ── DeviceManager (SEM modal automático) ─────────────── */
 const DeviceManager = {
   _d: 'pc',
   detect() {
@@ -144,35 +150,16 @@ const DeviceManager = {
   apply() {
     document.body.classList.remove('device-mobile', 'device-pc');
     document.body.classList.add(`device-${this._d}`);
-    const ic = document.getElementById('device-icon');
     const ch = document.getElementById('h-device');
-    if (ic) ic.textContent = this._d === 'mobile' ? '📱' : '💻';
     if (ch) ch.textContent = this._d === 'mobile' ? '📱' : '💻';
   },
   toggle() {
     this._d = this._d === 'pc' ? 'mobile' : 'pc'; this.apply();
-    const btn = document.getElementById('btn-device-toggle');
-    const tip = document.getElementById('device-tips');
-    if (btn) btn.textContent = this._d === 'mobile' ? 'Mudar para PC' : 'Mudar para celular';
-    if (tip) tip.textContent = this._d === 'mobile' ? 'Interface para toque ativada' : 'Interface para mouse ativada';
-  },
-  confirm() {
-    this.apply();
-    const ov = document.getElementById('ov-device');
-    if (ov) ov.style.display = 'none';
+    UI.toast(this._d === 'mobile' ? 'Modo mobile ativado' : 'Modo PC ativado');
     Sounds.play('click');
   },
-  showModal() {
-    const d = this.detect(); this.apply();
-    const ov  = document.getElementById('ov-device');
-    const ic  = document.getElementById('device-icon');
-    const tip = document.getElementById('device-tips');
-    const btn = document.getElementById('btn-device-toggle');
-    if (ic)  ic.textContent  = d === 'mobile' ? '📱' : '💻';
-    if (tip) tip.textContent = d === 'mobile' ? 'Interface para toque ativada.' : 'Interface para mouse ativada.';
-    if (btn) btn.textContent = d === 'mobile' ? 'Mudar para PC' : 'Mudar para celular';
-    if (ov)  ov.style.display = 'flex';
-  },
+  // REMOVIDO: showModal() — não aparece mais automaticamente
+  // REMOVIDO: confirm() — não precisa mais
 };
 
 /* ── Helpers ────────────────────────────────────────────── */
@@ -189,10 +176,17 @@ function _resetBtn(sel, t) { const b = document.querySelector(sel); if (b) { b.t
     _bind('reg-user',   Auth.register.bind(Auth));
     _bind('join-pin',   HomeUI.joinRoom.bind(HomeUI));
 
+    // Detecta dispositivo e aplica (SEM popup/modal)
     DeviceManager.detect();
     DeviceManager.apply();
+
+    // Botão de device é fixo — garante visível
+    const devBtn = document.getElementById('h-device');
+    if (devBtn) devBtn.style.display = 'inline-flex';
+    
     Profile.renderHud();
 
+    // Tenta auto-login com credenciais salvas
     if (!AutoLogin.attempt()) {
       UI.showPage('p-auth');
       Auth.showLogin();
@@ -201,4 +195,3 @@ function _resetBtn(sel, t) { const b = document.querySelector(sel); if (b) { b.t
     window.addEventListener('online',  () => UI.setNetStatus(true));
     window.addEventListener('offline', () => UI.setNetStatus(false));
   });
-

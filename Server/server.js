@@ -209,7 +209,7 @@ const ROOM_PHASE = {
 const RECONNECT_GRACE_MS = 60 * 1000;
 const REVEAL_MS          = 4000;
 const RANKING_CLEANUP_MS = 30 * 1000;
-const QUESTION_LIMITS = { facil: 6, medio: 12, extremo: 999 };
+const QUESTION_LIMITS = { facil: 6, medio: 12, dificil: 30, extremo: 999 };
 
 // ═══════════════════════════════════════════════════════
 //  SISTEMA DE LOGS — ring buffer, categorias
@@ -574,6 +574,7 @@ function _buildLogLines(out) {
 app.use('/Scripts', express.static(path.join(__dirname, '../Scripts')));
 app.use('/Data',    express.static(path.join(__dirname, '../Data')));
 app.use('/Assets',  express.static(path.join(__dirname, '../Assets')));
+app.use('/Assets/Questoes', express.static(path.join(__dirname, '../Assets/Questoes')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../Scripts/Paginas/index.html')));
 app.get('/status',  (req, res) => res.json(getStats()));
 
@@ -606,15 +607,21 @@ function resetRoomForNewMatch(room, difficulty = 'facil') {
   room.difficulty = difficulty;
   
   // CORREÇÃO: Tema Unificado com Filtro de Dificuldade
+  // facil = só fáceis (6 perg)
+  // medio = fáceis + médias (12 perg)
+  // dificil = fáceis + médias + difíceis (30 perg)
+  // extremo = TODAS as 126
   const allUnificado = allQ.unificado || [];
   let pool = [];
 
   if (difficulty === 'facil') {
     pool = allUnificado.filter(q => q.difficulty === 'facil');
   } else if (difficulty === 'medio') {
-    pool = allUnificado.filter(q => q.difficulty === 'medio' || q.difficulty === 'dificil');
+    pool = allUnificado.filter(q => q.difficulty === 'facil' || q.difficulty === 'medio');
+  } else if (difficulty === 'dificil') {
+    pool = allUnificado.filter(q => q.difficulty === 'facil' || q.difficulty === 'medio' || q.difficulty === 'dificil');
   } else {
-    // extremo ou qualquer outro: todas
+    // extremo: todas — muitas difíceis!
     pool = allUnificado;
   }
 

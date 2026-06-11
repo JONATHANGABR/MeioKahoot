@@ -8,121 +8,96 @@
   <link rel="stylesheet" href="/Scripts/Css/ranking.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════
-     HUD — Kahoot-style clean bar
-════════════════════════════════════════ -->
+<!-- ═══ HUD ═══ -->
 <header class="hud" id="hud">
-  <!-- Esquerda: avatar + nome + xp -->
   <button class="hud-profile-btn" id="hud-profile-btn" onclick="Modal.open('modal-profile')">
     <div class="hud-av">
       <span id="av-letter">?</span>
-      <img  id="av-photo" src="" alt=""/>
+      <img id="av-photo" src="" alt=""/>
     </div>
     <div class="hud-info">
       <span class="hud-name" id="u-name">Visitante</span>
-      <span class="hud-sub"  id="u-xp">0 pts · Nível 1</span>
+      <span class="hud-sub" id="u-xp">0 pts · Nível 1</span>
     </div>
   </button>
-
-  <!-- Centro: logo (só nas telas iniciais) -->
   <div class="hud-logo" id="hud-logo">
     <span class="logo-meio">MEIO</span><span class="logo-kahoot">KAHOOT</span>
   </div>
-
-
-  <!-- Direita: chips + ações -->
   <div class="hud-right">
-    <span class="hud-chip chip-green"  id="h-status">● Online</span>
-    <button class="hud-chip chip-blue" id="h-device" onclick="DeviceManager.toggle()">💻</button>
-    <span class="hud-chip chip-amber"  id="h-phase"   style="display:none"></span>
-    <span class="hud-chip chip-green"  id="h-players" style="display:none">👥 0</span>
-    <span class="hud-pin"              id="h-pin"     style="display:none">000000</span>
-    <!-- Botão de amigos (aparece na home) -->
+    <span class="hud-chip chip-green" id="h-status">● Online</span>
+    <span class="hud-chip chip-amber" id="h-phase" style="display:none"></span>
+    <button class="hud-chip chip-blue h-device-btn" id="h-device" onclick="DeviceManager.toggle()">💻</button>
+    <span class="hud-chip chip-green" id="h-players" style="display:none">👥 0</span>
+    <span class="hud-pin" id="h-pin" style="display:none">000000</span>
     <button class="hud-icon-btn" id="friends-btn" onclick="Friends.open()" style="display:none" title="Amigos">👥<span class="hud-mini-badge" id="friends-badge" style="display:none"></span></button>
-    <button class="hud-icon-btn" id="lobby-sound-btn" onclick="Sounds.toggleLobbyMute()" style="display:none" title="Ativar/desativar som do lobby">🔊</button>
+    <button class="hud-icon-btn" id="lobby-sound-btn" onclick="Sounds.toggleLobbyMute()" style="display:none" title="Som">🔊</button>
   </div>
 </header>
 
-<!-- Timer barra -->
-<div class="timer-bar" id="timer-bar" style="display:none">
-  <div class="timer-fill" id="timer-fill"></div>
-</div>
-
-<!-- Timer círculo -->
+<!-- Timer -->
+<div class="timer-bar" id="timer-bar" style="display:none"><div class="timer-fill" id="timer-fill"></div></div>
 <div class="timer-circle-wrap" id="timer-circle-wrap" style="display:none">
   <svg viewBox="0 0 36 36">
-    <circle class="tc-bg"   cx="18" cy="18" r="15.9"/>
-    <circle class="tc-ring" id="timer-ring" cx="18" cy="18" r="15.9"
-            stroke-dasharray="100 100" stroke-dashoffset="0"/>
+    <circle class="tc-bg" cx="18" cy="18" r="15.9"/>
+    <circle class="tc-ring" id="timer-ring" cx="18" cy="18" r="15.9" stroke-dasharray="100 100" stroke-dashoffset="0"/>
   </svg>
   <span class="timer-num" id="timer-num">15</span>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast" style="display:none"></div>
-
-<!-- Rede -->
 <div class="net-badge" id="net-badge">● Online</div>
-
-
-<!-- ════ DEVICE CHECK ════ -->
-<!-- Removido para não aparecer toda hora conforme solicitado -->
 <div class="screen-flash" id="screen-flash"></div>
 
-
-
-<!-- ════ P-AUTH ════ -->
+<!-- ═══ P-AUTH ═══ -->
 <div class="page" id="p-auth">
-  <!-- Login -->
   <div class="auth-wrap" id="s-login">
     <div class="brand">
       <span class="brand-leaf">🌿</span>
-      <h1>MeioKahoot</h1>
+      <h1><span class="logo-meio">Meio</span><span class="logo-kahoot">Kahoot</span></h1>
       <p>Quiz de Meio Ambiente</p>
     </div>
     <div class="white-card">
       <h2>Entrar</h2>
-      <input type="text"     id="login-user" placeholder="Usuário" autocomplete="username"/>
-      <input type="password" id="login-pass" placeholder="Senha"   autocomplete="current-password"/>
+      <input type="text" id="login-user" placeholder="Usuário" autocomplete="username"/>
+      <input type="password" id="login-pass" placeholder="Senha" autocomplete="current-password"/>
       <button class="btn btn-primary" onclick="Auth.login()">Entrar</button>
-      <button class="btn btn-ghost"   onclick="Auth.showRegister()">Criar conta</button>
+      <button class="btn btn-ghost" onclick="Auth.showRegister()">Criar conta</button>
     </div>
   </div>
-
-  <!-- Cadastro -->
   <div class="auth-wrap" id="s-register" style="display:none">
+    <div class="brand">
+      <span class="brand-leaf">🌿</span>
+      <h1><span class="logo-meio">Meio</span><span class="logo-kahoot">Kahoot</span></h1>
+      <p>Criar sua conta</p>
+    </div>
     <div class="white-card">
       <h2>Criar conta</h2>
       <div class="av-pick">
         <div class="av-preview" id="reg-preview">
           <span id="reg-initial">?</span>
-          <img  id="reg-photo-img" src="" alt="" style="display:none"/>
+          <img id="reg-photo-img" src="" alt="" style="display:none"/>
         </div>
         <button class="btn-link" onclick="document.getElementById('reg-file').click()">📸 Escolher foto</button>
         <input type="file" id="reg-file" accept="image/*" style="display:none" onchange="Auth.previewPhoto(this)"/>
       </div>
-      <input type="text"     id="reg-user" placeholder="Nome de usuário"/>
+      <input type="text" id="reg-user" placeholder="Nome de usuário"/>
       <input type="password" id="reg-pass" placeholder="Senha"/>
       <button class="btn btn-primary" onclick="Auth.register()">Cadastrar</button>
-      <button class="btn btn-ghost"   onclick="Auth.showLogin()">← Voltar</button>
+      <button class="btn btn-ghost" onclick="Auth.showLogin()">← Voltar</button>
     </div>
   </div>
 </div>
 
-
-<!-- ════ P-HOME ════ -->
+<!-- ═══ P-HOME ═══ -->
 <div class="page" id="p-home" style="display:none">
   <div class="home-wrap">
-
-    <!-- Card perfil compacto -->
     <div class="profile-strip">
       <div class="profile-av">
         <span class="pa-letter" id="home-initial">?</span>
-        <img  class="pa-photo"  id="home-avatar" src="" alt=""/>
+        <img class="pa-photo" id="home-avatar" src="" alt=""/>
       </div>
       <div class="profile-info">
         <strong id="home-name">---</strong>
@@ -135,161 +110,102 @@
       </div>
       <button class="icon-btn" onclick="Profile.openEdit()" title="Editar perfil">✏️</button>
     </div>
-
-    <!-- Ações principais -->
     <div class="main-actions">
       <button class="btn btn-primary btn-hero" onclick="HomeUI.showJoin()">
         <span class="btn-hero-icon">▶</span>
-        <span class="btn-hero-text">
-          <span class="btn-hero-title">Entrar em sala</span>
-          <span class="btn-hero-sub">Jogue com amigos</span>
-        </span>
+        <span class="btn-hero-text"><span class="btn-hero-title">Entrar em sala</span><span class="btn-hero-sub">Jogue com amigos</span></span>
       </button>
-
       <button class="btn btn-create btn-hero" onclick="Modal.open('modal-create')">
         <span class="btn-hero-icon">＋</span>
-        <span class="btn-hero-text">
-          <span class="btn-hero-title">Criar sala</span>
-          <span class="btn-hero-sub">Escolha o tema</span>
-        </span>
+        <span class="btn-hero-text"><span class="btn-hero-title">Criar sala</span><span class="btn-hero-sub">Escolha o tema</span></span>
       </button>
     </div>
-
-    <!-- Botão voltar à última sala -->
     <button class="btn btn-ghost" id="btn-rejoin" onclick="HomeUI.rejoin()" style="display:none">↩ Última sala</button>
-
-    <!-- Links secundários -->
     <div class="secondary-links">
       <button class="sec-link" onclick="HomeUI.goRanking()">🏆 Ranking</button>
       <button class="sec-link" onclick="Friends.open()">👥 Amigos</button>
       <button class="sec-link" onclick="Modal.open('modal-credits')">⭐ Créditos</button>
     </div>
-
   </div>
 </div>
 
-
-<!-- ════ P-JOIN ════ -->
+<!-- ═══ P-JOIN ═══ -->
 <div class="page" id="p-join" style="display:none">
-  <div class="modal-box" style="max-width:380px">
+  <div class="modal-box" style="max-width:400px">
     <h2>Entrar na sala</h2>
-    <p class="text-muted">Digite o PIN de 6 dígitos</p>
-    <input type="text" id="join-pin" class="pin-input" placeholder="000000"
-           maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')"/>
+    <p style="color:#666;text-align:center">Digite o PIN de 6 dígitos</p>
+    <input type="text" id="join-pin" class="pin-input" placeholder="000000" maxlength="6" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')"/>
     <button class="btn btn-primary" onclick="HomeUI.joinRoom()">Entrar →</button>
     <div class="rooms-browser">
-      <div class="rooms-browser-head">
-        <strong>Salas abertas</strong>
-        <button class="btn btn-ghost btn-sm" onclick="RoomsBrowser.load()">↻ Atualizar</button>
-      </div>
-      <div class="rooms-list" id="rooms-list">
-        <p class="text-muted" style="text-align:center;padding:12px">Carregando salas...</p>
-      </div>
+      <div class="rooms-browser-head"><strong>Salas abertas</strong><button class="btn btn-ghost btn-sm" onclick="RoomsBrowser.load()">↻</button></div>
+      <div class="rooms-list" id="rooms-list"><p style="text-align:center;padding:12px;color:#999">Carregando...</p></div>
     </div>
-    <button class="btn btn-ghost"   onclick="UI.showPage('p-home')">← Voltar</button>
+    <button class="btn btn-ghost" onclick="UI.showPage('p-home')">← Voltar</button>
   </div>
 </div>
 
-
-<!-- ════ P-LOBBY ════ -->
+<!-- ═══ P-LOBBY ═══ -->
 <div class="page" id="p-lobby" style="display:none">
   <div class="lobby-wrap">
-
-    <!-- PIN grande e contido -->
     <div class="pin-card">
       <span class="pin-label">PIN DA SALA</span>
       <div class="pin-row">
-        <span class="pin-digit" id="pin-d0">0</span>
-        <span class="pin-digit" id="pin-d1">0</span>
-        <span class="pin-digit" id="pin-d2">0</span>
+        <span class="pin-digit" id="pin-d0">0</span><span class="pin-digit" id="pin-d1">0</span><span class="pin-digit" id="pin-d2">0</span>
         <span class="pin-sep">·</span>
-        <span class="pin-digit" id="pin-d3">0</span>
-        <span class="pin-digit" id="pin-d4">0</span>
-        <span class="pin-digit" id="pin-d5">0</span>
+        <span class="pin-digit" id="pin-d3">0</span><span class="pin-digit" id="pin-d4">0</span><span class="pin-digit" id="pin-d5">0</span>
       </div>
       <span class="pin-hint">Compartilhe este código</span>
-      <button class="pin-copy-btn" onclick="Lobby.copyPin()">📋 Copiar código</button>
+      <button class="pin-copy-btn" onclick="Lobby.copyPin()">📋 Copiar</button>
     </div>
-
-    <!-- Status -->
-    <div class="lobby-status-row">
-      <span class="pulse-dot"></span>
-      <span id="lobby-status-txt">Aguardando jogadores...</span>
-      <span class="count-badge" id="lb-count">0</span>
-    </div>
-
-    <!-- Grid de jogadores -->
+    <div class="lobby-status-row"><span class="pulse-dot"></span><span id="lobby-status-txt">Aguardando jogadores...</span><span class="count-badge" id="lb-count">0</span></div>
     <div class="players-grid" id="lb-list"></div>
-
-    <!-- Controles do host -->
     <div id="host-controls" style="display:none">
       <div class="diff-row">
         <span class="label-sm">Dificuldade</span>
         <div class="diff-pills">
-          <button class="diff-pill active" onclick="HomeUI.setDiff(this,'facil')">Fácil · 6 questões</button>
-          <button class="diff-pill"        onclick="HomeUI.setDiff(this,'medio')">Médio · 12 questões</button>
-          <button class="diff-pill"        onclick="HomeUI.setDiff(this,'extremo')">Extremo · Todas</button>
+          <button class="diff-pill active" onclick="HomeUI.setDiff(this,'facil')">🟢 Fácil · 6 perg</button>
+          <button class="diff-pill" onclick="HomeUI.setDiff(this,'medio')">🟡 Médio · 12 perg</button>
+          <button class="diff-pill" onclick="HomeUI.setDiff(this,'dificil')">🟠 Difícil · 30 perg</button>
+          <button class="diff-pill" onclick="HomeUI.setDiff(this,'extremo')">🔴 Extremo · Todas (126)</button>
         </div>
       </div>
       <button class="btn btn-primary btn-hero" onclick="HomeUI.startGame()" style="margin-top:8px">▶ Começar partida</button>
     </div>
-
   </div>
 </div>
 
-
-<!-- ════ P-GAME ════ -->
+<!-- ═══ P-GAME ═══ -->
 <div class="page page-game" id="p-game" style="display:none">
-
-  <!-- Meta da questão -->
   <div class="q-header">
     <div class="q-meta">
       <span class="q-count" id="q-num">1/10</span>
-      <span class="q-cat"   id="q-cat">Ciências</span>
+      <span class="q-cat" id="q-cat">Ciências</span>
       <div class="q-bar-wrap"><div class="q-bar" id="q-progress"></div></div>
     </div>
-    <!-- Caixa da pergunta — BRANCA com texto escuro -->
-    <div class="q-box" id="q-box">
-      <p class="q-text" id="q-txt">Escolha uma resposta.</p>
+    <div class="q-image-wrap" id="q-image-wrap" style="display:none">
+      <img class="q-image" id="q-image" src="" alt="Imagem da questão" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.style.display='none'"/>
     </div>
+    <div class="q-box" id="q-box"><p class="q-text" id="q-txt">Escolha uma resposta.</p></div>
   </div>
-
-  <!-- Respostas — Cores e formas Kahoot -->
   <div class="answers" id="answers">
-    <button class="ans ans-red"    id="ans-0" onclick="GameUI.pick(0)"><span class="ans-sym">▲</span><span id="al-0"></span></button>
-    <button class="ans ans-blue"   id="ans-1" onclick="GameUI.pick(1)"><span class="ans-sym">◆</span><span id="al-1"></span></button>
+    <button class="ans ans-red" id="ans-0" onclick="GameUI.pick(0)"><span class="ans-sym">▲</span><span id="al-0"></span></button>
+    <button class="ans ans-blue" id="ans-1" onclick="GameUI.pick(1)"><span class="ans-sym">◆</span><span id="al-1"></span></button>
     <button class="ans ans-yellow" id="ans-2" onclick="GameUI.pick(2)"><span class="ans-sym">●</span><span id="al-2"></span></button>
-    <button class="ans ans-green"  id="ans-3" onclick="GameUI.pick(3)"><span class="ans-sym">■</span><span id="al-3"></span></button>
+    <button class="ans ans-green" id="ans-3" onclick="GameUI.pick(3)"><span class="ans-sym">■</span><span id="al-3"></span></button>
   </div>
-
-  <!-- Barra de ação -->
   <div class="game-bottom">
     <div class="status-pill" id="ans-status">Escolha uma resposta</div>
     <button class="btn btn-confirm" id="btn-confirm" onclick="GameUI.confirm()" disabled>Confirmar</button>
   </div>
-
-  <!-- Score ao vivo -->
-  <div class="score-pill" id="score-pill" style="display:none">
-    <span id="score-num">0</span><span class="score-unit">pts</span>
-  </div>
-
-
-
+  <div class="score-pill" id="score-pill" style="display:none"><span id="score-num">0</span><span class="score-unit">pts</span></div>
 </div>
 
-
-<!-- ════ P-RANK ════ -->
+<!-- ═══ P-RANK ═══ -->
 <div class="page" id="p-rank" style="display:none">
   <div class="rank-wrap">
     <div class="rank-header">
-      <div>
-        <p class="eyebrow">Placar Geral</p>
-        <h1>Ranking</h1>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-ghost btn-sm" onclick="RankingBoard.load()">↻</button>
-        <button class="btn btn-ghost btn-sm" onclick="UI.showPage('p-home')">← Voltar</button>
-      </div>
+      <div><p class="eyebrow">Placar Geral</p><h1>Ranking</h1></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="RankingBoard.load()">↻</button><button class="btn btn-ghost btn-sm" onclick="UI.showPage('p-home')">← Voltar</button></div>
     </div>
     <div class="rank-stats">
       <div class="rstat"><label>Melhor</label><strong id="rb-best">—</strong></div>
@@ -301,55 +217,41 @@
       <div class="rstat"><label>Temas</label><strong id="rb-themes">—</strong></div>
       <div class="rstat"><label>Vitórias</label><strong id="rb-wins">—</strong></div>
     </div>
-    <div class="rank-tools">
-      <input type="text" id="rank-search" placeholder="Buscar jogador..." oninput="RankingBoard.applyFilters()"/>
-      <select id="rank-theme" onchange="RankingBoard.applyFilters()">
-        <option value="">Todos os temas</option>
-      </select>
-    </div>
+    <div class="rank-tools"><input type="text" id="rank-search" placeholder="Buscar jogador..." oninput="RankingBoard.applyFilters()"/><select id="rank-theme" onchange="RankingBoard.applyFilters()"><option value="">Todos os temas</option></select></div>
     <div class="rank-me" id="rank-me" style="display:none"></div>
     <div class="rank-tabs">
       <button class="rtab active" onclick="RankingBoard.setTab('best',this)">Top</button>
-      <button class="rtab"        onclick="RankingBoard.setTab('recent',this)">Recentes</button>
-      <button class="rtab"        onclick="RankingBoard.setTab('wins',this)">Vitórias</button>
-      <button class="rtab"        onclick="RankingBoard.setTab('avg',this)">Média</button>
-      <button class="rtab"        onclick="RankingBoard.setTab('podiums',this)">Pódios</button>
-      <button class="rtab"        onclick="RankingBoard.setTab('themes',this)">Temas</button>
+      <button class="rtab" onclick="RankingBoard.setTab('recent',this)">Recentes</button>
+      <button class="rtab" onclick="RankingBoard.setTab('wins',this)">Vitórias</button>
+      <button class="rtab" onclick="RankingBoard.setTab('avg',this)">Média</button>
+      <button class="rtab" onclick="RankingBoard.setTab('podiums',this)">Pódios</button>
+      <button class="rtab" onclick="RankingBoard.setTab('themes',this)">Temas</button>
     </div>
-    <div class="rank-list" id="lb-board"><p class="text-muted" style="text-align:center;padding:20px">Carregando...</p></div>
+    <div class="rank-list" id="lb-board"><p style="text-align:center;padding:20px;color:rgba(255,255,255,.4)">Carregando...</p></div>
   </div>
 </div>
 
-
-<!-- ════ OVERLAY: Resultado (correto/errado) ════ -->
+<!-- ═══ RESULT OVERLAY ═══ -->
 <div class="result-overlay" id="result-overlay">
-  <div class="result-icon"  id="result-icon">✔</div>
+  <div class="result-icon" id="result-icon">✔</div>
   <div class="result-label" id="result-label">Correto!</div>
-  <div class="result-pts"   id="result-pts"></div>
+  <div class="result-pts" id="result-pts"></div>
 </div>
 
-
-<!-- ════ OVERLAY: Pódio final ════ -->
+<!-- ═══ PÓDIO ═══ -->
 <div class="page page-podium" id="p-podium" style="display:none">
-  <h1 class="podium-hero-title" id="podium-title">Resultado Final</h1>
-  
-  <div class="podium-stage" id="podium-stage">
-    <!-- Injetado via JS -->
-  </div>
-
-  <div class="podium-stats-grid" id="podium-stats">
-    <!-- Injetado via JS -->
-  </div>
-
-  <div class="podium-actions" style="display:flex; gap:15px; width:min(400px, 90vw);">
-    <button class="btn btn-primary" style="flex:1" onclick="Podium.hide()">Jogar Novamente</button>
-    <button class="btn btn-ghost" style="flex:1" onclick="Podium.hide()">Sair</button>
+  <div class="pod-stars" id="pod-stars"></div>
+  <h1 class="podium-hero-title" id="podium-title">🏆 Resultado Final 🏆</h1>
+  <div class="podium-stage" id="podium-stage"></div>
+  <div class="podium-rank-list" id="podium-rank-list"></div>
+  <div class="podium-stats-grid" id="podium-stats"></div>
+  <div class="podium-actions" style="display:flex;gap:12px;width:min(400px,90vw)">
+    <button class="btn btn-primary" style="flex:1" onclick="Podium.playAgain()">🎮 Jogar Novamente</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="Podium.exit()">🚪 Sair</button>
   </div>
 </div>
 
-
-
-<!-- ════ MODAL: Perfil ════ -->
+<!-- ═══ MODAL: PERFIL ═══ -->
 <div class="overlay-center" id="modal-profile" style="display:none">
   <div class="modal-box">
     <button class="modal-close" onclick="Modal.close('modal-profile')">✕</button>
@@ -357,7 +259,7 @@
     <div class="av-pick">
       <div class="av-preview large" id="edit-av">
         <span id="edit-av-letter">?</span>
-        <img  id="edit-av-photo" src="" alt="" style="display:none"/>
+        <img id="edit-av-photo" src="" alt="" style="display:none"/>
       </div>
       <button class="btn-link" onclick="document.getElementById('edit-file').click()">📸 Trocar foto</button>
       <button class="btn-link random-btn" onclick="Profile.randomizePhoto()">🎲 Foto aleatória</button>
@@ -374,63 +276,71 @@
   </div>
 </div>
 
+<!-- ═══ MODAL: CROP ═══ -->
+<div class="crop-overlay" id="modal-crop" style="display:none">
+  <div class="crop-modal-card">
+    <h3>Ajustar foto</h3>
+    <p>Arraste para mover. Use o slider ou scroll para zoom.</p>
+    <div class="crop-area" id="crop-stage">
+      <img id="crop-img" src="" alt="" style="display:none"/>
+      <div class="crop-guide" id="crop-guide"></div>
+    </div>
+    <div class="crop-zoom-row">
+      <span class="crop-zoom-label">🔍−</span>
+      <input type="range" class="crop-slider" id="crop-zoom" min="0.3" max="4" step="0.01" value="1"/>
+      <span class="crop-zoom-label">🔍+</span>
+    </div>
+    <div class="crop-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="PhotoCrop.cancel()">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="PhotoCrop.confirm()">✓ Confirmar</button>
+    </div>
+  </div>
+</div>
 
-<!-- ════ MODAL: Amigos ════ -->
+<!-- ═══ MODAL: AMIGOS ═══ -->
 <div class="overlay-center" id="modal-friends" style="display:none">
   <div class="modal-box">
     <button class="modal-close" onclick="Modal.close('modal-friends')">✕</button>
     <h2>👥 Amigos</h2>
-
-    <!-- Adicionar amigo -->
-    <p class="friend-help">Envie um pedido. A amizade só aparece quando o outro usuário aceitar — e também vale ao contrário.</p>
+    <p style="color:#666;font-size:.78rem;line-height:1.4">Envie um pedido. A amizade aparece quando o outro aceitar.</p>
     <div class="friends-add">
-      <input type="text" id="friend-input" placeholder="Nome de usuário do amigo"/>
-      <button class="btn btn-primary btn-sm" onclick="Friends.add()">Enviar pedido</button>
+      <input type="text" id="friend-input" placeholder="Nome de usuário"/>
+      <button class="btn btn-primary btn-sm" onclick="Friends.add()">Enviar</button>
     </div>
-
-    <!-- Pedidos + lista de amigos -->
-    <div class="friends-list" id="friends-requests"></div>
-    <div class="friends-list" id="friends-list">
-      <p class="text-muted" style="text-align:center;padding:16px">Nenhum amigo ainda.<br>Envie um pedido pelo nome de usuário!</p>
-    </div>
+    <div id="friends-requests"></div>
+    <div id="friends-list"><p style="text-align:center;padding:16px;color:#999">Nenhum amigo ainda.</p></div>
   </div>
 </div>
 
-
-<!-- ════ MODAL: Criar sala ════ -->
+<!-- ═══ MODAL: CRIAR SALA ═══ -->
 <div class="overlay-center" id="modal-create" style="display:none">
-  <div class="modal-box modal-create-box">
+  <div class="modal-box">
     <button class="modal-close" onclick="Modal.close('modal-create')">✕</button>
-    <div class="modal-create-header">
-      <span class="modal-create-icon">🌿</span>
+    <div style="text-align:center;margin-bottom:12px">
+      <span style="font-size:2.5rem">🌿</span>
       <h2>Criar sala</h2>
-      <p>Tema: Conscientização Ambiental (Unificado)</p>
+      <p style="color:#666;font-size:.8rem">Tema: Meio Ambiente (Unificado)</p>
     </div>
-
     <div class="theme-grid-popup">
-      <button class="theme-card active" data-theme="unificado" onclick="HomeUI.createRoom('unificado')">
+      <button class="theme-card active" onclick="HomeUI.createRoom('unificado')">
         <span class="theme-card-icon">🌎</span>
         <span class="theme-card-name">Meio Ambiente</span>
-        <span class="theme-card-desc">Questões unificadas de reciclagem, água, energia e clima</span>
+        <span class="theme-card-desc">Reciclagem, água, energia e clima</span>
       </button>
     </div>
-
-    <div class="modal-create-divider">ou</div>
-    <button class="btn btn-ghost" onclick="HomeUI.createBot(); Modal.close('modal-create')">
-      🤖 Modo treino com bots
-    </button>
+    <div style="text-align:center;color:rgba(255,255,255,.3);font-size:.8rem;font-weight:700;margin:14px 0">ou</div>
+    <button class="btn btn-ghost" onclick="HomeUI.createBot();Modal.close('modal-create')">🤖 Modo treino com bots</button>
   </div>
 </div>
 
-
-<!-- ════ MODAL: Créditos ════ -->
+<!-- ═══ MODAL: CRÉDITOS ═══ -->
 <div class="overlay-center" id="modal-credits" style="display:none">
   <div class="modal-box">
     <button class="modal-close" onclick="Modal.close('modal-credits')">✕</button>
     <h2>⭐ Créditos</h2>
     <div class="credits-hero">
       <span class="credits-logo">🌿</span>
-      <strong>MeioKahoot</strong>
+      <strong><span class="logo-meio">Meio</span><span class="logo-kahoot">Kahoot</span></strong>
       <small>Quiz educativo de Meio Ambiente</small>
     </div>
     <div class="credits-grid">
@@ -440,29 +350,21 @@
       <div><label>Interface</label><strong>HTML · CSS · JS</strong></div>
     </div>
     <div class="credits-section">
-      <h3>✨ Recursos principais</h3>
-      <ul>
-        <li>Partidas em tempo real com PIN</li>
-        <li>Sistema de amigos, convites e salas abertas</li>
-        <li>Ranking melhorado com vitórias, médias e pódios</li>
-        <li>Temas: Ciências, Reciclagem, Água, Clima, Energia e Sustentabilidade</li>
-      </ul>
-    </div>
-    <div class="credits-section">
-      <h3>🤝 Agradecimentos</h3>
-      <p>Aos colegas, professores e jogadores que testaram e ajudaram a melhorar o projeto.</p>
+      <h3>✨ Recursos</h3>
+      <ul><li>Partidas em tempo real com PIN</li><li>Sistema de amigos e convites</li><li>Pódio animado Kahoot-style</li><li>Fotos de perfil com crop</li><li>Temas de meio ambiente</li></ul>
     </div>
     <div class="credits-actions">
-      <button class="btn btn-primary" onclick="HomeUI.goRanking(); Modal.close('modal-credits')">Ver ranking</button>
-      <a class="btn btn-outline" href="https://github.com/JONATHANGABR/MeioKahoot" target="_blank" rel="noopener">GitHub →</a>
+      <button class="btn btn-primary" onclick="HomeUI.goRanking();Modal.close('modal-credits')">Ver ranking</button>
+      <a class="btn btn-outline" href="https://github.com/JONATHANGABR/MeioKahoot" target="_blank">GitHub →</a>
     </div>
   </div>
 </div>
 
-
-<!-- ════ SCRIPTS ════ -->
+<!-- ═══ SCRIPTS ═══ -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/Scripts/Js/sounds.js"></script>
+<script src="/Scripts/Js/animations.js"></script>
+<script src="/Scripts/Js/crop.js"></script>
 <script src="/Scripts/Js/profile.js"></script>
 <script src="/Scripts/Js/friends.js"></script>
 <script src="/Scripts/Js/ui.js"></script>

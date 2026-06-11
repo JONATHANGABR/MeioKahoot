@@ -1,4 +1,4 @@
-/* MeioKahoot — Game.js v5.0 (sem combo) */
+/* MeioKahoot — Game.js v6.0 (Pódio Epic + Animações Kahoot) */
 const GameUI = (() => {
   let _picked = -1, _confirmed = false, _already = false;
   let _score = 0, _correct = 0, _total = 0;
@@ -47,7 +47,7 @@ const GameUI = (() => {
   }
 
   function _onTimeout() {
-    if (!_active) return; // se já saiu, não faz nada
+    if (!_active) return;
     Sounds.stop('timer');
     _lock('Tempo esgotado');
     if (!_confirmed) { _confirmed = true; SocketClient.sendAnswer(-1); }
@@ -87,7 +87,8 @@ const GameUI = (() => {
   function onGameOver(payload) {
     const rank = Array.isArray(payload) ? payload : (payload?.rank || []);
     const stats = Array.isArray(payload) ? null : (payload?.stats || null);
-    Sounds.stopAll(); Sounds.play('win'); UI.stopTimer();
+    Sounds.stopAll();
+    UI.stopTimer();
     UI.hideResult();
     Profile.recordMatch({ score: _score, correct: _correct, total: _total, comboMax: 0 });
     _reset();
@@ -118,76 +119,120 @@ const GameUI = (() => {
   return { pick, confirm, onQuestion, onReveal, onScoreSync, onGameOver, forceReset };
 })();
 
-/* ── Pódio ───────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   PÓDIO EPIC — Kahoot-themed com animações, fogos, confetti
+   ══════════════════════════════════════════════════════════ */
 const Podium = (() => {
-
-  function confettiFall() {
-    const colors = ['#facc15', '#ef4444', '#3b82f6', '#22c55e', '#a855f7', '#ec4899'];
-    for (let i = 0; i < 100; i++) {
-      const div = document.createElement('div');
-      div.className = 'confetti';
-      div.style.left = Math.random() * 100 + 'vw';
-      div.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      div.style.animationDuration = (Math.random() * 3 + 2) + 's';
-      div.style.animationDelay = (Math.random() * 2) + 's';
-      div.style.opacity = Math.random();
-      document.body.appendChild(div);
-      setTimeout(() => div.remove(), 5000);
-    }
-  }
+  let _lastRank = [];
 
   function show(rank, stats) {
     const sorted = [...rank].sort((a, b) => (a.position || 999) - (b.position || 999) || (b.score || 0) - (a.score || 0));
+    _lastRank = sorted;
     const page = document.getElementById('p-podium');
     if (!page) return;
+
+    // Esconde o HUD para tela cheia
+    const hud = document.getElementById('hud');
+    if (hud) hud.style.display = 'none';
+
+    // Gera estrelas no fundo
+    _generateStars();
 
     // Título
     const title = document.getElementById('podium-title');
     if (title) {
       const topTie = stats?.topTie || sorted.filter(p => (p.score || 0) === (sorted[0]?.score || -1)).length > 1;
-      title.textContent = topTie ? 'Resultado Final — Empate!' : 'Resultado Final';
+      title.textContent = topTie ? '🏆 Empate! 🏆' : '🏆 Resultado Final 🏆';
+      title.classList.remove('visible');
     }
 
     // Stage (Top 3)
     const stage = document.getElementById('podium-stage');
     if (stage) {
       stage.innerHTML = '';
-    const order = [2, 1, 0]; // 3º, 2º, 1º
-    const bClass = ['b3', 'b2', 'b1'];
-    
-    order.forEach((posIdx, i) => {
-      const p = sorted[posIdx];
-      if (!p) return;
-
-      const slot = document.createElement('div');
-      slot.className = 'pod-winner-slot';
-      if (posIdx === 0) slot.classList.add('champion'); // Adiciona aura ao 1º lugar
+      const order = [2, 1, 0]; // 3º, 2º, 1º
+      const bClass = ['b3', 'b2', 'b1'];
+      const medals = ['🥉', '🥈', '🥇'];
       
-      const av = document.createElement('div');
-      av.className = 'pod-winner-av';
-      if (p.photo) {
-        const img = document.createElement('img');
-        img.src = p.photo;
-        av.appendChild(img);
-      } else {
-        av.textContent = (p.name?.[0] || '?').toUpperCase();
-      }
+      order.forEach((posIdx, i) => {
+        const p = sorted[posIdx];
+        if (!p) return;
 
-      const block = document.createElement('div');
-      block.className = `pod-winner-block ${bClass[i]}`;
-      block.innerHTML = `
-        <div class="pod-winner-name">${posIdx === 0 ? '👑 ' : ''}${p.name || 'Jogador'}</div>
-        <div class="pod-winner-score">${(p.score || 0).toLocaleString('pt-BR')} pts</div>
-      `;
+        const slot = document.createElement('div');
+        slot.className = 'pod-winner-slot';
+        if (posIdx === 0) slot.classList.add('champion');
+        
+        // Avatar
+        const av = document.createElement('div');
+        av.className = 'pod-winner-av';
+        av.id = `pod-av-${posIdx}`;
+        if (p.photo) {
+          const img = document.createElement('img');
+          img.src = p.photo;
+          img.alt = p.name || '';
+          av.appendChild(img);
+        } else {
+          av.textContent = (p.name?.[0] || '?').toUpperCase();
+        }
 
-      slot.appendChild(av);
-      slot.appendChild(block);
-      stage.appendChild(slot);
+        // Block (pedestal)
+        const block = document.createElement('div');
+        block.className = `pod-winner-block ${bClass[i]}`;
+        
+        // Medalha
+        const medal = document.createElement('div');
+        medal.className = 'pod-medal';
+        medal.textContent = medals[i];
+        
+        const nameEl = document.createElement('div');
+        nameEl.className = 'pod-winner-name';
+        nameEl.textContent = p.name || 'Jogador';
+        
+        const scoreEl = document.createElement('div');
+        scoreEl.className = 'pod-winner-score';
+        scoreEl.id = `pod-score-${posIdx}`;
+        scoreEl.textContent = '0 pts';
 
-      // Animação sequencial
-      setTimeout(() => slot.classList.add('show'), i * 800);
-    });
+        block.appendChild(medal);
+        block.appendChild(nameEl);
+        block.appendChild(scoreEl);
+        slot.appendChild(av);
+        slot.appendChild(block);
+        stage.appendChild(slot);
 
+        // Animação sequencial com bounce
+        setTimeout(() => {
+          slot.classList.add('show');
+          // Score count up animado
+          const scoreTarget = p.score || 0;
+          KahootAnim.scoreCountUp(scoreEl, 0, scoreTarget, 1500);
+          
+          // Se for champion, adiciona coroa e efeitos extras
+          if (posIdx === 0) {
+            setTimeout(() => {
+              KahootAnim.crownDrop(av, 200);
+              KahootAnim.pulseRing(av, '#fbbf24', 3);
+            }, 600);
+          }
+        }, i * 600 + 400);
+      });
+    }
+
+    // Lista de posições 4º+
+    const rankList = document.getElementById('podium-rank-list');
+    if (rankList) {
+      rankList.innerHTML = '';
+      sorted.slice(3).forEach((p, i) => {
+        const row = document.createElement('div');
+        row.className = 'podium-rank-row';
+        row.innerHTML = `
+          <span class="podium-rank-pos">#${i + 4}</span>
+          <span class="podium-rank-name">${p.name || 'Jogador'}</span>
+          <span class="podium-rank-score">${(p.score || 0).toLocaleString('pt-BR')} pts</span>
+        `;
+        rankList.appendChild(row);
+        setTimeout(() => row.classList.add('visible'), i * 100 + 2800);
+      });
     }
 
     // Stats Grid
@@ -204,22 +249,114 @@ const Podium = (() => {
         <div class="pod-stat-item"><label>Acertos</label><strong>${totalCorrect}/${totalAnswers}</strong></div>
         <div class="pod-stat-item"><label>Precisão</label><strong>${accuracy}%</strong></div>
       `;
+
+      // Anima as stats com stagger
+      setTimeout(() => {
+        const items = statsEl.querySelectorAll('.pod-stat-item');
+        KahootAnim.staggerReveal(items, 120);
+      }, 3000);
     }
 
+    // Mostra a página
     UI.showPage('p-podium');
-    confettiFall();
+
+    // ── SEQUÊNCIA DE ANIMAÇÕES ──
     
-    // Confetti extra para o 1º lugar
-    setTimeout(() => confettiFall(), 1600); 
+    // 1. Título aparece
+    setTimeout(() => {
+      title?.classList.add('visible');
+    }, 200);
+
+    // 2. Toca som de vitória
+    setTimeout(() => {
+      Sounds.play('correct');
+    }, 400);
+
+    // 3. Confetti burst principal
+    setTimeout(() => {
+      KahootAnim.confettiBurst({ count: 150, duration: 5000 });
+    }, 1500);
+
+    // 4. Flash de tela verde
+    setTimeout(() => {
+      KahootAnim.screenFlash('rgba(34,197,94,0.3)', 500);
+    }, 1200);
+
+    // 5. Partículas eco
+    setTimeout(() => {
+      const champion = stage?.querySelector('.champion');
+      if (champion) {
+        KahootAnim.spawnParticles(champion, { count: 15, emoji: ['🌿','⭐','✨','🏆'], spreadRadius: 150 });
+      }
+    }, 2000);
+
+    // 6. Fogos de artifício
+    setTimeout(() => {
+      KahootAnim.fireworks(4000);
+    }, 2500);
+
+    // 7. Confetti extra para manter a vibe
+    setTimeout(() => {
+      KahootAnim.confettiBurst({ count: 80, duration: 3000 });
+    }, 4000);
+  }
+
+  function _generateStars() {
+    const container = document.getElementById('pod-stars');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < 50; i++) {
+      const star = document.createElement('div');
+      star.className = 'pod-star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      star.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+      star.style.width = (Math.random() * 3 + 1) + 'px';
+      star.style.height = star.style.width;
+      container.appendChild(star);
+    }
+  }
+
+  function playAgain() {
+    _restoreHud();
+    Sounds.stopAll();
+    Sounds.play('click');
+    if (SocketClient._pin && SocketClient._isHost) {
+      UI.showPage('p-lobby');
+      Lobby.showHostControls(true);
+      Sounds.playBg('lobby');
+    } else {
+      UI.showPage('p-home');
+      Sounds.playBg('lobby');
+    }
+  }
+
+  function exit() {
+    _restoreHud();
+    SocketClient.leaveGame();
+    Sounds.stopAll();
+    Sounds.play('click');
+    UI.showPage('p-home');
+    Sounds.playBg('lobby');
   }
 
   function hide() {
+    _restoreHud();
     UI.showPage('p-home');
     Sounds.stopAll();
     Sounds.playBg('lobby');
   }
 
-  return { show, hide };
+  function _restoreHud() {
+    const hud = document.getElementById('hud');
+    if (hud) hud.style.display = '';
+    // Garante que o botão de device fica visível após pódio (já é fixo, mas garante)
+    const dev = document.getElementById('h-device');
+    if (dev) dev.style.display = 'inline-flex';
+  }
+
+  return { show, hide, playAgain, exit };
 })();
 
 /* ── HomeUI ──────────────────────────────────────────────── */
@@ -279,9 +416,10 @@ const HomeUI = (() => {
     document.querySelectorAll('.diff-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const msg = {
-      facil: 'Modo fácil: apenas questões simples (6)',
-      medio: 'Modo médio: questões simples e difíceis (12)',
-      extremo: 'Modo extremo: todas as questões disponíveis'
+      facil: '🟢 Fácil: 6 perguntas simples',
+      medio: '🟡 Médio: 12 perguntas fáceis + médias',
+      dificil: '🟠 Difícil: 30 perguntas incluindo difíceis com imagens',
+      extremo: '🔴 Extremo: TODAS as 126 perguntas — 61 difíceis!'
     }[diff] || 'Dificuldade alterada';
     UI.toast(msg);
   }
